@@ -3,6 +3,7 @@
     public class Transaction
     {
         private int id = -1;
+        private TransactionType? type;
         public uint Amount { get; private set; }
         public Date Date { get; private set; }
 
@@ -10,6 +11,11 @@
         {
             this.Amount = amount;
             this.Date = date;
+        }
+
+        public void setType(TransactionType type)
+        {
+            this.type = type;
         }
     }
 }
