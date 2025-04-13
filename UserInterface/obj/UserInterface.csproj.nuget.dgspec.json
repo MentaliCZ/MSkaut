@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\PV178-Project.csproj": {}
+    "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\UserInterface\\UserInterface.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\PV178-Project.csproj": {
+    "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\UserInterface\\UserInterface.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\PV178-Project.csproj",
-        "projectName": "PV178-Project",
-        "projectPath": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\PV178-Project.csproj",
+        "projectUniqueName": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\UserInterface\\UserInterface.csproj",
+        "projectName": "UserInterface",
+        "projectPath": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\UserInterface\\UserInterface.csproj",
         "packagesPath": "C:\\Users\\ondra\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\obj\\",
+        "outputPath": "C:\\Users\\ondra\\Documents\\C#\\PV178\\pv178-project\\UserInterface\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

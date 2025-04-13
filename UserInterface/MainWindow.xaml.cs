@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PV178_Project;
+namespace UserInterface;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

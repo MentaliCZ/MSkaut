@@ -2,7 +2,7 @@
 using System.Data;
 using System.Windows;
 
-namespace PV178_Project;
+namespace UserInterface;
 
 /// <summary>
 /// Interaction logic for App.xaml
