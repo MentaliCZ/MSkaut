@@ -4,12 +4,17 @@ namespace MSkaut
 {
 	public class EventClass
 	{
+		public string Name { get; set; }
 		private (Date startDate, Date endDate) duration;
-		private List<Transaction> transactions;
+		public List<Transaction> Transactions { get; set; }
+		public List<Person> Participants { get; set; }
 
-		public EventClass()
+		public EventClass(string name)
 		{
-			transactions = new();
+			this.Name = name;
+			Transactions = new();
+			Participants = new();
 		}
+
 	}
 }

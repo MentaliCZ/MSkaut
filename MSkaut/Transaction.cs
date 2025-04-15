@@ -3,19 +3,21 @@
     public class Transaction
     {
         private int id = -1;
-        private TransactionType? type;
+        private TransactionType Type { get; set; }
         public uint Amount { get; private set; }
         public Date Date { get; private set; }
+        private bool isExpense;
 
-        public Transaction(uint amount, Date date)
+        public Transaction(uint amount, Date date, TransactionType type)
         {
             this.Amount = amount;
             this.Date = date;
+            this.Type = type;
         }
 
-        public void setType(TransactionType type)
+        public void setIsExpense(bool isExpense)
         {
-            this.type = type;
+            this.isExpense = isExpense;
         }
     }
 }

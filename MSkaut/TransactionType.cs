@@ -5,17 +5,13 @@ namespace MSkaut
 	public class TransactionType
 	{
 		public string Name { get; private set; }
-		private bool isExpense;
+		public string Description { get; private set; }
 
-		public TransactionType(string name, bool isExpense)
+		public TransactionType(string name, string description)
 		{
 			this.Name = name;
-			this.isExpense = isExpense;
+			this.Description = description;
 		}
 
-		public void setIsExpense(bool isExpense)
-		{
-			this.isExpense = isExpense;
-		}
 	}
 }
