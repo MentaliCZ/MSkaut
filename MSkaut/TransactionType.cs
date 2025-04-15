@@ -1,18 +1,21 @@
 ﻿using System;
 
-public class TransactionType
+namespace MSkaut
 {
-	public string Name { get; private set; }
-	private bool isExpense;
-
-	public TransactionType(string name, bool isExpense)
+	public class TransactionType
 	{
-		this.Name = name;
-		this.isExpense = isExpense;
-	}
+		public string Name { get; private set; }
+		private bool isExpense;
 
-	public bool setIsExpense(bool isExpense) 
-	{
-		this.isExpense = isExpense;
+		public TransactionType(string name, bool isExpense)
+		{
+			this.Name = name;
+			this.isExpense = isExpense;
+		}
+
+		public void setIsExpense(bool isExpense)
+		{
+			this.isExpense = isExpense;
+		}
 	}
 }
