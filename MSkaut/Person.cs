@@ -7,9 +7,9 @@ namespace MSkaut
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public Date BirthDate { get; set; }
-		public string Gender { get; set; }
+		public Gender Gender { get; set; }
 
-		public Person(string firstName, string lastName, Date birthDate, string gender)
+		public Person(string firstName, string lastName, Date birthDate, Gender gender)
 		{
 			this.FirstName = firstName;
 			this.LastName = lastName;
