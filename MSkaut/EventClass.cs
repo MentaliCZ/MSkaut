@@ -1,4 +1,5 @@
 ﻿using System;
+using UserManager;
 
 namespace MSkaut
 {
@@ -8,10 +9,12 @@ namespace MSkaut
 		public (Date startDate, Date endDate) Duration { get; set; }
 		public List<Transaction> Transactions { get; set; }
 		public List<Person> Participants { get; set; }
+		public User Owner { get; private set; }
 
-		public EventClass(string name)
+		public EventClass(string name, User owner)
 		{
-			Name = name;
+			this.Name = name;
+			this.Owner = owner;
 			Transactions = new();
 			Participants = new();
 		}

@@ -7,11 +7,13 @@ namespace UserManager
     {
         private string login;
         private string hashedPassword;
+        private Role role;
 
-        public User(string login, string password) 
+        public User(string login, string password, Role role) 
         {
             this.login = login;
             hashedPassword = HashPassword(password);
+            this.role = role;
         }
 
         private string HashPassword(string password)
