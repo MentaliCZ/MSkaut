@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserInterface", "UserInterf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManager", "UserManager\UserManager.csproj", "{7CF2F073-984C-3B1B-6274-1B36CF081D42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseManager", "DatabaseManager\DatabaseManager.csproj", "{F7FB7254-ACDD-4057-8854-31803B578C86}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,8 +29,15 @@ Global
 		{7CF2F073-984C-3B1B-6274-1B36CF081D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CF2F073-984C-3B1B-6274-1B36CF081D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CF2F073-984C-3B1B-6274-1B36CF081D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7FB7254-ACDD-4057-8854-31803B578C86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7FB7254-ACDD-4057-8854-31803B578C86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7FB7254-ACDD-4057-8854-31803B578C86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7FB7254-ACDD-4057-8854-31803B578C86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1E0C51D2-7C91-4778-AFBC-302D9CADB4BE}
 	EndGlobalSection
 EndGlobal

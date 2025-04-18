@@ -1,0 +1,14 @@
+﻿<Window x:Class="UserInterface.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UserInterface"
+        mc:Ignorable="d"
+        Title="Login" Height="500" Width="800">
+    <Grid>
+        <Rectangle x:Name="rectangle" HorizontalAlignment="Left" Height="100" Margin="-155,-91,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
+        <Label x:Name="MainTitle" Content="Login" HorizontalAlignment="Center" Margin="0,54,0,0" VerticalAlignment="Top" Height="80" Width="110" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+    </Grid>
+</Window>
