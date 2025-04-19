@@ -2,7 +2,6 @@
 {
     public class Transaction
     {
-        private int id = -1;
         private TransactionType Type { get; set; }
         public uint Amount { get; private set; }
         public Date Date { get; private set; }

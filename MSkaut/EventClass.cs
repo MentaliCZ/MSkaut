@@ -1,9 +1,10 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using UserManager;
 
 namespace MSkaut
 {
-	public class EventClass
+    public class EventClass
 	{
 		public string Name { get; private set; }
 		public string Description { get; private set; }

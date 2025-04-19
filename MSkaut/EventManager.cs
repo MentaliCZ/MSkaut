@@ -1,7 +1,8 @@
 ﻿using System;
 using UserManager;
 
-namespace MSkaut {
+namespace MSkaut 
+{
 	public class EventManager
 	{
 		private HashSet<EventClass> events;
@@ -11,12 +12,7 @@ namespace MSkaut {
 			events = new();
 		}
 
-		public void addEvent(EventClass event)
-		{
-			events.add(event);
-		}
-
-		public bool deleteEvent(string name, User owner) 
+		public bool DeleteEvent(string name, User owner)
 		{
 			foreach (EventClass eventClass in events)
 			{
@@ -29,3 +25,10 @@ namespace MSkaut {
 
 			return false;
 		}
+
+		public void AddEvent(EventClass event)
+		{
+			events.add(event);
+		}
+	}
+}
