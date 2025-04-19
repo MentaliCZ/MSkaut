@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using XAct.Users;
 using XSystem.Security.Cryptography;
 
 namespace UserManager
@@ -16,7 +17,7 @@ namespace UserManager
             this.role = role;
         }
 
-        private string HashPassword(string password)
+        public static string HashPassword(string password)
         {
             using (var sha256 = new SHA256Managed())
             {
@@ -26,10 +27,15 @@ namespace UserManager
             }
         }
 
-        public bool CheckPassowrd(string password) 
+        public static bool CheckPassowrd(string password, string hashedPassword) 
         {
             return HashPassword(password) == hashedPassword;
         }
+
+        //**************************************************************************************
+        // Database methods
+        //**************************************************************************************
+
 
     }
 }
