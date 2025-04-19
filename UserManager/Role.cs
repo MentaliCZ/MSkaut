@@ -1,4 +1,6 @@
 ﻿using System;
+using DatabaseManager;
+using Supabase;
 
 namespace UserManager
 {
@@ -19,5 +21,19 @@ namespace UserManager
         {
 			this.Description = description;
         }
+
+        //**************************************************************************************
+        // Database methods
+        //**************************************************************************************
+
+        public static async Task<Role?> GetRole(string name, Client client) 
+		{
+			DBUserRole? dbUserRole = await DBUserRole.GetUserRole(name, client);
+
+			if (dbUserRole == null)
+				return null;
+
+			return new Role(dbUserRole.Name, dbUserRole.Description, dbUserRole.Hierarchy);	
+		}
     }
 }

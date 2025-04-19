@@ -1,19 +1,33 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using Supabase;
 using System;
 
-[Table("User_role")]
-public class DBUserRole : BaseModel
+namespace DatabaseManager
 {
-    [PrimaryKey("user_role_id")]
-    public int Id { get; set; }
+    [Table("User_role")]
+    public class DBUserRole : BaseModel
+    {
+        [PrimaryKey("user_role_id")]
+        public int Id { get; set; }
 
-    [Column("name")]
-    public string Name { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
 
-    [Column("description")]
-    public string Description { get; set; }
+        [Column("description")]
+        public string Description { get; set; }
 
-    [Column("power_int")]
-    public int Hierarchy { get; set; }
+        [Column("power_int")]
+        public int Hierarchy { get; set; }
+
+
+        public static async Task<DBUserRole?> GetUserRole(string name, Client client)
+        {
+            return await client
+           .From<DBUserRole>()
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy})
+           .Where(x => x.Name == name)
+           .Single();
+        }
+    }
 }
