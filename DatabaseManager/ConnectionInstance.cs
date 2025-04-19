@@ -1,6 +1,4 @@
 ﻿using Supabase;
-using UserManager;
-using MSkaut;
 
 namespace DatabaseManager
 {

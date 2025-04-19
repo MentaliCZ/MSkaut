@@ -2,7 +2,6 @@
 using Supabase.Postgrest.Models;
 using System;
 using Supabase;
-using UserManager;
 using System.Reflection;
 
 

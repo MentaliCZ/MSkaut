@@ -2,20 +2,20 @@
 using XAct.Users;
 using XSystem.Security.Cryptography;
 using DatabaseManager;
+using Supabase;
 
 namespace UserManager
 {
     public class User
     {
-        private string login;
-        private string hashedPassword;
+        public string Login { get; set; }
         private Role role;
 
-        public User(string login, string password, Role role) 
+        private User(string login, string password, Role role) 
         {
-            this.login = login;
-            hashedPassword = HashPassword(password);
-            this.role = role;
+            this.Login = login;
+            string hashedPassword = HashPassword(password);
+            this.role = role;  
         }
 
         public static string HashPassword(string password)
@@ -37,6 +37,20 @@ namespace UserManager
         // Database methods
         //**************************************************************************************
 
+
+
+        public static async Task<User> TryLogin(string login, string password, Client client)
+        {
+            DBUser? dbUser = await DBUser.GetUser(login, client);
+
+            if (dbUser == null)
+                return null;
+
+            if (dbUser.PasswordHashed == HashPassword(password))
+                return new User(login, password, null);
+
+            return null;
+        }
 
     }
 }
