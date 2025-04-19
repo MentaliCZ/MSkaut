@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using XAct.Users;
 using XSystem.Security.Cryptography;
+using DatabaseManager;
 
 namespace UserManager
 {
