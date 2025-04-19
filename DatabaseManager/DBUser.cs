@@ -1,6 +1,10 @@
 ﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 using System;
 using Supabase;
+using UserManager;
+using System.Reflection;
+
 
 namespace DatabaseManager
 {
@@ -18,5 +22,31 @@ namespace DatabaseManager
 
         [Column("role_id")]
         public int RoleId { get; set; }
+
+
+        public static async Task<DBUser?> GetUser(string login, Client client)
+        {
+             return await client
+            .From<DBUser>()
+            .Select(x => new object[] { x.Login, x.PasswordHashed })
+            .Where(x => x.Login == login)
+            .Single();
+        }
+
+        public async Task<bool> CreateUser(string login, string hashedPassword, Client client)
+        {
+            if (GetUser(login, client) != null)
+                return false;
+
+            var dbUser = new DBUser
+            {
+                Login = login,
+                PasswordHashed = hashedPassword
+            };
+
+            await client.From<DBUser>().Insert(dbUser);
+
+            return true;
+        }
     }
 }

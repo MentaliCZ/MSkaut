@@ -1,6 +1,7 @@
 ﻿using System;
 using Supabase;
 using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
 namespace DatabaseManager
 {

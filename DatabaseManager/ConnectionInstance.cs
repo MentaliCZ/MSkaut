@@ -36,15 +36,6 @@ namespace DatabaseManager
             await client.InitializeAsync();
         }
 
-        public async Task<User> TryLogin(string login, string password)
-        {
-            var result = await client
-                .From<DBUser>()
-                .Get();
-
-        }
-
-
-
     }
+
 }
