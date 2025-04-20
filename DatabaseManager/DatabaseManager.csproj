@@ -10,9 +10,4 @@
     <PackageReference Include="supabase" Version="1.1.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MSkaut\MSkaut.csproj" />
-    <ProjectReference Include="..\UserManager\UserManager.csproj" />
-  </ItemGroup>
-
 </Project>

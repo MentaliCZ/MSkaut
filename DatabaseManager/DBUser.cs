@@ -32,9 +32,9 @@ namespace DatabaseManager
             .Single();
         }
 
-        public async Task<bool> CreateUser(string login, string hashedPassword, Client client)
+        public static async Task<bool> CreateUser(string login, string hashedPassword, Client client)
         {
-            if (GetUser(login, client) != null)
+            if (await GetUser(login, client) != null)
                 return false;
 
             var dbUser = new DBUser

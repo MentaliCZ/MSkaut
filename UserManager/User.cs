@@ -41,7 +41,7 @@ namespace UserManager
 
         public static async Task<User> TryLogin(string login, string password, Client client)
         {
-            DBUser? dbUser = await DBUser.GetUser(login, client);
+            DatabaseManager.DBUser? dbUser = await DatabaseManager.DBUser.GetUser(login, client);
 
             if (dbUser == null)
                 return null;
