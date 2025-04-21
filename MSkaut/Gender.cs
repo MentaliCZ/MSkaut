@@ -1,6 +1,11 @@
 ﻿using System;
 
-public enum Gender
+public class Gender
 {
-	MALE, FEMALE
+	public string Name { get; set; }
+	
+	public Gender(string name) 
+	{
+		Name = name;
+	}
 }
