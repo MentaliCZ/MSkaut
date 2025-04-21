@@ -23,18 +23,18 @@ namespace DatabaseManager
         public int RoleId { get; set; }
 
 
-        public static async Task<DBUser?> GetUser(string login, Client client)
+        public static async Task<DBUser?> GetUser(string login, string hashedPassword ,Client client)
         {
              return await client
             .From<DBUser>()
-            .Select(x => new object[] { x.Login, x.PasswordHashed })
-            .Where(x => x.Login == login)
+            .Select(x => new object[] { x.PrimaryKey, x.Login, x.PasswordHashed })
+            .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
             .Single();
         }
 
         public static async Task<bool> CreateUser(string login, string hashedPassword, Client client)
         {
-            if (await GetUser(login, client) != null)
+            if (await GetUser(login, hashedPassword ,client) != null)
                 return false;
 
             var dbUser = new DBUser

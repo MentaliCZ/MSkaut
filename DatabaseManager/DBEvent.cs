@@ -19,5 +19,30 @@ namespace DatabaseManager
 
         [Column("owner_id")]
         public int OwnerId { get; set; }
+
+        public static async Task<List<DBEvent>> GetUserEvents(int id, Client client)
+        {
+            var result = await client
+           .From<DBEvent>()
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
+           .Where(x => x.OwnerId == id)
+           .Get();
+
+            return result.Models;
+        }
+
+        public static async Task<bool> CreateEvent(string name, string description, int owner_id Client client)
+        {
+            var dbEvent = new DBEvent
+            {
+                Name = name,
+                Description = description,
+                OwnerId = owner_id
+            };
+
+            await client.From<DBEvent>().Insert(dbEvent);
+
+            return true;
+        }
     }
 }

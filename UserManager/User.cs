@@ -8,14 +8,16 @@ namespace UserManager
 {
     public class User
     {
+        public int Id { get; set; }
         public string Login { get; set; }
         private Role role;
 
-        private User(string login, string password, Role role) 
+        private User(int id, string login, string password, Role role)
         {
+            this.Id = id;
             this.Login = login;
             string hashedPassword = HashPassword(password);
-            this.role = role;  
+            this.role = role;
         }
 
         public static string HashPassword(string password)
@@ -28,29 +30,23 @@ namespace UserManager
             }
         }
 
-        public static bool CheckPassowrd(string password, string hashedPassword) 
-        {
-            return HashPassword(password) == hashedPassword;
-        }
-
         //**************************************************************************************
         // Database methods
         //**************************************************************************************
 
-
-
-        public static async Task<User> TryLogin(string login, string password, Client client)
+        public static async Task<User?> TryLogin(string login, string password, Client client)
         {
-            DatabaseManager.DBUser? dbUser = await DatabaseManager.DBUser.GetUser(login, client);
+            DBUser? dbUser = await DBUser.GetUser(login, HashPassword(password), client);
 
             if (dbUser == null)
                 return null;
 
-            if (dbUser.PasswordHashed == HashPassword(password))
-                return new User(login, password, null);
-
-            return null;
+            return new User(dbUser.Id, login, password, await Role.GetRole(dbUser.RoleId, client));
         }
 
+        public static async Task<bool> CreateUser(string login, string password, Client client)
+        {
+            return await DBUser.CreateUser(login, HashPassword(password), client);
+        }
     }
 }

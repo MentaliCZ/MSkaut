@@ -6,34 +6,41 @@ namespace UserManager
 {
 	public class Role
 	{
+		public int Id { get; private set; }
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 		// hierarchy, larger number means more privileges
 		private int hierarchy;
 
-		public Role(string name, int hierarchy)
+		private Role(int id, string name, int hierarchy)
 		{
+			this.Id = id;
 			this.Name = name;
 			this.hierarchy = hierarchy;
 		}
 
-        public Role(string name, string description, int hierarchy) : this(name, hierarchy)
-        {
-			this.Description = description;
-        }
-
-        //**************************************************************************************
-        // Database methods
-        //**************************************************************************************
-
-        public static async Task<Role?> GetRole(string name, Client client) 
+		private Role(int id, string name, string description, int hierarchy) : this(id, name, hierarchy)
 		{
-			DBUserRole? dbUserRole = await DBUserRole.GetUserRole(name, client);
+			this.Description = description;
+		}
+
+		//**************************************************************************************
+		// Database methods
+		//**************************************************************************************
+
+		public static async Task<Role?> GetRole(int id, Client client)
+		{
+			DBUserRole? dbUserRole = await DBUserRole.GetUserRole(id, client);
 
 			if (dbUserRole == null)
 				return null;
 
-			return new Role(dbUserRole.Name, dbUserRole.Description, dbUserRole.Hierarchy);	
+			return new Role(dbUserRole.Id, dbUserRole.Name, dbUserRole.Description, dbUserRole.Hierarchy);
+		}
+
+		public static async Task<bool> CreateRole(string name, string description, int hierarchy, Client client)
+		{
+			
 		}
     }
 }

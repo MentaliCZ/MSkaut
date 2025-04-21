@@ -21,6 +21,15 @@ namespace DatabaseManager
         public int Hierarchy { get; set; }
 
 
+        public static async Task<DBUserRole?> GetUserRole(int id, Client client)
+        {
+            return await client
+           .From<DBUserRole>()
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
+           .Where(x => x.Id == id)
+           .Single();
+        }
+
         public static async Task<DBUserRole?> GetUserRole(string name, Client client)
         {
             return await client
