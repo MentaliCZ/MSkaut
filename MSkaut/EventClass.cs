@@ -31,6 +31,7 @@ namespace MSkaut
 
 		public static EventClass InitEventClass(DBEvent dbEvent, Client client)
 		{
+			
 
 
 

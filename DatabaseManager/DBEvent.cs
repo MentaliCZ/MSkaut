@@ -17,6 +17,12 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
+        [Column("start_date")]
+        public DateOnly StartDate { get; set; }
+
+        [Column("end_date")]
+        public DateOnly EndDate { get; set; }
+
         [Column("owner_id")]
         public int OwnerId { get; set; }
 
@@ -24,14 +30,14 @@ namespace DatabaseManager
         {
             var result = await client
            .From<DBEvent>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.StartDate, x.EndDate, x.OwnerId })
            .Where(x => x.OwnerId == id)
            .Get();
 
             return result.Models;
         }
 
-        public static async Task<bool> CreateEvent(string name, string description, int owner_id Client client)
+        public static async Task<bool> CreateEvent(string name, string description, int owner_id, Client client)
         {
             var dbEvent = new DBEvent
             {
