@@ -35,6 +35,17 @@ namespace DatabaseManager
            .Single();
         }
 
+        public static async Task<List<DBPerson>> GetUsersPeople(int creatorId, Client client)
+        {
+            var result = await client
+           .From<DBPerson>()
+           .Select(x => new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId, x.CreatorId })
+           .Where(x => x.CreatorId == creatorId)
+           .Get();
+
+            return result.Models;
+        }
+
         public static async Task<bool> CreatePerson(string firstName, string lastName, DateOnly birthDate,
                                                     int genderId, int creatorId, Client client)
         {
