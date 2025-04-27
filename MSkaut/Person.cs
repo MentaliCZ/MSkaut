@@ -20,10 +20,13 @@ namespace MSkaut
 			this.Gender = gender;
 		}
 
-		public static async Task<List<Person>> GetEventParticipants(EventClass event, Client client)
-		{
 
+		public static async Task<Person> DBPersonToPerson(DBPerson dbPerson, Client client)
+		{
+			return new Person(dbPerson.FirstName, dbPerson.LastName,
+				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client));
 		}
+
 
 		public static async Task<List<Person>> GetUsersPeople(User user, Client client)
 		{
@@ -37,6 +40,18 @@ namespace MSkaut
 
 			return people;
 		}
+
+		public static async Task<List<Person>> GetEventParticipants(int eventId, Client client)
+		{
+			List<Person> participants = new();
+
+            foreach (DBPerson dbPerson in (await DBEventPerson.GetEventParticipants(eventId, client)))
+            {
+                participants.Add(await Person.DBPersonToPerson(dbPerson, client));
+            }
+
+			return participants;
+        }
 
 	}
 }

@@ -6,7 +6,7 @@ using DatabaseManager;
 
 namespace MSkaut
 {
-    public class EventClass
+	public class EventClass
 	{
 		public int Id { get; private set; }
 		public string Name { get; private set; }
@@ -16,25 +16,28 @@ namespace MSkaut
 		public List<Person> Participants { get; private set; }
 		public User Owner { get; private set; }
 
-		public EventClass(string name, User owner)
+		public EventClass(int id, string name, User owner)
 		{
+			this.Id = id;
 			this.Name = name;
 			this.Owner = owner;
 			Transactions = new();
 			Participants = new();
 		}
 
-        public EventClass(string name, string description, User owner) : this(name, owner)
-        {
-			this.Description = description;
-        }
-
-		public static EventClass InitEventClass(DBEvent dbEvent, Client client)
+		public EventClass(int id, string name, string description, User owner) : this(id, name, owner)
 		{
-			
+			this.Description = description;
+		}
 
+		public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<int, TransactionType> transactionTypes, User user, Client client)
+		{
+			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description, user);
 
+			eventClass.Participants = await Person.GetEventParticipants(dbEvent.Id, client);
+			eventClass.Transactions = await Transaction.GetEventTransactions(dbEvent.Id, transactionTypes, client);
 
+			return eventClass;
 		}
 
     }

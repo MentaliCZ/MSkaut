@@ -12,20 +12,26 @@ namespace DatabaseManager
         public int EventId { get; set; }
 
         [Column("person_id")]
-        public string PersonId { get; set; }
+        public int PersonId { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
 
-        public static async Task<List<DBEventPerson>> GetEventParticipants(int eventId, Client client)
+        public static async Task<List<DBPerson?>> GetEventParticipants(int eventId, Client client)
         {
-            var result = await client
+            var participantsId = (await client
            .From<DBEventPerson>()
-           .Select(x => new object[] { x.EventId, x.PersonId })
+           .Select(x => new object[] { x.PersonId })
            .Where(x => x.EventId == eventId)
-           .Get();
+           .Get()).Models;
 
-            return result.Models;
+            var result = new List<DBPerson?>();
+            foreach (DBEventPerson dbEventPerson in participantsId) 
+            {
+                result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
+            }
+
+            return result;
         }
     }
 }

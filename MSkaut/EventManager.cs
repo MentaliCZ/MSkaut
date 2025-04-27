@@ -27,7 +27,7 @@ namespace MSkaut
 
 			foreach (DBEvent dbEvent in dbEvents)
 			{
-				events.Add(new EventClass(dbEvent.Name, user));
+				events.Add(await EventClass.InitEventClass(dbEvent, user, client));
 			}
 
 		}
