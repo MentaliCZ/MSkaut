@@ -17,10 +17,10 @@ namespace UserInterface
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class MainWindow : Window
     {
         ConnectionInstance dbConnection;
-        public LoginWindow()
+        public MainWindow()
         {   
             InitializeComponent();
             initDBConnection();

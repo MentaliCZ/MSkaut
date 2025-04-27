@@ -5,10 +5,97 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="Login" Height="500" Width="800">
+        Title="Login" Height="500" Width="800"
+        Background="#454372">
     <Grid>
-        <Rectangle x:Name="rectangle" HorizontalAlignment="Left" Height="100" Margin="-155,-91,0,0" Stroke="Black" VerticalAlignment="Top" Width="100"/>
-        <Label x:Name="MainTitle" Content="Login" HorizontalAlignment="Center" Margin="0,54,0,0" VerticalAlignment="Top" Height="80" Width="110" FontSize="36" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "50"/>
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="93*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background= "#2F2963" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition>
+
+                </ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Foreground="White"
+                       FontSize="25" 
+                       Text="Login"
+                       FontWeight="Bold"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Vertical"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center">
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Username:"
+                       HorizontalAlignment="Center"
+                       Foreground="White"
+                       FontSize="20"
+                       Margin="10"/>
+                <TextBox Width="200"
+                     Height="30"
+                         FontSize="20"
+                         Foreground="Black"
+                         Name="usernameInput"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <TextBlock Text="Password:"
+                       HorizontalAlignment="Center"
+                       Foreground="White"
+                       FontSize="20"
+                       Margin="10"/>
+                <TextBox Width="200"
+                     Height="30"
+                         FontSize="20"
+                         Foreground="Black"
+                         Name="passwordInput"/>
+            </StackPanel>
+
+            <Button Width="100"
+                    Height="30"
+                    Margin="20"
+                    Name="tryLogin"
+                    Background="#70877F"
+                    Click="LoginButton">
+                <TextBlock Text="Login"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="17"/>
+            </Button>
+
+            <Button Width="150"
+                    Height="20"
+                    Margin="5"
+                    Name="Create_new_User"
+                    Background="#EF946C" Click="Create_new_User_Click">
+                <TextBlock Text="Create new user"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="10"/>
+            </Button>
+
+
+
+
+        </StackPanel>
 
     </Grid>
 </Window>
