@@ -8,8 +8,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 using UserManager;
 using DatabaseManager;
+using UserInterface.ViewModels;
 
 namespace UserInterface
 {
@@ -19,18 +21,12 @@ namespace UserInterface
     /// </summary>
     public partial class MainWindow : Window
     {
-        ConnectionInstance dbConnection;
-        public MainWindow()
+        public MainWindow(User user, ConnectionInstance dbConnection)
         {   
             InitializeComponent();
-            initDBConnection();
+            MainViewModel mainViewModel = new(user, dbConnection);
+            DataContext = mainViewModel;
         }
-
-        private async Task initDBConnection() 
-        {
-            dbConnection = await ConnectionInstance.CreateInstance();
-        }
-
 
     }
 }

@@ -18,7 +18,7 @@
             <ColumnDefinition Width="40*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background= "#2F2963" Grid.ColumnSpan="2">
+        <Grid Background= "#2F2963" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="800">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition>
 
@@ -36,11 +36,12 @@
         <Grid Grid.Column="2">
             <StackPanel HorizontalAlignment="Right"
                         Orientation="Vertical">
-                <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="User: "
-                               Foreground="White">
+                               Foreground="White"/>
+                    <TextBlock Text="Name"
+                               Foreground="White"/>
 
-                    </TextBlock>
                 </StackPanel>
 
             </StackPanel>
