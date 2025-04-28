@@ -14,20 +14,21 @@ namespace MSkaut
 			events = new();
 		}
 
-		public static async Task<EventManager> InitEventManger(User user, Client client) 
+		public static async Task<EventManager> InitEventManger(User user, Dictionary<int, TransactionType> transactionTypes,
+			Client client) 
 		{
 			EventManager eventManager = new EventManager();
-			await eventManager.Init(user, client);
+			await eventManager.Init(user, transactionTypes, client);
 			return eventManager;
 		}
 
-		private async Task Init(User user, Client client) 
+		private async Task Init(User user, Dictionary<int, TransactionType> transactionTypes, Client client) 
 		{
 			List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
 
 			foreach (DBEvent dbEvent in dbEvents)
 			{
-				events.Add(await EventClass.InitEventClass(dbEvent, user, client));
+				events.Add(await EventClass.InitEventClass(dbEvent, transactionTypes, user, client));
 			}
 
 		}

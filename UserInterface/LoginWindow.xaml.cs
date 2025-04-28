@@ -34,38 +34,55 @@ namespace UserInterface
 
         private async void LoginButton(object sender, RoutedEventArgs e)
         {
-            if (usernameInput.Text == null || passwordInput == null)
+            if (usernameInput.Text == null || passwordInput == null || 
+                usernameInput.Text.Length <= 0 || passwordInput.Password.Length <= 0)
             {
-                //TODO, write some kind of error message
+                SetMessage("One of the input fields is empty");
                 return;
             }
 
-            User? user = await User.TryLogin(usernameInput.Text, passwordInput.Text, dbConnection.Client);
+            User? user = await User.TryLogin(usernameInput.Text, passwordInput.Password, dbConnection.Client);
 
+            ClearInputFields();
             if (user == null)
             {
-                //TODO, write some kind of error message
+                SetMessage("User name or password is incorrect");
                 return;
             }
 
-            //TODO: change screen to main page
+            SetMessage("Succesful login");
 
         }
 
         private async void Create_new_User_Click(object sender, RoutedEventArgs e)
         {
-            if (usernameInput.Text == null || passwordInput == null)
+            if (usernameInput.Text == null || passwordInput == null ||
+                usernameInput.Text.Length <= 0 || passwordInput.Password.Length <= 0)
             {
-                //TODO, write some kind of error message
+                SetMessage("One of the input fields is empty");
                 return;
             }
 
-            if (!await User.CreateUser(usernameInput.Text, passwordInput.Text, dbConnection.Client))
+            ClearInputFields();
+            if (!await User.CreateUser(usernameInput.Text, passwordInput.Password, dbConnection.Client))
             {
-                //TODO, write some kind of error message
+                SetMessage("User with this username already exists");
             }
+            else
+            {
+                SetMessage("Succesfuly created a new account");
+            }
+        }
 
-            //TODO, write some supportive message
+        private void SetMessage(string message)
+        {
+            messageText.Text = message;
+        }
+
+        private void ClearInputFields() 
+        {
+            usernameInput.Text = "";
+            passwordInput.Password = "";
         }
     }
 }

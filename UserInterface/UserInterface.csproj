@@ -8,4 +8,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseManager\DatabaseManager.csproj" />
+    <ProjectReference Include="..\MSkaut\MSkaut.csproj" />
+    <ProjectReference Include="..\UserManager\UserManager.csproj" />
+  </ItemGroup>
+
 </Project>

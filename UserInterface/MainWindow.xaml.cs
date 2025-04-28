@@ -32,40 +32,5 @@ namespace UserInterface
         }
 
 
-        private async void LoginButton(object sender, RoutedEventArgs e)
-        {
-            if (usernameInput.Text == null || passwordInput == null)
-            {
-                //TODO, write some kind of error message
-                return;
-            }
-
-            User? user = await User.TryLogin(usernameInput.Text, passwordInput.Text, dbConnection.Client);
-
-            if (user == null)
-            {
-                //TODO, write some kind of error message
-                return;
-            }
-
-            //TODO: change screen to main page
-
-        }
-
-        private async void Create_new_User_Click(object sender, RoutedEventArgs e)
-        {
-            if (usernameInput.Text == null || passwordInput == null)
-            {
-                //TODO, write some kind of error message
-                return;
-            }
-
-            if (!await User.CreateUser(usernameInput.Text, passwordInput.Text, dbConnection.Client))
-            {
-                //TODO, write some kind of error message
-            }
-
-            //TODO, write some supportive message
-        }
     }
 }

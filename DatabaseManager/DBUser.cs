@@ -27,7 +27,7 @@ namespace DatabaseManager
         {
              return await client
             .From<DBUser>()
-            .Select(x => new object[] { x.PrimaryKey, x.Login, x.PasswordHashed })
+            .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
             .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
             .Single();
         }
@@ -40,7 +40,8 @@ namespace DatabaseManager
             var dbUser = new DBUser
             {
                 Login = login,
-                PasswordHashed = hashedPassword
+                PasswordHashed = hashedPassword,
+                RoleId = 3
             };
 
             await client.From<DBUser>().Insert(dbUser);

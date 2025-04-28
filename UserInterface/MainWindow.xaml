@@ -33,5 +33,19 @@
                        FontWeight="Bold"/>
         </Grid>
 
+        <Grid Grid.Column="2">
+            <StackPanel HorizontalAlignment="Right"
+                        Orientation="Vertical">
+                <StackPanel>
+                    <TextBlock Text="User: "
+                               Foreground="White">
+
+                    </TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+
+        </Grid>
+
     </Grid>
 </Window>

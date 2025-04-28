@@ -40,7 +40,7 @@ namespace UserManager
 
 		public static async Task<bool> CreateRole(string name, string description, int hierarchy, Client client)
 		{
-			
+			return await DBUserRole.CreateUserRole(name, description, hierarchy, client);
 		}
     }
 }

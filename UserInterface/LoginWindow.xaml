@@ -58,7 +58,7 @@
                        Foreground="White"
                        FontSize="20"
                        Margin="10"/>
-                <TextBox Width="200"
+                <PasswordBox Width="200"
                      Height="30"
                          FontSize="20"
                          Foreground="Black"
@@ -91,6 +91,13 @@
                            FontWeight="Bold"
                            FontSize="10"/>
             </Button>
+            <TextBlock Text=""
+                       Foreground="#A61C3C"
+                       HorizontalAlignment="Center"
+                       Margin="20"
+                       Name="messageText"
+                       FontSize="15"
+                       FontWeight="Bold"/>
 
 
 
