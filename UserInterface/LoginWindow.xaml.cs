@@ -17,14 +17,21 @@ namespace UserInterface
 {
 
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for LoginWindow.xaml
     /// </summary>
     public partial class LoginWindow : Window
     {
         public LoginWindow()
         {   
             InitializeComponent();
-            LoginViewModel loginViewModel = new();
+            LoginViewModel loginViewModel = new(this);
+            DataContext = loginViewModel;
+        }
+
+        public LoginWindow(ConnectionInstance dbInstance)
+        {
+            InitializeComponent();
+            LoginViewModel loginViewModel = new(this);
             DataContext = loginViewModel;
         }
     }

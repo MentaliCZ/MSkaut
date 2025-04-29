@@ -29,7 +29,7 @@
                        HorizontalAlignment="Center"
                        Foreground="White"
                        FontSize="25" 
-                       Text="Main page"
+                       Text="MSkaut"
                        FontWeight="Bold"/>
         </Grid>
 
@@ -39,10 +39,19 @@
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="User: "
                                Foreground="White"/>
-                    <TextBlock Text="Name"
+                    <TextBlock Text="{Binding User.Login}"
                                Foreground="White"/>
-
                 </StackPanel>
+                <Button Background="#A61C3C" 
+                        Height="15"
+                        Width="50"
+                        Margin="5"
+                        Command="{Binding LogOutCommand}">
+                    <TextBlock Text="Log Out"
+                               FontSize="8"
+                               Foreground="White"
+                               FontWeight="Bold"/>
+                </Button>
 
             </StackPanel>
 

@@ -32,9 +32,18 @@ namespace DatabaseManager
             .Single();
         }
 
+        public static async Task<DBUser?> GetUserByLogin(string login, Client client)
+        {
+            return await client
+            .From<DBUser>()
+            .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
+            .Where(x => x.Login == login)
+            .Single();
+        }
+
         public static async Task<bool> CreateUser(string login, string hashedPassword, Client client)
         {
-            if (await GetUser(login, hashedPassword ,client) != null)
+            if (await GetUserByLogin(login ,client) != null)
                 return false;
 
             var dbUser = new DBUser

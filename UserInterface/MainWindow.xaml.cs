@@ -24,7 +24,7 @@ namespace UserInterface
         public MainWindow(User user, ConnectionInstance dbConnection)
         {   
             InitializeComponent();
-            MainViewModel mainViewModel = new(user, dbConnection);
+            MainViewModel mainViewModel = new(this, user, dbConnection);
             DataContext = mainViewModel;
         }
 

@@ -19,6 +19,7 @@ namespace UserInterface.ViewModels
 		public RelayCommand TryLoginCommand { get; set; }
 		public RelayCommand CreateUserCommand { get; set; }
 		private MainWindow mainWindow;
+		private Window window;
 
 		private string _message;
 		public string Message 
@@ -32,10 +33,23 @@ namespace UserInterface.ViewModels
 
 		private ConnectionInstance dbConnection;
 
-		public LoginViewModel()
+		private LoginViewModel()
+		{
+            TryLoginCommand = new(TryLogin, _ => true);
+            CreateUserCommand = new(CreateUser, _ => true);
+        }
+
+		public LoginViewModel(Window window) : this()
 		{
 			initDBConnection();
-			TryLoginCommand = new(TryLogin, _ => true);
+			this.window = window;
+        }
+
+        public LoginViewModel(Window window, ConnectionInstance dbConnection) : this()
+        {
+			this.dbConnection = dbConnection;
+            this.window = window;
+            TryLoginCommand = new(TryLogin, _ => true);
             CreateUserCommand = new(CreateUser, _ => true);
         }
 
@@ -64,13 +78,27 @@ namespace UserInterface.ViewModels
             mainWindow = new(user, dbConnection);
             mainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 			mainWindow.Show();
-			
+
+			window.Close();
             return;
 		}
 
 		public async void CreateUser(Object obj)
 		{
-			Message = "we failed men";
+			if (Login == null || Password == null ||
+				Login.Length <= 0 || Password.Length <= 0)
+			{
+				Message = "Login and password fields cant be empty";
+				return;
+			}
+
+			if (!await User.CreateUser(Login, Password, dbConnection.Client))
+			{
+				Message = "Account with this username already exists";
+				return;
+			}
+
+			Message = "Account was succesfuly created, you can log in now";
 		}
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
