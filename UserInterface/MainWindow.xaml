@@ -5,55 +5,118 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="Main page" Height="500" Width="800"
+        Title="Main page" Height="500" Width="1000"
         Background="#454372">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "50"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
-
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100*"/>
-            <ColumnDefinition Width="40*"/>
-        </Grid.ColumnDefinitions>
 
-        <Grid Background= "#2F2963" Grid.ColumnSpan="2" HorizontalAlignment="Left" Width="800">
+        <Grid Background= "#2F2963" Grid.ColumnSpan="2" 
+              HorizontalAlignment="Center"
+              Grid.Row="0"
+              Width="1000">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition>
-
-                </ColumnDefinition>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Column="1"
+            <TextBlock Grid.Column="0"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Foreground="White"
                        FontSize="25" 
                        Text="MSkaut"
                        FontWeight="Bold"/>
-        </Grid>
 
-        <Grid Grid.Column="2">
-            <StackPanel HorizontalAlignment="Right"
+            <Grid Grid.Column="1"
+              Background="#2F2963">
+                <StackPanel HorizontalAlignment="Right"
                         Orientation="Vertical">
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <TextBlock Text="User: "
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="User: "
                                Foreground="White"/>
-                    <TextBlock Text="{Binding User.Login}"
+                        <TextBlock Text="{Binding User.Login}"
                                Foreground="White"/>
-                </StackPanel>
-                <Button Background="#A61C3C" 
+                    </StackPanel>
+                    <Button Background="#A61C3C" 
                         Height="15"
                         Width="50"
                         Margin="5"
                         Command="{Binding LogOutCommand}">
-                    <TextBlock Text="Log Out"
+                        <TextBlock Text="Log Out"
                                FontSize="8"
                                Foreground="White"
                                FontWeight="Bold"/>
-                </Button>
+                    </Button>
 
-            </StackPanel>
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+
+
+        <Grid Grid.Row="1" Grid.Column="0"
+              Background="#2F2963">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Background="#2F2963"
+                    Command="{Binding ShowEventsPage}">
+                <TextBlock Text="Events"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Grid.Column="1"
+                    Background="#2F2963"
+                    Command="{Binding ShowPeoplePage}">
+                <TextBlock Text="People"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Grid.Column="2"
+                    Background="#2F2963"
+                    Command="{Binding ShowCategoriesPage}">
+                <TextBlock Text="Categories"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Button>
+
+            <Button Grid.Column="3"
+                    Background="#2F2963"
+                    Command="{Binding ShowExportPage}">
+                <TextBlock Text="Export"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Button>
+
+        </Grid>
+
+        <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
+            <ListView Name="EventsList" ItemsSource="{Binding Students}" Background="#2F2963">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Age}" Header="Age"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
 
         </Grid>
 
