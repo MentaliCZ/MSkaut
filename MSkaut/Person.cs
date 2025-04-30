@@ -2,6 +2,7 @@
 using UserManager;
 using DatabaseManager;
 using Supabase;
+using System.Collections.ObjectModel;
 
 namespace MSkaut
 {
@@ -21,34 +22,42 @@ namespace MSkaut
 		}
 
 
-		public static async Task<Person> DBPersonToPerson(DBPerson dbPerson, Client client)
+		public static async Task DBPersonToPerson(ObservableCollection<Person> peopleList, DBPerson dbPerson, Client client)
 		{
-			return new Person(dbPerson.FirstName, dbPerson.LastName,
-				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client));
+			peopleList.Add(new Person(dbPerson.FirstName, dbPerson.LastName,
+				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client)));
 		}
 
 
-		public static async Task<List<Person>> GetUsersPeople(User user, Client client)
+		public static async Task<ObservableCollection<Person>> GetUsersPeople(User user, Client client)
 		{
 			List<DBPerson> dbPeople = await DBPerson.GetUsersPeople(user.Id, client);
-			List<Person> people = new();
+            ObservableCollection<Person> people = new();
+
+			List<Task> tasks = new(); 
 
 			foreach (DBPerson dbPerson in dbPeople)
 			{
-				people.Add(new Person(dbPerson.FirstName, dbPerson.LastName, dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client)));
+				tasks.Add(DBPersonToPerson(people, dbPerson, client));
 			}
+
+			await Task.WhenAll();
 
 			return people;
 		}
 
-		public static async Task<List<Person>> GetEventParticipants(int eventId, Client client)
+		public static async Task<ObservableCollection<Person>> GetEventParticipants(int eventId, Client client)
 		{
-			List<Person> participants = new();
+			List<DBPerson> dbPeople = await DBEventPerson.GetEventParticipants(eventId, client);
+            ObservableCollection<Person> participants = new();
+			List<Task> tasks = new();
 
-            foreach (DBPerson dbPerson in (await DBEventPerson.GetEventParticipants(eventId, client)))
+            foreach (DBPerson dbPerson in dbPeople)
             {
-                participants.Add(await Person.DBPersonToPerson(dbPerson, client));
+                tasks.Add(DBPersonToPerson(participants, dbPerson, client));
             }
+
+			await Task.WhenAll(tasks);
 
 			return participants;
         }

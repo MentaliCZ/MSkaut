@@ -9,6 +9,7 @@ using UserInterface.Commands;
 using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Collections.ObjectModel;
 
 namespace UserInterface.ViewModels
 {
@@ -18,10 +19,15 @@ namespace UserInterface.ViewModels
 
         public User User { get; set; }
         private ConnectionInstance dbConnection;
+        public ObservableCollection<EventClass> Events { get; set; }
+        public ObservableCollection<TransactionType> TransactionTypes { get; set; }
+        private Dictionary<int, TransactionType> transactionTypesDict;
+
+        public ObservableCollection<Person> UsersPeople { get; set; }
 
         public RelayCommand ShowEventsPage { get; set; }
         public RelayCommand ShowPeoplePage { get; set; }
-        public RelayCommand ShowCategoriesPage { get; set; }
+        public RelayCommand ShowTypesPage { get; set; }
         public RelayCommand ShowExportPage { get; set; }
 
         private Visibility _eventsVisible;
@@ -81,11 +87,26 @@ namespace UserInterface.ViewModels
             this.dbConnection = dbConnection;
             this.thisWindow = thisWindow;
 
+            InitStructures();
+
             LogOutCommand = new(LogOut, _ => true);
             ShowEventsPage = new(ShowEvents, _ => true);
             ShowPeoplePage = new(ShowPeople, _ => true);
-            ShowCategoriesPage = new(ShowCategories, _ => true);
+            ShowTypesPage = new(ShowTypes, _ => true);
             ShowExportPage = new(ShowExport, _ => true);
+        }
+
+        private async Task InitStructures()
+        {
+            TransactionTypes = await TransactionType.GetUsersTransactionTypes(User, dbConnection.Client);
+
+            foreach (TransactionType transactionType in TransactionTypes)
+            {
+                transactionTypesDict[transactionType.Id] = transactionType;
+            }
+
+            Events = await EventClass.GetUserEvents(User, transactionTypesDict, dbConnection.Client);
+            UsersPeople = await Person.GetUsersPeople(User, dbConnection.Client);
         }
 
         private void LogOut(Object obj)
@@ -115,7 +136,7 @@ namespace UserInterface.ViewModels
             PeopleVisible = Visibility.Visible;
         }
 
-        private void ShowCategories(Object obj)
+        private void ShowTypes(Object obj)
         {
             HideAllWindows();
             CategoriesVisible = Visibility.Visible;

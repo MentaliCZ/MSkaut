@@ -1,5 +1,6 @@
 ﻿using Supabase;
 using DatabaseManager;
+using System.Collections.ObjectModel;
 
 namespace MSkaut
 {
@@ -18,11 +19,11 @@ namespace MSkaut
             this.IsExpense = false;
         }
 
-        public static async Task<List<Transaction>> GetEventTransactions(int eventId,
+        public static async Task<ObservableCollection<Transaction>> GetEventTransactions(int eventId,
             Dictionary<int, TransactionType> transactionTypes, Client client)
         {
             List<DBTransaction> dbTransactions = await DBTransaction.GetEventTransactions(eventId, client);
-            List<Transaction> result = new();
+            ObservableCollection<Transaction> result = new();
 
             foreach(DBTransaction dbTransaction in dbTransactions)
             {

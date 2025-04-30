@@ -18,6 +18,11 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
+        [Column("owner_id")]
+        public int? OnwerId { get; set; }
+
+
+
         public static async Task<DBTransactionType?> GetTransactionType(int id, Client client)
         {
             return await client
@@ -36,7 +41,18 @@ namespace DatabaseManager
            .Single();
         }
 
-        public static async Task<bool> CreateTransactionType(string name, string description, Client client)
+        public static async Task<List<DBTransactionType>> GetUsersTransactionTypes(int userId, Client client)
+        {
+            var result = await client
+                .From<DBTransactionType>()
+                .Where(x => x.OnwerId == userId || x.OnwerId == null)
+                .Select(x => new object[] { x.Id, x.Name, x.Description })
+                .Get();
+
+            return result.Models;
+        }
+
+        public static async Task<bool> CreateTransactionType(string name, string description, int userId, Client client)
         {
             if (await GetTransactionType(name, client) != null)
                 return false;

@@ -17,7 +17,7 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
-        public static async Task<List<DBPerson?>> GetEventParticipants(int eventId, Client client)
+        public static async Task<List<DBPerson>> GetEventParticipants(int eventId, Client client)
         {
             var participantsId = (await client
            .From<DBEventPerson>()
@@ -26,6 +26,7 @@ namespace DatabaseManager
            .Get()).Models;
 
             var result = new List<DBPerson?>();
+
             foreach (DBEventPerson dbEventPerson in participantsId) 
             {
                 result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
