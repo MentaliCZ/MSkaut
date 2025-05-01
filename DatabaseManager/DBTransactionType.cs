@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using System.Linq;
 
 
 namespace DatabaseManager
@@ -47,10 +48,12 @@ namespace DatabaseManager
             var result = await client
                 .From<DBTransactionType>()
                 .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
-                //.Where(x => x.OwnerId == userId)
                 .Get();
 
-            return result.Models;
+
+            return result.Models
+                .Where(x => x.OwnerId == null || x.OwnerId == userId)
+                .ToList();
         }
 
         public static async Task<bool> CreateTransactionType(string name, string description, long userId, Client client)
