@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
@@ -10,7 +11,7 @@ namespace DatabaseManager
     public class DBTransactionType : BaseModel
     {
         [PrimaryKey("transaction_type_id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
@@ -19,11 +20,11 @@ namespace DatabaseManager
         public string Description { get; set; }
 
         [Column("owner_id")]
-        public int? OnwerId { get; set; }
+        public long? OwnerId { get; set; }
 
 
 
-        public static async Task<DBTransactionType?> GetTransactionType(int id, Client client)
+        public static async Task<DBTransactionType?> GetTransactionType(long id, Client client)
         {
             return await client
            .From<DBTransactionType>()
@@ -41,18 +42,18 @@ namespace DatabaseManager
            .Single();
         }
 
-        public static async Task<List<DBTransactionType>> GetUsersTransactionTypes(int userId, Client client)
+        public static async Task<List<DBTransactionType>> GetUsersTransactionTypes(long userId, Client client)
         {
             var result = await client
                 .From<DBTransactionType>()
-                .Where(x => x.OnwerId == userId || x.OnwerId == null)
-                .Select(x => new object[] { x.Id, x.Name, x.Description })
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
+                //.Where(x => x.OwnerId == userId)
                 .Get();
 
             return result.Models;
         }
 
-        public static async Task<bool> CreateTransactionType(string name, string description, int userId, Client client)
+        public static async Task<bool> CreateTransactionType(string name, string description, long userId, Client client)
         {
             if (await GetTransactionType(name, client) != null)
                 return false;

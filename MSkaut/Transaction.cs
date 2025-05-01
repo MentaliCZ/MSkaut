@@ -19,8 +19,8 @@ namespace MSkaut
             this.IsExpense = false;
         }
 
-        public static async Task<ObservableCollection<Transaction>> GetEventTransactions(int eventId,
-            Dictionary<int, TransactionType> transactionTypes, Client client)
+        public static async Task<ObservableCollection<Transaction>> GetEventTransactions(long eventId,
+            Dictionary<long, TransactionType> transactionTypes, Client client)
         {
             List<DBTransaction> dbTransactions = await DBTransaction.GetEventTransactions(eventId, client);
             ObservableCollection<Transaction> result = new();

@@ -10,10 +10,10 @@ namespace DatabaseManager
     public class DBTransaction : BaseModel
     {
         [PrimaryKey("transaction_id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("transaction_type_id")]
-        public int TypeId { get; set; }
+        public long TypeId { get; set; }
 
         [Column("amount")]
         public int Amount { get; set; }
@@ -25,9 +25,9 @@ namespace DatabaseManager
         public DateOnly Date { get; set; }
 
         [Column("event_id")]
-        public int EventId { get; set; }
+        public long EventId { get; set; }
 
-        public static async Task<DBTransaction?> GetTransaction(int id, Client client)
+        public static async Task<DBTransaction?> GetTransaction(long id, Client client)
         {
             return await client
            .From<DBTransaction>()
@@ -36,7 +36,7 @@ namespace DatabaseManager
            .Single();
         }
 
-        public static async Task<List<DBTransaction>> GetEventTransactions(int event_id, Client client)
+        public static async Task<List<DBTransaction>> GetEventTransactions(long event_id, Client client)
         {
             var result = await client
            .From<DBTransaction>()
@@ -47,7 +47,8 @@ namespace DatabaseManager
             return result.Models;
         }
 
-        public static async Task<bool> CreateTransaction(int typeId, int amount, bool isExpense, DateOnly date, int eventId, Client client)
+        public static async Task<bool> CreateTransaction(long typeId, int amount, bool isExpense,
+            DateOnly date, long eventId, Client client)
         {
             var dbTransaction = new DBTransaction
             {

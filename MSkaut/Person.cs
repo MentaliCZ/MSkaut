@@ -46,7 +46,7 @@ namespace MSkaut
 			return people;
 		}
 
-		public static async Task<ObservableCollection<Person>> GetEventParticipants(int eventId, Client client)
+		public static async Task<ObservableCollection<Person>> GetEventParticipants(long eventId, Client client)
 		{
 			List<DBPerson> dbPeople = await DBEventPerson.GetEventParticipants(eventId, client);
             ObservableCollection<Person> participants = new();

@@ -13,7 +13,7 @@ namespace MSkaut
 {
 	public class EventClass
 	{
-		public int Id { get; private set; }
+		public long Id { get; private set; }
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 		public (DateOnly startDate, DateOnly endDate) Duration { get; private set; }
@@ -21,7 +21,7 @@ namespace MSkaut
 		public ObservableCollection<Person> Participants { get; private set; }
 		public User Owner { get; private set; }
 
-		public EventClass(int id, string name, User owner)
+		public EventClass(long id, string name, User owner)
 		{
 			this.Id = id;
 			this.Name = name;
@@ -31,12 +31,13 @@ namespace MSkaut
 			Participants = new();
 		}
 
-		public EventClass(int id, string name, string description, User owner) : this(id, name, owner)
+		public EventClass(long id, string name, string description, User owner) : this(id, name, owner)
 		{
 			this.Description = description;
 		}
 
-		public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<int, TransactionType> transactionTypes, User user, Client client)
+		public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<long, TransactionType> transactionTypes,
+			User user, Client client)
 		{
 			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description, user);
 
@@ -51,7 +52,7 @@ namespace MSkaut
 		}
 
 
-        public static async Task<ObservableCollection<EventClass>> GetUserEvents (User user, Dictionary<int, TransactionType> transactionTypes, Client client) 
+        public static async Task<ObservableCollection<EventClass>> GetUserEvents (User user, Dictionary<long, TransactionType> transactionTypes, Client client) 
 		{
 			List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
 			ObservableCollection<EventClass> events = new();
@@ -68,7 +69,8 @@ namespace MSkaut
 			return events;
 		}
 
-        private static async Task AddEvent(ObservableCollection<EventClass> events, DBEvent dbEvent, Dictionary<int, TransactionType> transactionTypes, User user, Client client)
+        private static async Task AddEvent(ObservableCollection<EventClass> events, DBEvent dbEvent,
+			Dictionary<long, TransactionType> transactionTypes, User user, Client client)
 		{
 			EventClass eventClass = await EventClass.InitEventClass(dbEvent, transactionTypes, user, client);
 
@@ -76,13 +78,13 @@ namespace MSkaut
 		}
 
 
-private async Task LoadParticipants(EventClass eventClass, DBEvent dbEvent, Client client)
+		private async Task LoadParticipants(EventClass eventClass, DBEvent dbEvent, Client client)
 		{
             eventClass.Participants = await Person.GetEventParticipants(dbEvent.Id, client);
         }
 
         private async Task LoadTransactions(EventClass eventClass, DBEvent dbEvent,
-			Dictionary<int, TransactionType> transactionTypes, Client client)
+			Dictionary<long, TransactionType> transactionTypes, Client client)
         {
             eventClass.Transactions = await Transaction.GetEventTransactions(dbEvent.Id, transactionTypes, client);
         }

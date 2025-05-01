@@ -19,11 +19,42 @@ namespace UserInterface.ViewModels
 
         public User User { get; set; }
         private ConnectionInstance dbConnection;
-        public ObservableCollection<EventClass> Events { get; set; }
-        public ObservableCollection<TransactionType> TransactionTypes { get; set; }
-        private Dictionary<int, TransactionType> transactionTypesDict;
 
-        public ObservableCollection<Person> UsersPeople { get; set; }
+        private ObservableCollection<EventClass> _events;
+        public ObservableCollection<EventClass> Events
+        {
+            get => _events;
+
+            set
+            {
+                _events = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<TransactionType> _transactionTypes;
+        public ObservableCollection<TransactionType> TransactionTypes
+        {
+            get => _transactionTypes;
+
+            set
+            {
+                _transactionTypes = value;
+                OnPropertyChanged();
+            }
+        }
+        private Dictionary<long, TransactionType> transactionTypesDict;
+
+        private ObservableCollection<Person> _usersPeople;
+        public ObservableCollection<Person> UsersPeople 
+        { get => _usersPeople;
+
+          set
+          {
+                _usersPeople = value;
+                OnPropertyChanged();
+          } 
+        }
 
         public RelayCommand ShowEventsPage { get; set; }
         public RelayCommand ShowPeoplePage { get; set; }
@@ -54,14 +85,14 @@ namespace UserInterface.ViewModels
             }
         }
 
-        private Visibility _categoriesVisible;
-        public Visibility CategoriesVisible
+        private Visibility _transactionTypesVisible;
+        public Visibility TransactionTypesVisible
         {
-            get => _categoriesVisible;
+            get => _transactionTypesVisible;
 
             set
             {
-                _categoriesVisible = value;
+                _transactionTypesVisible = value;
                 OnPropertyChanged();
             }
         }
@@ -81,25 +112,34 @@ namespace UserInterface.ViewModels
         public RelayCommand LogOutCommand { get; set; }
         private Window thisWindow;
 
-        public MainViewModel(Window thisWindow, User user, ConnectionInstance dbConnection)
+        private MainViewModel(Window thisWindow, User user, ConnectionInstance dbConnection)
         {
             this.User = user;
             this.dbConnection = dbConnection;
             this.thisWindow = thisWindow;
-
-            InitStructures();
 
             LogOutCommand = new(LogOut, _ => true);
             ShowEventsPage = new(ShowEvents, _ => true);
             ShowPeoplePage = new(ShowPeople, _ => true);
             ShowTypesPage = new(ShowTypes, _ => true);
             ShowExportPage = new(ShowExport, _ => true);
+
+            ShowEvents(this);
         }
 
-        private async Task InitStructures()
+        public static async Task<MainViewModel> CreateMainViewModel(Window thisWindow,
+            User user, ConnectionInstance dbConnection)
+        {
+            MainViewModel mainViewModel = new(thisWindow, user, dbConnection);
+            await mainViewModel.InitStructures();
+            return mainViewModel;
+        }
+
+        public async Task InitStructures()
         {
             TransactionTypes = await TransactionType.GetUsersTransactionTypes(User, dbConnection.Client);
 
+            transactionTypesDict = new();
             foreach (TransactionType transactionType in TransactionTypes)
             {
                 transactionTypesDict[transactionType.Id] = transactionType;
@@ -120,7 +160,7 @@ namespace UserInterface.ViewModels
         {
             EventsVisible = Visibility.Hidden;
             PeopleVisible = Visibility.Hidden;
-            CategoriesVisible = Visibility.Hidden;
+            TransactionTypesVisible = Visibility.Hidden;
             ExportVisible = Visibility.Hidden;
         }
 
@@ -139,7 +179,7 @@ namespace UserInterface.ViewModels
         private void ShowTypes(Object obj)
         {
             HideAllWindows();
-            CategoriesVisible = Visibility.Visible;
+            TransactionTypesVisible = Visibility.Visible;
         }
 
         private void ShowExport(Object obj)

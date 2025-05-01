@@ -9,15 +9,15 @@ namespace DatabaseManager
     public class DBEventPerson : BaseModel
     {
         [PrimaryKey("event_id")]
-        public int EventId { get; set; }
+        public long EventId { get; set; }
 
         [Column("person_id")]
-        public int PersonId { get; set; }
+        public long PersonId { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
 
-        public static async Task<List<DBPerson>> GetEventParticipants(int eventId, Client client)
+        public static async Task<List<DBPerson>> GetEventParticipants(long eventId, Client client)
         {
             var participantsId = (await client
            .From<DBEventPerson>()

@@ -112,8 +112,28 @@
             <ListView Name="EventsList" ItemsSource="{Binding Events}" Background="#454372">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" Header="Name" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Description}" Header="Description"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" 
+                                        Header="Name"
+                                        Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Description}"
+                                        Header="Description"
+                                        Width="300"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+        </Grid>
+
+        <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
+            <ListView Name="TransactionTypes" ItemsSource="{Binding TransactionTypes}" Background="#454372">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}" 
+                                        Header="Name"
+                                        Width="100"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding Description}" 
+                                        Header="Description"
+                                        Width="300"/>
                     </GridView>
                 </ListView.View>
             </ListView>

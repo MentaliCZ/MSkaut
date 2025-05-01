@@ -9,7 +9,7 @@ namespace DatabaseManager
     public class DBEvent : BaseModel
 	{
         [PrimaryKey("event_id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("name")]
         public string Name { get; set; }
@@ -24,9 +24,9 @@ namespace DatabaseManager
         public DateOnly EndDate { get; set; }
 
         [Column("owner_id")]
-        public int OwnerId { get; set; }
+        public long OwnerId { get; set; }
 
-        public static async Task<List<DBEvent>> GetUserEvents(int id, Client client)
+        public static async Task<List<DBEvent>> GetUserEvents(long id, Client client)
         {
             var result = await client
            .From<DBEvent>()
@@ -37,13 +37,13 @@ namespace DatabaseManager
             return result.Models;
         }
 
-        public static async Task<bool> CreateEvent(string name, string description, int owner_id, Client client)
+        public static async Task<bool> CreateEvent(string name, string description, long ownerId, Client client)
         {
             var dbEvent = new DBEvent
             {
                 Name = name,
                 Description = description,
-                OwnerId = owner_id
+                OwnerId = ownerId
             };
 
             await client.From<DBEvent>().Insert(dbEvent);

@@ -9,7 +9,7 @@ namespace DatabaseManager
     public class DBPerson : BaseModel
 	{
         [PrimaryKey("person_id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("first_name")]
         public string FirstName { get; set; }
@@ -26,7 +26,7 @@ namespace DatabaseManager
         [Column("creator_id")]
         public int CreatorId { get; set; }
 
-        public static async Task<DBPerson?> GetPerson(int id, Client client)
+        public static async Task<DBPerson?> GetPerson(long id, Client client)
         {
             return await client
            .From<DBPerson>()
@@ -35,7 +35,7 @@ namespace DatabaseManager
            .Single();
         }
 
-        public static async Task<List<DBPerson>> GetUsersPeople(int creatorId, Client client)
+        public static async Task<List<DBPerson>> GetUsersPeople(long creatorId, Client client)
         {
             var result = await client
            .From<DBPerson>()

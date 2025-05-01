@@ -8,11 +8,11 @@ namespace MSkaut
 {
 	public class TransactionType
 	{
-		public int Id { get; private set; }
+		public long Id { get; private set; }
 		public string Name { get; private set; }
 		public string Description { get; private set; }
 
-		public TransactionType(int id, string name, string description)
+		public TransactionType(long id, string name, string description)
 		{
 			this.Id = id;
 			this.Name = name;

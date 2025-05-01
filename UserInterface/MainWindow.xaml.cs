@@ -21,11 +21,22 @@ namespace UserInterface
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(User user, ConnectionInstance dbConnection)
+        private MainWindow()
         {   
             InitializeComponent();
-            MainViewModel mainViewModel = new(this, user, dbConnection);
+        }
+
+        private async Task Init(User user, ConnectionInstance dbConnection)
+        {
+            MainViewModel mainViewModel = await MainViewModel.CreateMainViewModel(this, user, dbConnection);
             DataContext = mainViewModel;
+        }
+
+        public static async Task<MainWindow> CreateMainWindow(User user, ConnectionInstance dbConnection)
+        {
+            MainWindow mainWindow = new MainWindow();
+            await mainWindow.Init(user, dbConnection);
+            return mainWindow;
         }
 
     }

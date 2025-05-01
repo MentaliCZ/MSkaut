@@ -75,7 +75,7 @@ namespace UserInterface.ViewModels
 				return;
 			}
 
-            mainWindow = new(user, dbConnection);
+			mainWindow = await MainWindow.CreateMainWindow(user, dbConnection);
             mainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 			mainWindow.Show();
 

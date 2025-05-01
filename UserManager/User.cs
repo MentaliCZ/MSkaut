@@ -8,11 +8,11 @@ namespace UserManager
 {
     public class User
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Login { get; set; }
         private Role role;
 
-        private User(int id, string login, string password, Role role)
+        private User(long id, string login, string password, Role role)
         {
             this.Id = id;
             this.Login = login;

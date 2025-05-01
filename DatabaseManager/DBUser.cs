@@ -11,7 +11,7 @@ namespace DatabaseManager
     public class DBUser : BaseModel
 	{
         [PrimaryKey("user_id")]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         [Column("login")]
         public string Login { get; set; }
