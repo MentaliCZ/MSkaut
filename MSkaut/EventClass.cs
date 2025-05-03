@@ -8,38 +8,45 @@ using System.Collections.ObjectModel;
 using MSkaut;
 using static Microsoft.IO.RecyclableMemoryStreamManager;
 using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Windows.Input;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using MSkaut.Commands;
 
 namespace MSkaut
 {
 	public class EventClass
 	{
 		public long Id { get; private set; }
-		public string Name { get; private set; }
-		public string Description { get; private set; }
-		public (DateOnly startDate, DateOnly endDate) Duration { get; private set; }
-		public ObservableCollection<Transaction> Transactions { get; private set; }
-		public ObservableCollection<Person> Participants { get; private set; }
-		public User Owner { get; private set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public (DateOnly startDate, DateOnly endDate) Duration { get; set; }
+		public ObservableCollection<Transaction> Transactions { get; set; }
+		public ObservableCollection<Person> Participants { get; set; }
+		public User Owner { get; set; }
 
-		public EventClass(long id, string name, User owner)
+        public RelayCommand SaveRowCommand { get; }
+		private Client client;
+
+        public EventClass(long id, string name, string description, User owner, Client client)
 		{
 			this.Id = id;
 			this.Name = name;
-			this.Owner = owner;
-
-			Transactions = new();
-			Participants = new();
-		}
-
-		public EventClass(long id, string name, string description, User owner) : this(id, name, owner)
-		{
 			this.Description = description;
+			this.Owner = owner;
+			this.client = client;
+
+            SaveRowCommand = new(SaveRow, _ => true);
+
+            Transactions = new();
+			Participants = new();
 		}
 
 		public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<long, TransactionType> transactionTypes,
 			User user, Client client)
 		{
-			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description, user);
+			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description, user, client);
 
             List<Task> tasks = new();
 
@@ -89,5 +96,10 @@ namespace MSkaut
             eventClass.Transactions = await Transaction.GetEventTransactions(dbEvent.Id, transactionTypes, client);
         }
 
+
+        public async void SaveRow(Object obj)
+		{
+			await DBEvent.UpdateEvent(Id, Name, Description, Owner.Id, client);
+		}
     }
 }

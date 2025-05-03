@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reflection;
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.QueryOptions;
 
 namespace DatabaseManager
 {
@@ -35,6 +37,17 @@ namespace DatabaseManager
            .Single();
         }
 
+        public static async Task<long> GetPerson(string firstName, string lastName, DateOnly birthDate, Client client)
+        {
+            var result = await client
+           .From<DBPerson>()
+           .Where(x => x.FirstName == firstName && x.LastName == lastName && x.BirthDate == birthDate)
+           .Select(x => new object[] { x.Id})
+           .Single();
+
+            return result.Id;
+        }
+
         public static async Task<List<DBPerson>> GetUsersPeople(long creatorId, Client client)
         {
             var result = await client
@@ -46,7 +59,7 @@ namespace DatabaseManager
             return result.Models;
         }
 
-        public static async Task<bool> CreatePerson(string firstName, string lastName, DateOnly birthDate,
+        public static async Task<long> CreatePerson(string firstName, string lastName, DateOnly birthDate,
                                                     int genderId, int creatorId, Client client)
         {
             var dbPerson = new DBPerson
@@ -58,9 +71,26 @@ namespace DatabaseManager
                 CreatorId = creatorId
             };
 
-            await client.From<DBPerson>().Insert(dbPerson);
+            var result = await client.From<DBPerson>()
+                .Insert(dbPerson, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return true;
+            return result.Model.Id;
+        }
+
+        public static async Task UpdatePerson(long id, string firstName, string lastName, DateOnly birthDate,
+                                                    int genderId, int creatorId, Client client)
+        {
+            var dbPerson = new DBPerson
+            {
+                Id = id,
+                FirstName = firstName,
+                LastName = lastName,
+                BirthDate = birthDate,
+                GenderId = genderId,
+                CreatorId = creatorId
+            };
+
+            await client.From<DBPerson>().Upsert(dbPerson);
         }
 
 

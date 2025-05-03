@@ -3,29 +3,47 @@ using UserManager;
 using DatabaseManager;
 using Supabase;
 using System.Collections.ObjectModel;
+using MSkaut.Commands;
+using System.Xml.Linq;
 
 namespace MSkaut
 {
 	public class Person
 	{
+		public long? Id;
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateOnly BirthDate { get; set; }
 		public Gender Gender { get; set; }
+		public int CreatorId { get; set; }
 
-		public Person(string firstName, string lastName, DateOnly birthDate, Gender gender)
+		public RelayCommand SaveRowCommand { get; set; }
+
+		private Client client;
+
+		public Person(string firstName, string lastName, DateOnly birthDate, Gender gender, Client client)
 		{
-			this.FirstName = firstName;
-			this.LastName = lastName;
-			this.BirthDate = birthDate;
-			this.Gender = gender;
+			this.Id = null;
+            this.FirstName = firstName;
+            this.LastName = lastName;
+            this.BirthDate = birthDate;
+            this.Gender = gender;
+            this.client = client;
+
+			SaveRowCommand = new(SaveRow, _ => true);
+        }
+
+		private Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, Client client) 
+			: this(firstName, lastName, birthDate, gender, client)
+		{
+			this.Id = id;
 		}
 
 
 		public static async Task DBPersonToPerson(ObservableCollection<Person> peopleList, DBPerson dbPerson, Client client)
 		{
-			peopleList.Add(new Person(dbPerson.FirstName, dbPerson.LastName,
-				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client)));
+			peopleList.Add(new Person(dbPerson.Id, dbPerson.FirstName, dbPerson.LastName,
+				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client), client));
 		}
 
 
@@ -62,5 +80,13 @@ namespace MSkaut
 			return participants;
         }
 
-	}
+		public async void SaveRow(Object obj)
+		{
+			if (Id == null)
+				Id = await DBPerson.CreatePerson(FirstName, LastName, BirthDate, Gender.Id, CreatorId, client);
+			else
+				await DBPerson.UpdatePerson((long)Id, FirstName, LastName, BirthDate, Gender.Id, CreatorId, client);
+        }
+
+    }
 }

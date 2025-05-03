@@ -6,7 +6,14 @@
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
         Title="Main page" Height="500" Width="1000"
-        Background="#454372">
+        Background="#454372"
+        Name ="RootWindow">
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "50"/>
@@ -109,19 +116,106 @@
         </Grid>
 
         <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
-            <ListView Name="EventsList" ItemsSource="{Binding Events}" Background="#454372">
+            <ListView Name="EventsList" ItemsSource="{Binding Events}" 
+                      Background="#454372">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" 
-                                        Header="Name"
-                                        Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Description}"
-                                        Header="Description"
-                                        Width="300"/>
+                        <GridViewColumn Header="Name"
+                                        Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        
+                        <GridViewColumn Header="Description"
+                                        Width="300">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Center"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Upload"
+                                        Command="{Binding SaveRowCommand}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
+            <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Command="{Binding AddEventCommand}">
+                <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+            </Button>
+        </Grid>
 
+        <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
+            <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
+                      Background="#454372">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="First Name"
+                                        Width="200">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                             HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Last Name"
+                                        Width="200">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Center"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Gender">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Genders, ElementName=RootWindow}"
+                                               SelectedItem="{Binding Gender, Mode=TwoWay}"
+                                              Width="80"
+                                              Height="20"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Upload"
+                                        Command="{Binding SaveRowCommand}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Command="{Binding AddPersonCommand}">
+                <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+            </Button>
         </Grid>
 
         <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
@@ -137,7 +231,6 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-
         </Grid>
 
     </Grid>

@@ -1,13 +1,15 @@
 ﻿using System;
 using DatabaseManager;
 using Supabase;
+using System.Collections.ObjectModel;
+
 
 public class Gender
 {
 	public int Id { get; set; }
 	public string Name { get; set; }
 
-	public Gender(int id, string name)
+	private Gender(int id, string name)
 	{
 		this.Id = id;
 		this.Name = name;
@@ -18,5 +20,24 @@ public class Gender
 		DBGender dbGender = await DBGender.GetGender(id, client);
 
 		return new Gender(dbGender.Id, dbGender.NameCs);
+	}
+
+	public static async Task<ObservableCollection<Gender>> GetAllGendersEN(Client client)
+	{
+		List<DBGender> dbGenders = await DBGender.GetAllGenders(client);
+		ObservableCollection<Gender> genders = new();
+
+		foreach(DBGender dbGender in dbGenders)
+		{
+			genders.Add(new Gender(dbGender.Id, dbGender.NameEn));
+		}
+
+		return genders;
+	}
+
+
+	public override string ToString()
+	{
+		return Name;
 	}
 }

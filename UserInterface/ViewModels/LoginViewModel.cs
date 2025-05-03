@@ -4,8 +4,10 @@ using DatabaseManager;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using UserInterface.Commands;
+using MSkaut.Commands;
 using System.Windows;
+using System.Windows.Controls;
+using System.Xml.Linq;
 
 namespace UserInterface.ViewModels
 {
@@ -13,8 +15,11 @@ namespace UserInterface.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string Login { get; set; }
-		public string Password { get; set; }
+		private string _login;
+        public string Login { get => _login; set { _login = value; TryLoginCommand.RaiseCanExecuteChanged(); CreateUserCommand.RaiseCanExecuteChanged(); } }
+
+		private string _password;
+		public string Password { get => _password; set { _password = value; TryLoginCommand.RaiseCanExecuteChanged(); CreateUserCommand.RaiseCanExecuteChanged(); } }
 
 		public RelayCommand TryLoginCommand { get; set; }
 		public RelayCommand CreateUserCommand { get; set; }
@@ -35,8 +40,8 @@ namespace UserInterface.ViewModels
 
 		private LoginViewModel()
 		{
-            TryLoginCommand = new(TryLogin, _ => true);
-            CreateUserCommand = new(CreateUser, _ => true);
+            TryLoginCommand = new(TryLogin, CanTryLogin);
+            CreateUserCommand = new(CreateUser, CanTryLogin);
         }
 
 		public LoginViewModel(Window window) : this()
@@ -49,8 +54,8 @@ namespace UserInterface.ViewModels
         {
 			this.dbConnection = dbConnection;
             this.window = window;
-            TryLoginCommand = new(TryLogin, _ => true);
-            CreateUserCommand = new(CreateUser, _ => true);
+            TryLoginCommand = new(TryLogin, CanTryLogin);
+            CreateUserCommand = new(CreateUser, CanTryLogin);
         }
 
         private async Task initDBConnection()
@@ -60,13 +65,6 @@ namespace UserInterface.ViewModels
 
         public async void TryLogin(Object obj)
 		{
-            if (Login == null || Password == null ||
-				Login.Length <= 0 || Password.Length <= 0)
-			{
-				Message = "Login and password fields cant be empty";
-				return;
-			}
-
 			User? user = await User.TryLogin(Login, Password, dbConnection.Client);
 
 			if (user == null)
@@ -85,13 +83,6 @@ namespace UserInterface.ViewModels
 
 		public async void CreateUser(Object obj)
 		{
-			if (Login == null || Password == null ||
-				Login.Length <= 0 || Password.Length <= 0)
-			{
-				Message = "Login and password fields cant be empty";
-				return;
-			}
-
 			if (!await User.CreateUser(Login, Password, dbConnection.Client))
 			{
 				Message = "Account with this username already exists";
@@ -105,6 +96,10 @@ namespace UserInterface.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+		private bool CanTryLogin(object? obj) =>
+			Login is not null && Password is not null;
+
 
     }
 }

@@ -37,7 +37,7 @@ namespace DatabaseManager
             return result.Models;
         }
 
-        public static async Task<bool> CreateEvent(string name, string description, long ownerId, Client client)
+        public static async Task<bool> InsertEvent(string name, string description, long ownerId, Client client)
         {
             var dbEvent = new DBEvent
             {
@@ -47,6 +47,21 @@ namespace DatabaseManager
             };
 
             await client.From<DBEvent>().Insert(dbEvent);
+
+            return true;
+        }
+
+        public static async Task<bool> UpdateEvent(long id, string name, string description, long ownerId, Client client)
+        {
+            var dbEvent = new DBEvent
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                OwnerId = ownerId
+            };
+
+            await client.From<DBEvent>().Upsert(dbEvent);
 
             return true;
         }

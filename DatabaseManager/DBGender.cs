@@ -29,6 +29,16 @@ namespace DatabaseManager
            .Single();
         }
 
+        public static async Task<List<DBGender>> GetAllGenders(Client client)
+        {
+            var result = await client
+            .From<DBGender>()
+            .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
+            .Get();
+
+            return result.Models;
+        }
+
     }
 }
 

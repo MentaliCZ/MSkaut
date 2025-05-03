@@ -5,7 +5,7 @@ using System.Data.Common;
 using MSkaut;
 using UserManager;
 using DatabaseManager;
-using UserInterface.Commands;
+using MSkaut.Commands;
 using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -20,45 +20,25 @@ namespace UserInterface.ViewModels
         public User User { get; set; }
         private ConnectionInstance dbConnection;
 
-        private ObservableCollection<EventClass> _events;
-        public ObservableCollection<EventClass> Events
-        {
-            get => _events;
+        public ObservableCollection<EventClass> Events { get; set; }
 
-            set
-            {
-                _events = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private ObservableCollection<TransactionType> _transactionTypes;
-        public ObservableCollection<TransactionType> TransactionTypes
-        {
-            get => _transactionTypes;
-
-            set
-            {
-                _transactionTypes = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<TransactionType> TransactionTypes { get; set; }
         private Dictionary<long, TransactionType> transactionTypesDict;
 
-        private ObservableCollection<Person> _usersPeople;
-        public ObservableCollection<Person> UsersPeople 
-        { get => _usersPeople;
+        public ObservableCollection<Gender> Genders { get; set; }
+        private Dictionary<int, Gender> genderDict;
 
-          set
-          {
-                _usersPeople = value;
-                OnPropertyChanged();
-          } 
-        }
+        public ObservableCollection<Person> UsersPeople { get; set; }
 
         public RelayCommand ShowEventsPage { get; set; }
+        public RelayCommand AddEventCommand { get; set; }
+
         public RelayCommand ShowPeoplePage { get; set; }
+        public RelayCommand AddPersonCommand { get; set; }
+
         public RelayCommand ShowTypesPage { get; set; }
+        public RelayCommand AddTypeCommand { get; set; }
+
         public RelayCommand ShowExportPage { get; set; }
 
         private Visibility _eventsVisible;
@@ -119,9 +99,16 @@ namespace UserInterface.ViewModels
             this.thisWindow = thisWindow;
 
             LogOutCommand = new(LogOut, _ => true);
+
             ShowEventsPage = new(ShowEvents, _ => true);
+            AddEventCommand = new(AddEvent, _ => true);
+
             ShowPeoplePage = new(ShowPeople, _ => true);
+            AddPersonCommand = new(AddPerson, _ => true);
+
             ShowTypesPage = new(ShowTypes, _ => true);
+
+
             ShowExportPage = new(ShowExport, _ => true);
 
             ShowEvents(this);
@@ -145,6 +132,7 @@ namespace UserInterface.ViewModels
                 transactionTypesDict[transactionType.Id] = transactionType;
             }
 
+            Genders = await Gender.GetAllGendersEN(dbConnection.Client);
             Events = await EventClass.GetUserEvents(User, transactionTypesDict, dbConnection.Client);
             UsersPeople = await Person.GetUsersPeople(User, dbConnection.Client);
         }
@@ -170,16 +158,31 @@ namespace UserInterface.ViewModels
             EventsVisible = Visibility.Visible;
         }
 
+        private void AddEvent(Object obj)
+        {
+            //TODO: DO SOMETHING
+        }
+
         private void ShowPeople(Object obj)
         {
             HideAllWindows();
             PeopleVisible = Visibility.Visible;
         }
 
+        private void AddPerson(Object obj)
+        {
+            UsersPeople.Add(new Person("Insert first name", "Insert last name", new DateOnly(), null, dbConnection.Client));
+        }
+
         private void ShowTypes(Object obj)
         {
             HideAllWindows();
             TransactionTypesVisible = Visibility.Visible;
+        }
+
+        private void AddType(Object obj)
+        {
+            //TODO: DO SOMETHING
         }
 
         private void ShowExport(Object obj)
