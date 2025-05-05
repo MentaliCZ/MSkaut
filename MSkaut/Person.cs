@@ -8,29 +8,21 @@ using System.Xml.Linq;
 
 namespace MSkaut
 {
-	public class Person
+	public class Person : EditableClass
 	{
-		public long? Id;
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateOnly BirthDate { get; set; }
 		public Gender Gender { get; set; }
 		public int CreatorId { get; set; }
 
-		public RelayCommand SaveRowCommand { get; set; }
-
-		private Client client;
-
-		public Person(string firstName, string lastName, DateOnly birthDate, Gender gender, Client client)
+		public Person(string firstName, string lastName, DateOnly birthDate, Gender gender, Client client) :base(client)
 		{
 			this.Id = null;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.BirthDate = birthDate;
             this.Gender = gender;
-            this.client = client;
-
-			SaveRowCommand = new(SaveRow, _ => true);
         }
 
 		private Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, Client client) 
@@ -80,7 +72,7 @@ namespace MSkaut
 			return participants;
         }
 
-		public async void SaveRow(Object obj)
+		public override async void SaveRow(Object obj)
 		{
 			if (Id == null)
 				Id = await DBPerson.CreatePerson(FirstName, LastName, BirthDate, Gender.Id, CreatorId, client);
