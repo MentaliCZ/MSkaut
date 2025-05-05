@@ -4,7 +4,6 @@ using System.Data.Common;
 
 using MSkaut;
 using UserManager;
-using DatabaseManager;
 using MSkaut.Commands;
 using System.Windows;
 using System.ComponentModel;
@@ -107,7 +106,7 @@ namespace UserInterface.ViewModels
             AddPersonCommand = new(AddPerson, _ => true);
 
             ShowTypesPage = new(ShowTypes, _ => true);
-
+            AddTypeCommand = new(AddType, _ => true);
 
             ShowExportPage = new(ShowExport, _ => true);
 
@@ -171,7 +170,7 @@ namespace UserInterface.ViewModels
 
         private void AddPerson(Object obj)
         {
-            UsersPeople.Add(new Person("Insert first name", "Insert last name", new DateOnly(), null, dbConnection.Client));
+            UsersPeople.Add(new Person("Insert first name", "Insert last name", DateTime.Now, null, dbConnection.Client, User.Id));
         }
 
         private void ShowTypes(Object obj)

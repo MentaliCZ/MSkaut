@@ -186,10 +186,20 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Gender">
+                        <GridViewColumn Header="Birth Date"
+                                        Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <ComboBox ItemsSource="{Binding Genders, ElementName=RootWindow}"
+                                    <DatePicker SelectedDate="{Binding BirthDate}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Gender"
+                                        Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding DataContext.Genders, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
                                                SelectedItem="{Binding Gender, Mode=TwoWay}"
                                               Width="80"
                                               Height="20"/>
@@ -197,10 +207,10 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn>
+                        <GridViewColumn Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Upload"
+                                    <Button Content="Save"
                                         Command="{Binding SaveRowCommand}" />
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>

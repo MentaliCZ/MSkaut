@@ -17,7 +17,7 @@ namespace MSkaut {
             IsChanged = false;
             this.client = client;
 
-			SaveRowCommand = new(SaveRow, x => IsChanged);
+			SaveRowCommand = new(SaveRow, x => true);
         }
 
 		public abstract void SaveRow(Object obj);

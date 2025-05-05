@@ -12,21 +12,22 @@ namespace MSkaut
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
-		public DateOnly BirthDate { get; set; }
+		public DateTime BirthDate { get; set; }
 		public Gender Gender { get; set; }
-		public int CreatorId { get; set; }
+		public long CreatorId { get; set; }
 
-		public Person(string firstName, string lastName, DateOnly birthDate, Gender gender, Client client) :base(client)
+		public Person(string firstName, string lastName, DateTime birthDate, Gender gender, Client client, long creatorId) :base(client)
 		{
 			this.Id = null;
             this.FirstName = firstName;
             this.LastName = lastName;
             this.BirthDate = birthDate;
             this.Gender = gender;
+			this.CreatorId = creatorId;
         }
 
-		private Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, Client client) 
-			: this(firstName, lastName, birthDate, gender, client)
+		private Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, Client client, long creatorId) 
+			: this(firstName, lastName, birthDate.ToDateTime(TimeOnly.Parse("10:00 PM")), gender, client, creatorId)
 		{
 			this.Id = id;
 		}
@@ -35,7 +36,7 @@ namespace MSkaut
 		public static async Task DBPersonToPerson(ObservableCollection<Person> peopleList, DBPerson dbPerson, Client client)
 		{
 			peopleList.Add(new Person(dbPerson.Id, dbPerson.FirstName, dbPerson.LastName,
-				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client), client));
+				dbPerson.BirthDate, await Gender.GetGender(dbPerson.GenderId, client), client, dbPerson.CreatorId));
 		}
 
 
@@ -75,9 +76,9 @@ namespace MSkaut
 		public override async void SaveRow(Object obj)
 		{
 			if (Id == null)
-				Id = await DBPerson.CreatePerson(FirstName, LastName, BirthDate, Gender.Id, CreatorId, client);
+				Id = await DBPerson.CreatePerson(FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);
 			else
-				await DBPerson.UpdatePerson((long)Id, FirstName, LastName, BirthDate, Gender.Id, CreatorId, client);
+				await DBPerson.UpdatePerson((long)Id, FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);
         }
 
     }

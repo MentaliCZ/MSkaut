@@ -26,7 +26,7 @@ namespace DatabaseManager
         public int GenderId { get; set; }
 
         [Column("creator_id")]
-        public int CreatorId { get; set; }
+        public long CreatorId { get; set; }
 
         public static async Task<DBPerson?> GetPerson(long id, Client client)
         {
@@ -60,7 +60,7 @@ namespace DatabaseManager
         }
 
         public static async Task<long> CreatePerson(string firstName, string lastName, DateOnly birthDate,
-                                                    int genderId, int creatorId, Client client)
+                                                    int genderId, long creatorId, Client client)
         {
             var dbPerson = new DBPerson
             {
@@ -78,7 +78,7 @@ namespace DatabaseManager
         }
 
         public static async Task UpdatePerson(long id, string firstName, string lastName, DateOnly birthDate,
-                                                    int genderId, int creatorId, Client client)
+                                                    int genderId, long creatorId, Client client)
         {
             var dbPerson = new DBPerson
             {
