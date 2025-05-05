@@ -2,6 +2,7 @@
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.QueryOptions;
 
 namespace DatabaseManager
 {
@@ -37,27 +38,32 @@ namespace DatabaseManager
             return result.Models;
         }
 
-        public static async Task<bool> InsertEvent(string name, string description, long ownerId, Client client)
+        public static async Task<long> CreateEvent(string name, string description, DateOnly startDate, DateOnly endDate, long ownerId, Client client)
         {
             var dbEvent = new DBEvent
             {
                 Name = name,
                 Description = description,
+                StartDate = startDate,
+                EndDate = endDate,
                 OwnerId = ownerId
             };
 
-            await client.From<DBEvent>().Insert(dbEvent);
+            var result = await client.From<DBEvent>()
+                .Insert(dbEvent, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return true;
+            return result.Model.Id;
         }
 
-        public static async Task<bool> UpdateEvent(long id, string name, string description, long ownerId, Client client)
+        public static async Task<bool> UpdateEvent(long id, string name, string description, DateOnly startDate, DateOnly endDate, long ownerId, Client client)
         {
             var dbEvent = new DBEvent
             {
                 Id = id,
                 Name = name,
                 Description = description,
+                StartDate = startDate,
+                EndDate = endDate,
                 OwnerId = ownerId
             };
 

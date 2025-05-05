@@ -16,41 +16,48 @@ using MSkaut.Commands;
 
 namespace MSkaut
 {
-	public class EventClass
+	public class EventClass : EditableClass
 	{
-		public long Id { get; private set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public (DateOnly startDate, DateOnly endDate) Duration { get; set; }
+		public DateTime StartDate { get; set; }
+		public DateTime EndDate { get; set; }
+
 		public ObservableCollection<Transaction> Transactions { get; set; }
 		public ObservableCollection<Person> Participants { get; set; }
-		public User Owner { get; set; }
+		public long CreatorId { get; set; }
 
-        public RelayCommand SaveRowCommand { get; }
-		private Client client;
-
-        public EventClass(long id, string name, string description, User owner, Client client)
+        public EventClass(string name, string description, long creatorId, Client client) : base(client)
 		{
-			this.Id = id;
+			this.Id = null;
 			this.Name = name;
 			this.Description = description;
-			this.Owner = owner;
+			this.CreatorId = creatorId;
 			this.client = client;
 
-            SaveRowCommand = new(SaveRow, _ => true);
+			StartDate = DateTime.Now;
+			EndDate = DateTime.Now;
 
             Transactions = new();
 			Participants = new();
 		}
 
-		public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<long, TransactionType> transactionTypes,
+        private EventClass(long id, string name, string description, DateOnly startDate, DateOnly endDate, long creatorId, Client client) : this(name, description, creatorId, client)
+        {
+            this.Id = id;
+			StartDate = startDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
+			EndDate = endDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
+        }
+
+        public static async Task<EventClass> InitEventClass(DBEvent dbEvent, Dictionary<long, Gender> genderDict, Dictionary<long, TransactionType> transactionTypes,
 			User user, Client client)
 		{
-			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description, user, client);
+			var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description,
+				dbEvent.StartDate, dbEvent.EndDate, user.Id, client);
 
             List<Task> tasks = new();
 
-			tasks.Add(eventClass.LoadParticipants(eventClass, dbEvent, client));
+			tasks.Add(eventClass.LoadParticipants(eventClass, genderDict, dbEvent, client));
 			tasks.Add(eventClass.LoadTransactions(eventClass, dbEvent, transactionTypes, client));
 
 			await Task.WhenAll(tasks);
@@ -59,7 +66,8 @@ namespace MSkaut
 		}
 
 
-        public static async Task<ObservableCollection<EventClass>> GetUserEvents (User user, Dictionary<long, TransactionType> transactionTypes, Client client) 
+        public static async Task<ObservableCollection<EventClass>> GetUserEvents (User user, Dictionary<long, TransactionType> transactionTypes,
+			Dictionary<long, Gender> genderDict, Client client) 
 		{
 			List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
 			ObservableCollection<EventClass> events = new();
@@ -68,7 +76,7 @@ namespace MSkaut
 
 			foreach (DBEvent dbEvent in dbEvents)
 			{
-				tasks.Add(AddEvent(events, dbEvent, transactionTypes, user, client));
+				tasks.Add(AddEvent(events, dbEvent, transactionTypes, genderDict, user, client));
 			}
 
 			await Task.WhenAll(tasks);
@@ -77,17 +85,18 @@ namespace MSkaut
 		}
 
         private static async Task AddEvent(ObservableCollection<EventClass> events, DBEvent dbEvent,
-			Dictionary<long, TransactionType> transactionTypes, User user, Client client)
+			Dictionary<long, TransactionType> transactionTypes, Dictionary<long, Gender> genderDict,
+			User user, Client client)
 		{
-			EventClass eventClass = await EventClass.InitEventClass(dbEvent, transactionTypes, user, client);
+			EventClass eventClass = await EventClass.InitEventClass(dbEvent, genderDict, transactionTypes, user, client);
 
 			events.Add(eventClass);
 		}
 
 
-		private async Task LoadParticipants(EventClass eventClass, DBEvent dbEvent, Client client)
+		private async Task LoadParticipants(EventClass eventClass, Dictionary<long, Gender> genderDict, DBEvent dbEvent, Client client)
 		{
-            eventClass.Participants = await Person.GetEventParticipants(dbEvent.Id, client);
+            eventClass.Participants = await Person.GetEventParticipants(genderDict, dbEvent.Id, client);
         }
 
         private async Task LoadTransactions(EventClass eventClass, DBEvent dbEvent,
@@ -97,9 +106,17 @@ namespace MSkaut
         }
 
 
-        public async void SaveRow(Object obj)
-		{
-			await DBEvent.UpdateEvent(Id, Name, Description, Owner.Id, client);
-		}
+        public override async void SaveRow(object obj)
+        {
+			if (Id == null)
+				Id = await DBEvent.CreateEvent(Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
+			else
+				await DBEvent.UpdateEvent((long)Id, Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
+        }
+
+        public override async void DeleteRow(object obj)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -17,10 +17,11 @@ namespace MSkaut {
             IsChanged = false;
             this.client = client;
 
-			SaveRowCommand = new(SaveRow, x => true);
+			SaveRowCommand = new(SaveRow, _ => true);
         }
 
 		public abstract void SaveRow(Object obj);
 
+		public abstract void DeleteRow(Object obj);
     }
 }

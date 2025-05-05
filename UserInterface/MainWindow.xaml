@@ -116,9 +116,11 @@
         </Grid>
 
         <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
-            <ListView Name="EventsList" ItemsSource="{Binding Events}" 
-                      Background="#454372">
-                <ListView.View>
+            <StackPanel>
+                <ListView Name="EventsList" ItemsSource="{Binding Events}" 
+                      Background="#454372"
+                      Height="300">
+                    <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name"
                                         Width="100">
@@ -140,14 +142,33 @@
                         </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn>
+                        <GridViewColumn Header="Start Date"
+                                    Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Upload"
-                                        Command="{Binding SaveRowCommand}" />
+                                    <DatePicker SelectedDate="{Binding StartDate}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
+
+                            <GridViewColumn Header="End Date"
+                                    Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding EndDate}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Upload"
+                                    Command="{Binding SaveRowCommand}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     </GridView>
                 </ListView.View>
             </ListView>
@@ -159,11 +180,14 @@
                            Foreground="White"
                            FontWeight="Bold"/>
             </Button>
+            </StackPanel>
         </Grid>
 
         <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
-            <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
-                      Background="#454372">
+            <StackPanel>
+                <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
+                      Background="#454372"
+                      Height="300">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="First Name"
@@ -226,6 +250,7 @@
                            Foreground="White"
                            FontWeight="Bold"/>
             </Button>
+            </StackPanel>
         </Grid>
 
         <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">

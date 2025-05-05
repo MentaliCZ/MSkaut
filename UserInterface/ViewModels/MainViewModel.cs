@@ -25,7 +25,7 @@ namespace UserInterface.ViewModels
         private Dictionary<long, TransactionType> transactionTypesDict;
 
         public ObservableCollection<Gender> Genders { get; set; }
-        private Dictionary<int, Gender> genderDict;
+        private Dictionary<long, Gender> genderDict;
 
         public ObservableCollection<Person> UsersPeople { get; set; }
 
@@ -132,8 +132,15 @@ namespace UserInterface.ViewModels
             }
 
             Genders = await Gender.GetAllGendersEN(dbConnection.Client);
-            Events = await EventClass.GetUserEvents(User, transactionTypesDict, dbConnection.Client);
-            UsersPeople = await Person.GetUsersPeople(User, dbConnection.Client);
+
+            genderDict = new();
+            foreach (Gender gender in Genders)
+            {
+                genderDict[gender.Id] = gender;
+            }
+
+            Events = await EventClass.GetUserEvents(User, transactionTypesDict, genderDict, dbConnection.Client);
+            UsersPeople = await Person.GetUsersPeople(User, genderDict, dbConnection.Client);
         }
 
         private void LogOut(Object obj)
@@ -159,7 +166,7 @@ namespace UserInterface.ViewModels
 
         private void AddEvent(Object obj)
         {
-            //TODO: DO SOMETHING
+            Events.Add(new EventClass("Insert event name", "...", User.Id, dbConnection.Client));
         }
 
         private void ShowPeople(Object obj)
