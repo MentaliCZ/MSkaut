@@ -27,12 +27,23 @@ namespace DatabaseManager
 
             var result = new List<DBPerson?>();
 
-            foreach (DBEventPerson dbEventPerson in participantsId) 
+            foreach (DBEventPerson dbEventPerson in participantsId)
             {
                 result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
             }
 
             return result;
+        }
+
+        public static async Task AddEventParticipant(long eventId, long personId, Client client)
+        {
+            var dbEventPerson = new DBEventPerson
+            {
+                EventId = eventId,
+                PersonId = personId
+            };
+
+            await client.From<DBEventPerson>().Upsert(dbEventPerson);
         }
     }
 }

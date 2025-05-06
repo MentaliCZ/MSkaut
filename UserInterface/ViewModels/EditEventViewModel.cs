@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using DatabaseManager;
 using Supabase;
 using UserInterface.ViewModels.ModelRepresantations;
+using UserInterface.Commands;
 
 namespace UserInterface.ViewModels
 {
@@ -29,13 +30,18 @@ namespace UserInterface.ViewModels
         public ObservableCollection<Transaction> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set; }
 
+        private PersonViewModel selectedParticipant;
+        public PersonViewModel SelectedParticipant { get => selectedParticipant; set { selectedParticipant = value; AddParticipantCommand.RaiseCanExecuteChanged(); } }
         public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
-        
+
+        public RelayCommand AddParticipantCommand { get; set; }
 
         public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
         {
             this.eventClass = eventClass;
             this.client = client;
+
+            AddParticipantCommand = new(AddParticipant, x => CanAddParticipant());
 
             Transactions = eventClass.Transactions;
             Participants = eventClass.Participants;
@@ -46,5 +52,27 @@ namespace UserInterface.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
+
+        public bool CanAddParticipant()
+        {
+            if (SelectedParticipant == null || Participants == null)
+                return false;
+
+            foreach (PersonViewModel person in Participants)
+            {
+                if (person.Id == SelectedParticipant.Id)
+                    return false;
+            }
+
+            return true;
+        }
+
+        public async void AddParticipant(Object obj)
+        {
+            Participants.Add(SelectedParticipant);
+            AddParticipantCommand.RaiseCanExecuteChanged();
+            await DBEventPerson.AddEventParticipant((long)eventClass.Id, (long)SelectedParticipant.Id, client);
+        }
+
     }
 }
