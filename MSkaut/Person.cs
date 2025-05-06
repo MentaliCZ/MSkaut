@@ -3,20 +3,20 @@ using UserManager;
 using DatabaseManager;
 using Supabase;
 using System.Collections.ObjectModel;
-using MSkaut.Commands;
 using System.Xml.Linq;
 
 namespace MSkaut
 {
-	public class Person : EditableClass
+	public class Person
 	{
+		public long? Id { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateTime BirthDate { get; set; }
 		public Gender Gender { get; set; }
 		public long CreatorId { get; set; }
 
-		public Person(string firstName, string lastName, DateTime birthDate, Gender gender, Client client, long creatorId) :base(client)
+		public Person(string firstName, string lastName, DateTime birthDate, Gender gender, long creatorId)
 		{
 			this.Id = null;
             this.FirstName = firstName;
@@ -26,65 +26,11 @@ namespace MSkaut
 			this.CreatorId = creatorId;
         }
 
-		private Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, Client client, long creatorId) 
-			: this(firstName, lastName, birthDate.ToDateTime(TimeOnly.Parse("10:00 PM")), gender, client, creatorId)
+		public Person(long id, string firstName, string lastName, DateOnly birthDate, Gender gender, long creatorId) 
+			: this(firstName, lastName, birthDate.ToDateTime(TimeOnly.Parse("10:00 PM")), gender, creatorId)
 		{
 			this.Id = id;
 		}
-
-
-		public static async Task DBPersonToPerson(ObservableCollection<Person> peopleList, Dictionary<long, Gender> genderDict, DBPerson dbPerson, Client client)
-		{
-			peopleList.Add(new Person(dbPerson.Id, dbPerson.FirstName, dbPerson.LastName,
-				dbPerson.BirthDate, genderDict[dbPerson.GenderId], client, dbPerson.CreatorId));
-		}
-
-
-		public static async Task<ObservableCollection<Person>> GetUsersPeople(User user, Dictionary<long, Gender> genderDict, Client client)
-		{
-			List<DBPerson> dbPeople = await DBPerson.GetUsersPeople(user.Id, client);
-            ObservableCollection<Person> people = new();
-
-			List<Task> tasks = new(); 
-
-			foreach (DBPerson dbPerson in dbPeople)
-			{
-				tasks.Add(DBPersonToPerson(people, genderDict, dbPerson, client));
-			}
-
-			await Task.WhenAll();
-
-			return people;
-		}
-
-		public static async Task<ObservableCollection<Person>> GetEventParticipants(Dictionary<long, Gender> genderDict, long eventId, Client client)
-		{
-			List<DBPerson> dbPeople = await DBEventPerson.GetEventParticipants(eventId, client);
-            ObservableCollection<Person> participants = new();
-			List<Task> tasks = new();
-
-            foreach (DBPerson dbPerson in dbPeople)
-            {
-                tasks.Add(DBPersonToPerson(participants, genderDict, dbPerson, client));
-            }
-
-			await Task.WhenAll(tasks);
-
-			return participants;
-        }
-
-		public override async void SaveRow(Object obj)
-		{
-			if (Id == null)
-				Id = await DBPerson.CreatePerson(FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);
-			else
-				await DBPerson.UpdatePerson((long)Id, FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);
-        }
-
-        public override async void DeleteRow(object obj)
-        {
-            throw new NotImplementedException();
-        }
 
     }
 }

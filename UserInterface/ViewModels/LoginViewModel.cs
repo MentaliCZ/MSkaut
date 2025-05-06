@@ -4,7 +4,7 @@ using DatabaseManager;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-using MSkaut.Commands;
+using UserInterface.Commands;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;

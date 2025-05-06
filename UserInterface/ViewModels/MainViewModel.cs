@@ -4,7 +4,7 @@ using System.Data.Common;
 
 using MSkaut;
 using UserManager;
-using MSkaut.Commands;
+using UserInterface.Commands;
 using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -19,15 +19,15 @@ namespace UserInterface.ViewModels
         public User User { get; set; }
         private ConnectionInstance dbConnection;
 
-        public ObservableCollection<EventClass> Events { get; set; }
+        public ObservableCollection<EventViewModel> Events { get; set; }
 
-        public ObservableCollection<TransactionType> TransactionTypes { get; set; }
+        public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
         private Dictionary<long, TransactionType> transactionTypesDict;
 
         public ObservableCollection<Gender> Genders { get; set; }
         private Dictionary<long, Gender> genderDict;
 
-        public ObservableCollection<Person> UsersPeople { get; set; }
+        public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
 
         public RelayCommand ShowEventsPage { get; set; }
         public RelayCommand AddEventCommand { get; set; }
@@ -123,12 +123,12 @@ namespace UserInterface.ViewModels
 
         public async Task InitStructures()
         {
-            TransactionTypes = await TransactionType.GetUsersTransactionTypes(User, dbConnection.Client);
+            TransactionTypes = await TransactionTypeViewModel.GetUsersTransactionTypes(User, dbConnection.Client);
 
             transactionTypesDict = new();
-            foreach (TransactionType transactionType in TransactionTypes)
+            foreach (TransactionTypeViewModel transactionType in TransactionTypes)
             {
-                transactionTypesDict[transactionType.Id] = transactionType;
+                transactionTypesDict[(long)transactionType.Id] = transactionType.getTransactionType();
             }
 
             Genders = await Gender.GetAllGendersEN(dbConnection.Client);
@@ -139,8 +139,8 @@ namespace UserInterface.ViewModels
                 genderDict[gender.Id] = gender;
             }
 
-            Events = await EventClass.GetUserEvents(User, transactionTypesDict, genderDict, dbConnection.Client);
-            UsersPeople = await Person.GetUsersPeople(User, genderDict, dbConnection.Client);
+            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, dbConnection.Client);
+            UsersPeople = await PersonViewModel.GetUsersPeople(User, genderDict, dbConnection.Client);
         }
 
         private void LogOut(Object obj)
@@ -166,7 +166,9 @@ namespace UserInterface.ViewModels
 
         private void AddEvent(Object obj)
         {
-            Events.Add(new EventClass("Insert event name", "...", User.Id, dbConnection.Client));
+            EventClass eventClass = new("Insert event name", "...", User.Id);
+
+            Events.Add(new EventViewModel(eventClass, dbConnection.Client));
         }
 
         private void ShowPeople(Object obj)
@@ -177,7 +179,9 @@ namespace UserInterface.ViewModels
 
         private void AddPerson(Object obj)
         {
-            UsersPeople.Add(new Person("Insert first name", "Insert last name", DateTime.Now, null, dbConnection.Client, User.Id));
+            Person person = new Person("Insert first name", "Insert last name", DateTime.Now, null, User.Id);
+            
+            UsersPeople.Add(new PersonViewModel(person, dbConnection.Client));
         }
 
         private void ShowTypes(Object obj)

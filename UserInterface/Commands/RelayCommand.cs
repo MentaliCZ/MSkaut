@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace MSkaut.Commands
+namespace UserInterface.Commands
 {
     public class RelayCommand(Action<object?> executeAction, Predicate<object?> canExecutePredicate) : ICommand
     {

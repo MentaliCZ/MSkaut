@@ -40,7 +40,8 @@
             <Grid Grid.Column="1"
               Background="#2F2963">
                 <StackPanel HorizontalAlignment="Right"
-                        Orientation="Vertical">
+                        Orientation="Vertical" Margin="0,0,10,0"
+                            >
                     <StackPanel Orientation="Horizontal" Margin="5">
                         <TextBlock Text="User: "
                                Foreground="White"/>
@@ -116,7 +117,7 @@
         </Grid>
 
         <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
-            <StackPanel>
+            <StackPanel Margin="10">
                 <ListView Name="EventsList" ItemsSource="{Binding Events}" 
                       Background="#454372"
                       Height="300">
@@ -162,14 +163,23 @@
 
 
                             <GridViewColumn>
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Upload"
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Edit"
+                                            Command="{Binding OpenEditWindowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Save"
                                     Command="{Binding SaveRowCommand}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    </GridView>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
                 </ListView.View>
             </ListView>
             <Button Width="100"
@@ -184,7 +194,7 @@
         </Grid>
 
         <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
-            <StackPanel>
+            <StackPanel Margin="10">
                 <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
                       Background="#454372"
                       Height="300">

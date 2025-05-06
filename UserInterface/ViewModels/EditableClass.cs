@@ -1,8 +1,8 @@
 ﻿using System;
-using MSkaut.Commands;
+using UserInterface.Commands;
 using Supabase;
 
-namespace MSkaut {
+namespace UserInterface.ViewModels {
 	public abstract class EditableClass
 	{
 		public bool IsChanged { get; set; }
