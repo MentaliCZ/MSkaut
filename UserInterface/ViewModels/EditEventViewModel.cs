@@ -5,6 +5,7 @@ using MSkaut;
 using System.Collections.ObjectModel;
 using DatabaseManager;
 using Supabase;
+using UserInterface.ViewModels.ModelRepresantations;
 
 namespace UserInterface.ViewModels
 {
@@ -25,17 +26,20 @@ namespace UserInterface.ViewModels
             }
         }
 
-        public ObservableCollection<Transaction> Transactions;
-        public ObservableCollection<PersonViewModel> Participants;
+        public ObservableCollection<Transaction> Transactions { get; set; }
+        public ObservableCollection<PersonViewModel> Participants { get; set; }
+
+        public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
         
 
-        public EditEventViewModel(Client client, EventViewModel eventClass)
+        public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
         {
             this.eventClass = eventClass;
             this.client = client;
 
-            Transactions = new(eventClass.Transactions);
-            Participants = new(eventClass.Participants);
+            Transactions = eventClass.Transactions;
+            Participants = eventClass.Participants;
+            UsersPeople = usersPeople;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

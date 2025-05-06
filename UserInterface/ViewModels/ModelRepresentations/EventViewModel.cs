@@ -10,7 +10,7 @@ using System.Windows;
 using UserInterface.Commands;
 
 
-namespace UserInterface.ViewModels
+namespace UserInterface.ViewModels.ModelRepresantations
 {
     public class EventViewModel : EditableClass
     {
@@ -27,21 +27,24 @@ namespace UserInterface.ViewModels
         public long CreatorId { get => eventClass.CreatorId; set => eventClass.CreatorId = value; }
 
         public RelayCommand OpenEditWindowCommand { get; set; }
+        private ObservableCollection<PersonViewModel> usersPeople;
 
         private EditEventWindow editWindow;
 
-        public EventViewModel(EventClass eventClass, Client client) : base(client)
+        public EventViewModel(EventClass eventClass, ObservableCollection<PersonViewModel> usersPeople, Client client) : base(client)
         {
             this.eventClass = eventClass;
+            this.usersPeople = usersPeople;
             OpenEditWindowCommand = new(OpenEditWindow, _ => true);
         }
 
         public static async Task<EventViewModel> InitEventClass(DBEvent dbEvent, Dictionary<long, Gender> genderDict, 
-            Dictionary<long, TransactionType> transactionTypes, User user, Client client)
+            Dictionary<long, TransactionType> transactionTypes, User user,
+            ObservableCollection<PersonViewModel> usersPeople, Client client)
         {
             var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description,
                 dbEvent.StartDate, dbEvent.EndDate, user.Id);
-            EventViewModel eventViewModel = new(eventClass, client);
+            EventViewModel eventViewModel = new(eventClass, usersPeople, client);
 
             List<Task> tasks = new();
 
@@ -55,7 +58,7 @@ namespace UserInterface.ViewModels
 
 
         public static async Task<ObservableCollection<EventViewModel>> GetUserEvents(User user, Dictionary<long, TransactionType> transactionTypes,
-            Dictionary<long, Gender> genderDict, Client client)
+            Dictionary<long, Gender> genderDict, ObservableCollection<PersonViewModel> usersPeople, Client client)
         {
             List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
             ObservableCollection<EventViewModel> events = new();
@@ -64,7 +67,7 @@ namespace UserInterface.ViewModels
 
             foreach (DBEvent dbEvent in dbEvents)
             {
-                tasks.Add(AddEvent(events, dbEvent, transactionTypes, genderDict, user, client));
+                tasks.Add(AddEvent(events, dbEvent, transactionTypes, genderDict, user, usersPeople, client));
             }
 
             await Task.WhenAll(tasks);
@@ -74,9 +77,9 @@ namespace UserInterface.ViewModels
 
         private static async Task AddEvent(ObservableCollection<EventViewModel> events, DBEvent dbEvent,
             Dictionary<long, TransactionType> transactionTypes, Dictionary<long, Gender> genderDict,
-            User user, Client client)
+            User user, ObservableCollection<PersonViewModel> usersPeople, Client client)
         {
-            EventViewModel eventViewModel = await EventViewModel.InitEventClass(dbEvent, genderDict, transactionTypes, user, client);
+            EventViewModel eventViewModel = await EventViewModel.InitEventClass(dbEvent, genderDict, transactionTypes, user, usersPeople, client);
 
             events.Add(eventViewModel);
         }
@@ -109,7 +112,7 @@ namespace UserInterface.ViewModels
 
         public void OpenEditWindow(object obj)
         {
-            editWindow = new(client, this);
+            editWindow = new(client, this, usersPeople);
             editWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             editWindow.Show();
         }

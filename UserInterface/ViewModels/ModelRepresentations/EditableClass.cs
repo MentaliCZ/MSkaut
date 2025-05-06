@@ -2,7 +2,7 @@
 using UserInterface.Commands;
 using Supabase;
 
-namespace UserInterface.ViewModels {
+namespace UserInterface.ViewModels.ModelRepresantations {
 	public abstract class EditableClass
 	{
 		public bool IsChanged { get; set; }

@@ -5,7 +5,7 @@ using System.Collections.ObjectModel;
 using Supabase;
 using UserManager;
 
-namespace UserInterface.ViewModels
+namespace UserInterface.ViewModels.ModelRepresantations
 {
 	public class TransactionTypeViewModel : EditableClass
 	{

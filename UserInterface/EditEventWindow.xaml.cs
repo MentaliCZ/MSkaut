@@ -13,6 +13,9 @@ using DatabaseManager;
 using UserInterface.ViewModels;
 using MSkaut;
 using Supabase;
+using System.Collections.ObjectModel;
+using UserInterface.ViewModels.ModelRepresantations;
+
 
 namespace UserInterface
 {
@@ -22,10 +25,10 @@ namespace UserInterface
     /// </summary>
     public partial class EditEventWindow : Window
     {
-        public EditEventWindow(Client client, EventViewModel eventClass)
+        public EditEventWindow(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
         {   
             InitializeComponent();
-            EditEventViewModel editEventViewModel = new(client, eventClass);
+            EditEventViewModel editEventViewModel = new(client, eventClass, usersPeople);
             DataContext = editEventViewModel;
         }
     }

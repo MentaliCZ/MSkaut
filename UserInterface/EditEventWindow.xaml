@@ -5,36 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="Edit event" Height="500" Width="800"
+        Title="Edit event" Height="800" Width="1000"
         Background="#454372">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height = "50"/>
+            <RowDefinition Height = "100"/>
             <RowDefinition Height="50*"/>
             <RowDefinition Height="50*"/>
-
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="93*"/>
         </Grid.ColumnDefinitions>
 
         <Grid Background= "#2F2963" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition>
-
-                </ColumnDefinition>
-            </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="1"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
                        Foreground="White"
                        FontSize="25" 
                        Text="{Binding Name}"
-                       FontWeight="Bold"/>
+                       FontWeight="Bold" Margin="11,0,0,0"/>
         </Grid>
 
-        <Grid Grid.Row="2">
-            
+        <Grid Grid.RowSpan="3"
+              Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="30*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
+
+        <Grid Grid.Row="1"
+              Grid.Column="0">
+            <StackPanel Margin="10">
+                <ListView Name="EventsList" 
+                          ItemsSource="{Binding Participants}"
+                      Background="#454372"
+                      MaxHeight="300">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="First Name"
+                                        Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FirstName}"
+                                                   HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Last Name"
+                                        Width="300">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding LastName}"
+                                                   HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Birth date"
+                                    Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding BirthDate}"
+                                                   HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Save"
+                                    Command="{Binding SaveRowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <StackPanel Margin="10"
+                            Orientation="Horizontal">
+                    <ComboBox Width="500"
+                              Height="20"
+                              ItemsSource="{Binding UsersPeople}"
+                              SelectedValue="{Binding SelectedParticipant}"/>
+
+                    <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Margin="10"
+                    Command="{Binding AddParticipantCommand}">
+                        <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+                    </Button>
+
+                </StackPanel>
+
+            </StackPanel>
         </Grid>
 
     </Grid>

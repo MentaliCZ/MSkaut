@@ -9,6 +9,7 @@ using System.Windows;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using UserInterface.ViewModels.ModelRepresantations;
 
 namespace UserInterface.ViewModels
 {
@@ -139,8 +140,8 @@ namespace UserInterface.ViewModels
                 genderDict[gender.Id] = gender;
             }
 
-            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, dbConnection.Client);
             UsersPeople = await PersonViewModel.GetUsersPeople(User, genderDict, dbConnection.Client);
+            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, UsersPeople, dbConnection.Client);
         }
 
         private void LogOut(Object obj)
@@ -168,7 +169,7 @@ namespace UserInterface.ViewModels
         {
             EventClass eventClass = new("Insert event name", "...", User.Id);
 
-            Events.Add(new EventViewModel(eventClass, dbConnection.Client));
+            Events.Add(new EventViewModel(eventClass, UsersPeople, dbConnection.Client));
         }
 
         private void ShowPeople(Object obj)

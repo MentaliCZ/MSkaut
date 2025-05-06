@@ -8,6 +8,7 @@ using UserInterface.Commands;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
+using UserInterface.ViewModels.ModelRepresantations;
 
 namespace UserInterface.ViewModels
 {

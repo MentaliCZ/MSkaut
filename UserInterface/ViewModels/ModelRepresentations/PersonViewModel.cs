@@ -5,7 +5,7 @@ using MSkaut;
 using UserManager;
 using Supabase;
 
-namespace UserInterface.ViewModels
+namespace UserInterface.ViewModels.ModelRepresantations
 {
 	public class PersonViewModel : EditableClass
 	{
@@ -108,6 +108,11 @@ namespace UserInterface.ViewModels
         public override async void DeleteRow(object obj)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return FirstName + " " + LastName;
         }
     }
 }
