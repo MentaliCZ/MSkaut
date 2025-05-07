@@ -13,10 +13,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
 		private Transaction transaction;
 
         public long? Id { get => transaction.Id; set => transaction.Id = value; }
-		public string Name { get => transaction.Name; set => transaction.Name = value; }
-        public TransactionType Type { get => transaction.Type; set => transaction.Type = value; }
+		public string Name { get => transaction.Name; set { transaction.Name = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+
+        public TransactionTypeViewModel Type { get => new(transaction.Type, client); set => transaction.Type = value.getTransactionType(); }
         public int Amount { get => transaction.Amount; set => transaction.Amount = value; }
         public DateTime Date { get => transaction.Date; set => transaction.Date = value; }
+
+        public long EventId { get => transaction.EventId; set => transaction.EventId = value; }
 
 		public TransactionViewModel(Transaction transaction, Client client) : base(client)
 		{
@@ -32,7 +35,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
             foreach (DBTransaction dbTransaction in dbTransactions)
             {
                 Transaction transaction = new Transaction(dbTransaction.Id, dbTransaction.Name,
-                    dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")), transactionTypes[dbTransaction.TypeId]);
+                    dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")), transactionTypes[dbTransaction.TypeId],
+                    dbTransaction.EventId);
 
                 result.Add(new TransactionViewModel(transaction, client));
             }
@@ -40,14 +44,27 @@ namespace UserInterface.ViewModels.ModelRepresantations
             return result;
         }
 
-        public override void SaveRow(object obj)
+        public override async void SaveRow(object obj)
         {
-            throw new NotImplementedException();
+            if (Id == null)
+                Id = await DBTransaction.CreateTransaction(Name, (long)Type.Id, Amount, DateOnly.FromDateTime(Date), EventId, client);
+            else
+                await DBTransaction.UpdateTransaction((long)Id, Name, (long)Type.Id, Amount, DateOnly.FromDateTime(Date), EventId, client);
         }
 
         public override void DeleteRow(object obj)
         {
             throw new NotImplementedException();
+        }
+
+        public override bool CanSaveRow()
+        {
+            return Name != null && Name.Length > 0;
+        }
+
+        public override bool CanDeleteRow()
+        {
+            return true;
         }
     }
 }

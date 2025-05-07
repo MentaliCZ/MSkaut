@@ -141,7 +141,8 @@ namespace UserInterface.ViewModels
             }
 
             UsersPeople = await PersonViewModel.GetUsersPeople(User, genderDict, dbConnection.Client);
-            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, UsersPeople, dbConnection.Client);
+            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, UsersPeople,
+                TransactionTypes, dbConnection.Client);
         }
 
         private void LogOut(Object obj)
@@ -169,7 +170,7 @@ namespace UserInterface.ViewModels
         {
             EventClass eventClass = new("Insert event name", "...", User.Id);
 
-            Events.Add(new EventViewModel(eventClass, UsersPeople, dbConnection.Client));
+            Events.Add(new EventViewModel(eventClass, UsersPeople, TransactionTypes, dbConnection.Client));
         }
 
         private void ShowPeople(Object obj)

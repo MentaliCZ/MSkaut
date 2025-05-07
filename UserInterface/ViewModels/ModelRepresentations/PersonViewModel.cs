@@ -20,15 +20,15 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
 		public string FirstName 
 		{ 
-			get => person.FirstName; 
-		
-			set => person.FirstName = value;
+			get => person.FirstName;
+
+            set { person.FirstName = value; SaveRowCommand.RaiseCanExecuteChanged(); }
 		}
 		public string LastName 
 		{ 
-			get => person.LastName; 
-			
-			set => person.LastName = value;
+			get => person.LastName;
+
+            set { person.LastName = value; SaveRowCommand.RaiseCanExecuteChanged(); }
 		}
 
         public DateTime BirthDate 
@@ -40,7 +40,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public Gender Gender 
         { get => person.Gender;
 
-          set => person.Gender = value;
+          set { person.Gender = value; SaveRowCommand.RaiseCanExecuteChanged(); }
         }
 
         public long CreatorId 
@@ -113,6 +113,16 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override string ToString()
         {
             return FirstName + " " + LastName;
+        }
+
+        public override bool CanSaveRow()
+        {
+            return FirstName != null && FirstName.Length > 0 && LastName != null && LastName.Length > 0 && Gender != null;
+        }
+
+        public override bool CanDeleteRow()
+        {
+            return true;
         }
     }
 }

@@ -39,16 +39,19 @@ namespace UserInterface.ViewModels
         public RelayCommand AddParticipantCommand { get; set; }
         public RelayCommand AddTransactionCommand { get; set; }
 
-        public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
+        public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople, 
+            ObservableCollection<TransactionTypeViewModel> transactionTypes)
         {
             this.eventClass = eventClass;
             this.client = client;
 
             AddParticipantCommand = new(AddParticipant, x => CanAddParticipant());
+            AddTransactionCommand = new(AddTransaction, x => true);
 
+            TransactionTypes = transactionTypes;
+            UsersPeople = usersPeople;
             Transactions = eventClass.Transactions;
             Participants = eventClass.Participants;
-            UsersPeople = usersPeople;
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
@@ -77,11 +80,10 @@ namespace UserInterface.ViewModels
             await DBEventPerson.AddEventParticipant((long)eventClass.Id, (long)SelectedParticipant.Id, client);
         }
 
-        public async void AddTransaction(Object obj)
+        public void AddTransaction(Object obj)
         {
-            Transaction transaction = new("...", 0, DateTime.Now, null);
-
-            Transactions.Add(new(transaction, client));
+            Transaction transaction = new("...", 0, DateTime.Now, null, (long)eventClass.Id);
+            Transactions.Add(new (transaction, client));
         }
 
     }

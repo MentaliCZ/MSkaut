@@ -25,10 +25,11 @@ namespace UserInterface
     /// </summary>
     public partial class EditEventWindow : Window
     {
-        public EditEventWindow(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
+        public EditEventWindow(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople,
+            ObservableCollection<TransactionTypeViewModel> transactionTypes)
         {   
             InitializeComponent();
-            EditEventViewModel editEventViewModel = new(client, eventClass, usersPeople);
+            EditEventViewModel editEventViewModel = new(client, eventClass, usersPeople, transactionTypes);
             DataContext = editEventViewModel;
         }
     }

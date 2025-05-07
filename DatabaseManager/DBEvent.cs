@@ -2,6 +2,7 @@
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.Constants;
 using static Supabase.Postgrest.QueryOptions;
 
 namespace DatabaseManager
@@ -33,6 +34,7 @@ namespace DatabaseManager
            .From<DBEvent>()
            .Select(x => new object[] { x.Id, x.Name, x.Description, x.StartDate, x.EndDate, x.OwnerId })
            .Where(x => x.OwnerId == id)
+           .Order(x => x.StartDate, Ordering.Ascending)
            .Get();
 
             return result.Models;

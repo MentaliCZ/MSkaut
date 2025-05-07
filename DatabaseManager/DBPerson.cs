@@ -3,6 +3,7 @@ using System.Reflection;
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.Constants;
 using static Supabase.Postgrest.QueryOptions;
 
 namespace DatabaseManager
@@ -54,6 +55,7 @@ namespace DatabaseManager
            .From<DBPerson>()
            .Select(x => new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId, x.CreatorId })
            .Where(x => x.CreatorId == creatorId)
+           .Order(x => x.LastName, Ordering.Ascending)
            .Get();
 
             return result.Models;

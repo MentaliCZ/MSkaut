@@ -17,10 +17,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
         private EventClass eventClass;
 
         public long? Id { get => eventClass.Id; set => eventClass.Id = value; }
-        public string Name { get => eventClass.Name; set => eventClass.Name = value; }
-        public string Description { get => eventClass.Description; set => eventClass.Description = value; }
-        public DateTime StartDate { get => eventClass.StartDate; set => eventClass.StartDate = value; }
-        public DateTime EndDate { get => eventClass.EndDate; set => eventClass.EndDate = value; }
+        public string Name { get => eventClass.Name; set { eventClass.Name = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public string Description { get => eventClass.Description; set { eventClass.Description = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public DateTime StartDate { get => eventClass.StartDate; set { eventClass.StartDate = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public DateTime EndDate { get => eventClass.EndDate; set { eventClass.EndDate = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
         public ObservableCollection<TransactionViewModel> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set;}
@@ -28,28 +28,32 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public RelayCommand OpenEditWindowCommand { get; set; }
         private ObservableCollection<PersonViewModel> usersPeople;
+        private ObservableCollection<TransactionTypeViewModel> transactionTypes;
 
         private EditEventWindow editWindow;
 
-        public EventViewModel(EventClass eventClass, ObservableCollection<PersonViewModel> usersPeople, Client client) : base(client)
+        public EventViewModel(EventClass eventClass, ObservableCollection<PersonViewModel> usersPeople, 
+            ObservableCollection<TransactionTypeViewModel> transactionTypes, Client client) : base(client)
         {
             this.eventClass = eventClass;
             this.usersPeople = usersPeople;
+            this.transactionTypes = transactionTypes;
             OpenEditWindowCommand = new(OpenEditWindow, _ => true);
         }
 
         public static async Task<EventViewModel> InitEventClass(DBEvent dbEvent, Dictionary<long, Gender> genderDict, 
-            Dictionary<long, TransactionType> transactionTypes, User user,
-            ObservableCollection<PersonViewModel> usersPeople, Client client)
+            Dictionary<long, TransactionType> transactionTypesDict, User user,
+            ObservableCollection<PersonViewModel> usersPeople, ObservableCollection<TransactionTypeViewModel> transactionTypes,
+            Client client)
         {
             var eventClass = new EventClass(dbEvent.Id, dbEvent.Name, dbEvent.Description,
                 dbEvent.StartDate, dbEvent.EndDate, user.Id);
-            EventViewModel eventViewModel = new(eventClass, usersPeople, client);
+            EventViewModel eventViewModel = new(eventClass, usersPeople, transactionTypes, client);
 
             List<Task> tasks = new();
 
             tasks.Add(eventViewModel.LoadParticipants(eventViewModel, genderDict, dbEvent, client));
-            tasks.Add(eventViewModel.LoadTransactions(eventViewModel, dbEvent, transactionTypes, client));
+            tasks.Add(eventViewModel.LoadTransactions(eventViewModel, dbEvent, transactionTypesDict, client));
 
             await Task.WhenAll(tasks);
 
@@ -57,31 +61,20 @@ namespace UserInterface.ViewModels.ModelRepresantations
         }
 
 
-        public static async Task<ObservableCollection<EventViewModel>> GetUserEvents(User user, Dictionary<long, TransactionType> transactionTypes,
-            Dictionary<long, Gender> genderDict, ObservableCollection<PersonViewModel> usersPeople, Client client)
+        public static async Task<ObservableCollection<EventViewModel>> GetUserEvents(User user, Dictionary<long, TransactionType> transactionTypesDict,
+            Dictionary<long, Gender> genderDict, ObservableCollection<PersonViewModel> usersPeople, ObservableCollection<TransactionTypeViewModel> transactionTypes,
+            Client client)
         {
             List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
             ObservableCollection<EventViewModel> events = new();
 
-            List<Task> tasks = new();
-
             foreach (DBEvent dbEvent in dbEvents)
             {
-                tasks.Add(AddEvent(events, dbEvent, transactionTypes, genderDict, user, usersPeople, client));
+                events.Add(await EventViewModel.InitEventClass(dbEvent, genderDict, transactionTypesDict, 
+                    user, usersPeople, transactionTypes, client));
             }
 
-            await Task.WhenAll(tasks);
-
             return events;
-        }
-
-        private static async Task AddEvent(ObservableCollection<EventViewModel> events, DBEvent dbEvent,
-            Dictionary<long, TransactionType> transactionTypes, Dictionary<long, Gender> genderDict,
-            User user, ObservableCollection<PersonViewModel> usersPeople, Client client)
-        {
-            EventViewModel eventViewModel = await EventViewModel.InitEventClass(dbEvent, genderDict, transactionTypes, user, usersPeople, client);
-
-            events.Add(eventViewModel);
         }
 
 
@@ -112,9 +105,19 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public void OpenEditWindow(object obj)
         {
-            editWindow = new(client, this, usersPeople);
+            editWindow = new(client, this, usersPeople, transactionTypes);
             editWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             editWindow.Show();
+        }
+
+        public override bool CanSaveRow()
+        {
+            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate;
+        }
+
+        public override bool CanDeleteRow()
+        {
+            return true;
         }
     }
 }

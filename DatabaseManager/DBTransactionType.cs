@@ -20,8 +20,6 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
-        [Column("is_expense")]
-        public bool IsExpense { get; set; }
 
         [Column("owner_id")]
         public long? OwnerId { get; set; }
@@ -31,7 +29,7 @@ namespace DatabaseManager
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
+           .Select(x => new object[] { x.Id, x.Name, x.Description })
            .Where(x => x.Id == id)
            .Single();
         }
@@ -40,7 +38,7 @@ namespace DatabaseManager
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
+           .Select(x => new object[] { x.Id, x.Name, x.Description })
            .Where(x => x.Name == name)
            .Single();
         }
@@ -49,7 +47,7 @@ namespace DatabaseManager
         {
             var result = await client
                 .From<DBTransactionType>()
-                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId, x.IsExpense })
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
                 .Get();
 
 
@@ -67,8 +65,7 @@ namespace DatabaseManager
             {
                 Name = name,
                 Description = description,
-                OwnerId = userId,
-                IsExpense = isExpense
+                OwnerId = userId
             };
 
             await client.From<DBTransactionType>().Insert(dbTransactionType);

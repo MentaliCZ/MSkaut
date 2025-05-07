@@ -2,6 +2,8 @@
 using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
+using static Supabase.Postgrest.Constants;
+using static Supabase.Postgrest.QueryOptions;
 
 
 namespace DatabaseManager
@@ -33,12 +35,13 @@ namespace DatabaseManager
            .From<DBTransaction>()
            .Select(x => new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.Date })
            .Where(x => x.EventId == event_id)
+           .Order(x => x.Date, Ordering.Ascending)
            .Get();
 
             return result.Models;
         }
 
-        public static async Task<bool> CreateTransaction(string name, long typeId, int amount, bool isExpense,
+        public static async Task<long> CreateTransaction(string name, long typeId, int amount,
             DateOnly date, long eventId, Client client)
         {
             var dbTransaction = new DBTransaction
@@ -50,9 +53,27 @@ namespace DatabaseManager
                 EventId = eventId
             };
 
-            await client.From<DBTransaction>().Insert(dbTransaction);
+            var result = await client.From<DBTransaction>()
+                .Insert(dbTransaction, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return true;
+            return result.Model.Id;
+        }
+
+        public static async Task UpdateTransaction(long id, string name, long typeId, int amount,
+            DateOnly date, long eventId, Client client)
+        {
+            var dbTransaction = new DBTransaction
+            {
+                Id = id,
+                Name = name,
+                TypeId = typeId,
+                Amount = amount,
+                Date = date,
+                EventId = eventId
+            };
+
+            await client.From<DBTransaction>().Upsert(dbTransaction);
+
         }
     }
 }
