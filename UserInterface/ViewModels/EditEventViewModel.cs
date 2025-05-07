@@ -27,7 +27,9 @@ namespace UserInterface.ViewModels
             }
         }
 
-        public ObservableCollection<Transaction> Transactions { get; set; }
+        public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
+        public ObservableCollection<TransactionViewModel> Transactions { get; set; }
+
         public ObservableCollection<PersonViewModel> Participants { get; set; }
 
         private PersonViewModel selectedParticipant;
@@ -35,6 +37,7 @@ namespace UserInterface.ViewModels
         public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
 
         public RelayCommand AddParticipantCommand { get; set; }
+        public RelayCommand AddTransactionCommand { get; set; }
 
         public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople)
         {
@@ -72,6 +75,13 @@ namespace UserInterface.ViewModels
             Participants.Add(SelectedParticipant);
             AddParticipantCommand.RaiseCanExecuteChanged();
             await DBEventPerson.AddEventParticipant((long)eventClass.Id, (long)SelectedParticipant.Id, client);
+        }
+
+        public async void AddTransaction(Object obj)
+        {
+            Transaction transaction = new("...", 0, DateTime.Now, null);
+
+            Transactions.Add(new(transaction, client));
         }
 
     }

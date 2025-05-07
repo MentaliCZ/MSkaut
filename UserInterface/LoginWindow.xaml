@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
         Title="Login" Height="500" Width="800"
-        Background="#454372">
+        Background="#FF31323A">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "50"/>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width="93*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background= "#2F2963" Grid.ColumnSpan="2">
+        <Grid Background= "#FF24272C" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition>
 

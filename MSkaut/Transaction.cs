@@ -6,32 +6,24 @@ namespace MSkaut
 {
     public class Transaction
     {
-        private TransactionType Type { get; set; }
-        public int Amount { get; private set; }
-        public DateOnly Date { get; private set; }
-        public bool IsExpense { get; private set; }
+        public long? Id { get; set; }
+        public string Name { get; set; }
+        public TransactionType Type { get; set; }
+        public int Amount { get; set; }
+        public DateTime Date { get; set; }
 
-        public Transaction(int amount, DateOnly date, TransactionType type, bool isExpense)
+        public Transaction(string name, int amount, DateTime date, TransactionType type)
         {
+            Id = null;
+            this.Name = name;
             this.Amount = amount;
             this.Date = date;
             this.Type = type;
-            this.IsExpense = false;
         }
 
-        public static async Task<ObservableCollection<Transaction>> GetEventTransactions(long eventId,
-            Dictionary<long, TransactionType> transactionTypes, Client client)
+        public Transaction(long id, string name, int amount, DateTime date, TransactionType type) : this(name, amount, date, type)
         {
-            List<DBTransaction> dbTransactions = await DBTransaction.GetEventTransactions(eventId, client);
-            ObservableCollection<Transaction> result = new();
-
-            foreach(DBTransaction dbTransaction in dbTransactions)
-            {
-                result.Add(new Transaction(dbTransaction.Amount, dbTransaction.Date,
-                    transactionTypes[dbTransaction.TypeId], dbTransaction.IsExpense ));
-            }
-
-            return result;
+            this.Id = id;
         }
     }
 }

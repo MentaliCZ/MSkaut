@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
         Title="Main page" Height="500" Width="1000"
-        Background="#454372"
+        Background="#FF31323A"
         Name ="RootWindow">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -20,7 +20,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Grid Background= "#2F2963" Grid.ColumnSpan="2" 
+        <Grid Background= "#FF24272C" Grid.ColumnSpan="2" 
               HorizontalAlignment="Center"
               Grid.Row="0"
               Width="1000">
@@ -30,7 +30,7 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Row="0" Grid.Column="0"
-              Background="#2F2963">
+              Background="#FF24272C">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -40,7 +40,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button Grid.Column="0"
-                    Background="#2F2963"
+                    Background="#FF24272C"
                     Command="{Binding ShowEventsPage}">
                     <TextBlock Text="Events"
                            Foreground="White"
@@ -50,7 +50,7 @@
                 </Button>
 
                 <Button Grid.Column="1"
-                    Background="#2F2963"
+                    Background="#FF24272C"
                     Command="{Binding ShowPeoplePage}">
                     <TextBlock Text="People"
                            Foreground="White"
@@ -60,7 +60,7 @@
                 </Button>
 
                 <Button Grid.Column="2"
-                    Background="#2F2963"
+                    Background="#FF24272C"
                     Command="{Binding ShowTypesPage}">
                     <TextBlock Text="Transaction types"
                            Foreground="White"
@@ -70,7 +70,7 @@
                 </Button>
 
                 <Button Grid.Column="3"
-                    Background="#2F2963"
+                    Background="#FF24272C"
                     Command="{Binding ShowExportPage}">
                     <TextBlock Text="Export"
                            Foreground="White"
@@ -83,7 +83,7 @@
 
 
             <Grid Grid.Column="1"
-              Background="#2F2963">
+              Background="#FF24272C">
                 <StackPanel HorizontalAlignment="Right"
                         Orientation="Vertical" Margin="0,0,10,0"
                             >
@@ -113,7 +113,7 @@
         <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
             <StackPanel Margin="10">
                 <ListView Name="EventsList" ItemsSource="{Binding Events}" 
-                      Background="#454372"
+                      Background="#FF31323A"
                       Height="300">
                     <ListView.View>
                     <GridView>
@@ -191,7 +191,7 @@
         <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
             <StackPanel Margin="10">
                 <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
-                      Background="#454372"
+                      Background="#FF31323A"
                       Height="300">
                 <ListView.View>
                     <GridView>
@@ -260,7 +260,7 @@
         </Grid>
 
         <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
-            <ListView Name="TransactionTypes" ItemsSource="{Binding TransactionTypes}" Background="#454372">
+            <ListView Name="TransactionTypes" ItemsSource="{Binding TransactionTypes}" Background="#FF31323A">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Name}" 

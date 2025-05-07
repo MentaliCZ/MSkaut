@@ -23,8 +23,6 @@ namespace MSkaut
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 
-		public ObservableCollection<Transaction> Transactions { get; set; }
-		public ObservableCollection<Person> Participants { get; set; }
 		public long CreatorId { get; set; }
 
         public EventClass(string name, string description, long creatorId)
@@ -36,9 +34,6 @@ namespace MSkaut
 
 			StartDate = DateTime.Now;
 			EndDate = DateTime.Now;
-
-            Transactions = new();
-			Participants = new();
 		}
 
         public EventClass(long id, string name, string description, DateOnly startDate, DateOnly endDate, long creatorId) : this(name, description, creatorId)

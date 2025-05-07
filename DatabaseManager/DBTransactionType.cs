@@ -20,16 +20,18 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
+        [Column("is_expense")]
+        public bool IsExpense { get; set; }
+
         [Column("owner_id")]
         public long? OwnerId { get; set; }
-
 
 
         public static async Task<DBTransactionType?> GetTransactionType(long id, Client client)
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
            .Where(x => x.Id == id)
            .Single();
         }
@@ -38,7 +40,7 @@ namespace DatabaseManager
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
            .Where(x => x.Name == name)
            .Single();
         }
@@ -47,7 +49,7 @@ namespace DatabaseManager
         {
             var result = await client
                 .From<DBTransactionType>()
-                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId, x.IsExpense })
                 .Get();
 
 
@@ -56,7 +58,7 @@ namespace DatabaseManager
                 .ToList();
         }
 
-        public static async Task<bool> CreateTransactionType(string name, string description, long userId, Client client)
+        public static async Task<bool> CreateTransactionType(string name, string description, bool isExpense, long userId, Client client)
         {
             if (await GetTransactionType(name, client) != null)
                 return false;
@@ -64,7 +66,9 @@ namespace DatabaseManager
             var dbTransactionType = new DBTransactionType
             {
                 Name = name,
-                Description = description
+                Description = description,
+                OwnerId = userId,
+                IsExpense = isExpense
             };
 
             await client.From<DBTransactionType>().Insert(dbTransactionType);

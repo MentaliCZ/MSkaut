@@ -22,7 +22,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public DateTime StartDate { get => eventClass.StartDate; set => eventClass.StartDate = value; }
         public DateTime EndDate { get => eventClass.EndDate; set => eventClass.EndDate = value; }
 
-        public ObservableCollection<Transaction> Transactions { get; set; }
+        public ObservableCollection<TransactionViewModel> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set;}
         public long CreatorId { get => eventClass.CreatorId; set => eventClass.CreatorId = value; }
 
@@ -93,7 +93,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         private async Task LoadTransactions(EventViewModel eventViewModel, DBEvent dbEvent,
             Dictionary<long, TransactionType> transactionTypes, Client client)
         {
-            eventViewModel.Transactions = await Transaction.GetEventTransactions(dbEvent.Id, transactionTypes, client);
+            eventViewModel.Transactions = await TransactionViewModel.GetEventTransactions(dbEvent.Id, transactionTypes, client);
         }
 
 
