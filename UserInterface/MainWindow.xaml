@@ -13,6 +13,7 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
     </Window.Resources>
+    
 
     <Grid>
         <Grid.RowDefinitions>
@@ -120,15 +121,24 @@
                 <ListView Name="EventsList" ItemsSource="{Binding Events}" 
                       Background="#FF31323A"
                       Height="300">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
                     <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name"
                                         Width="100">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                             HorizontalAlignment="Center"/>
-                                </DataTemplate>
+                                        <Grid>
+                                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             HorizontalAlignment="Stretch"/>
+                                        </Grid>
+                                    </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
                         
@@ -137,7 +147,7 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                         HorizontalAlignment="Center"/>
+                                         HorizontalAlignment="Stretch"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -146,7 +156,8 @@
                                     Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding StartDate}"/>
+                                    <DatePicker SelectedDate="{Binding StartDate}"
+                                                HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -155,7 +166,8 @@
                                     Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <DatePicker SelectedDate="{Binding EndDate}"/>
+                                        <DatePicker SelectedDate="{Binding EndDate}"
+                                                    HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -198,14 +210,21 @@
                 <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
                       Background="#FF31323A"
                       Height="300">
-                <ListView.View>
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    
+                    <ListView.View>
                     <GridView>
                         <GridViewColumn Header="First Name"
                                         Width="200">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
-                                             HorizontalAlignment="Center"/>
+                                             HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -215,7 +234,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
-                                         HorizontalAlignment="Center"/>
+                                         HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -224,7 +243,8 @@
                                         Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <DatePicker SelectedDate="{Binding BirthDate}"/>
+                                    <DatePicker SelectedDate="{Binding BirthDate}"
+                                                HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
@@ -269,6 +289,13 @@
                 <ListView Name="TransactionTypesList" ItemsSource="{Binding TransactionTypes}" 
                       Background="#FF31323A"
                       Height="300">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="First Name"
@@ -276,7 +303,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                             HorizontalAlignment="Center"/>
+                                             HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -286,7 +313,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                         HorizontalAlignment="Center"/>
+                                         HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

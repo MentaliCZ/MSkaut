@@ -194,7 +194,7 @@ namespace UserInterface.ViewModels
 
         private void AddType(Object obj)
         {
-            TransactionType type = new("...", "...", User.Id);
+            TransactionType type = new("Insert name", "...", User.Id);
 
             TransactionTypes.Add(new TransactionTypeViewModel(type, dbConnection.Client));
         }
