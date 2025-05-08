@@ -131,11 +131,14 @@
                     <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name"
-                                        Width="100">
+                                        Width="200">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                         <Grid>
                                             <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
                                              HorizontalAlignment="Stretch"/>
                                         </Grid>
                                     </DataTemplate>
@@ -143,10 +146,13 @@
                         </GridViewColumn>
                         
                         <GridViewColumn Header="Description"
-                                        Width="300">
+                                        Width="250">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderThickness="0"
+                                         Background="#FF53545D"
+                                         Foreground="White"
                                          HorizontalAlignment="Stretch"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -173,7 +179,7 @@
                             </GridViewColumn>
 
 
-                            <GridViewColumn>
+                            <GridViewColumn Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Edit"
@@ -182,7 +188,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn>
+                            <GridViewColumn Width="100">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Save"
@@ -220,20 +226,26 @@
                     <ListView.View>
                     <GridView>
                         <GridViewColumn Header="First Name"
-                                        Width="200">
+                                        Width="300">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
                                              HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
                         <GridViewColumn Header="Last Name"
-                                        Width="200">
+                                        Width="300">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                          BorderThickness="0"
+                                         Background="#FF53545D"
+                                         Foreground="White"
                                          HorizontalAlignment="Stretch"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -298,22 +310,28 @@
                     
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="First Name"
+                            <GridViewColumn Header="Name"
                                         Width="200">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
                                              HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <GridViewColumn Header="Description"
-                                        Width="200">
+                                        Width="400">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                         HorizontalAlignment="Stretch"/>
+                                            BorderThickness="0"
+                                            Background="#FF53545D"
+                                            Foreground="White"
+                                            HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -322,7 +340,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="Save"
-                                        Command="{Binding SaveRowCommand}" />
+                                        Command="{Binding SaveRowCommand}"
+                                                HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

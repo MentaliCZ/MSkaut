@@ -137,6 +137,9 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                    BorderThickness="0"
+                                                    Background="#FF53545D"
+                                                    Foreground="White"
                                                     HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -148,7 +151,7 @@
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.TransactionTypes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
                                                SelectedItem="{Binding Type, Mode=TwoWay}"
-                                                  HorizontalAlignment="Stretch"
+                                                 HorizontalAlignment="Stretch"
                                               Width="80"
                                               Height="20"/>
                                     </DataTemplate>
@@ -170,6 +173,9 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Amount, UpdateSourceTrigger=PropertyChanged}"
+                                                    BorderThickness="0"
+                                                    Background="#FF53545D"
+                                                    Foreground="White"
                                                     HorizontalAlignment="Stretch"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
