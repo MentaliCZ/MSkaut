@@ -4,6 +4,8 @@ using Supabase;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 using System.Linq;
+using static Supabase.Postgrest.QueryOptions;
+using System.Data.Common;
 
 
 namespace DatabaseManager
@@ -19,7 +21,6 @@ namespace DatabaseManager
 
         [Column("description")]
         public string Description { get; set; }
-
 
         [Column("owner_id")]
         public long? OwnerId { get; set; }
@@ -56,21 +57,31 @@ namespace DatabaseManager
                 .ToList();
         }
 
-        public static async Task<bool> CreateTransactionType(string name, string description, bool isExpense, long userId, Client client)
+        public static async Task<long> CreateTransactionType(string name, string description, long userId, Client client)
         {
-            if (await GetTransactionType(name, client) != null)
-                return false;
-
             var dbTransactionType = new DBTransactionType
             {
                 Name = name,
                 Description = description,
                 OwnerId = userId
             };
+            var result = await client.From<DBTransactionType>()
+                .Insert(dbTransactionType, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            await client.From<DBTransactionType>().Insert(dbTransactionType);
+            return result.Model.Id;
+        }
 
-            return true;
+        public static async Task UpdateTransactionType(long id, string name, string description, long? userId, Client client)
+        {
+            var dbTransactionType = new DBTransactionType
+            {
+                Id = id,
+                Name = name,
+                Description = description,
+                OwnerId = userId
+            };
+
+            await client.From<DBTransactionType>().Upsert(dbTransactionType);
         }
     }
 }

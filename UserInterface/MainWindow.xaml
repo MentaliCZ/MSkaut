@@ -265,18 +265,53 @@
         </Grid>
 
         <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
-            <ListView Name="TransactionTypes" ItemsSource="{Binding TransactionTypes}" Background="#FF31323A">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}" 
-                                        Header="Name"
-                                        Width="100"/>
-                        <GridViewColumn DisplayMemberBinding="{Binding Description}" 
-                                        Header="Description"
-                                        Width="300"/>
-                    </GridView>
-                </ListView.View>
-            </ListView>
+            <StackPanel Margin="10">
+                <ListView Name="TransactionTypesList" ItemsSource="{Binding TransactionTypes}" 
+                      Background="#FF31323A"
+                      Height="300">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="First Name"
+                                        Width="200">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Description"
+                                        Width="200">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         HorizontalAlignment="Center"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Save"
+                                        Command="{Binding SaveRowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Margin="10"
+                    Command="{Binding AddTypeCommand}">
+                    <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+                </Button>
+            </StackPanel>
         </Grid>
 
     </Grid>

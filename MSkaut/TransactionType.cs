@@ -11,15 +11,20 @@ namespace MSkaut
 		public long? Id { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public bool IsExpense { get; set; }
+		public long? OwnerId { get; set; }
 
-		public TransactionType(long id, string name, string description)
+		public TransactionType(string name, string description, long? ownerId)
 		{
-			this.Id = id;
+			this.Id = null;
 			this.Name = name;
 			this.Description = description;
-			this.IsExpense = IsExpense;
+			this.OwnerId = ownerId;
 		}
+
+        public TransactionType(long id, string name, string description, long? ownerId) : this(name, description, ownerId)
+        {
+            this.Id = id;
+        }
 
         public override string ToString()
         {

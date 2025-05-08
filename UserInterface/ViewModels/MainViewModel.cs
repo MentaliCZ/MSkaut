@@ -181,7 +181,7 @@ namespace UserInterface.ViewModels
 
         private void AddPerson(Object obj)
         {
-            Person person = new Person("Insert first name", "Insert last name", DateTime.Now, null, User.Id);
+            Person person = new("Insert first name", "Insert last name", DateTime.Now, null, User.Id);
             
             UsersPeople.Add(new PersonViewModel(person, dbConnection.Client));
         }
@@ -194,7 +194,9 @@ namespace UserInterface.ViewModels
 
         private void AddType(Object obj)
         {
-            //TODO: DO SOMETHING
+            TransactionType type = new("...", "...", User.Id);
+
+            TransactionTypes.Add(new TransactionTypeViewModel(type, dbConnection.Client));
         }
 
         private void ShowExport(Object obj)

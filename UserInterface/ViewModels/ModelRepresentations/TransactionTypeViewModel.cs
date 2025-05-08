@@ -4,6 +4,8 @@ using System;
 using System.Collections.ObjectModel;
 using Supabase;
 using UserManager;
+using Microsoft.Extensions.Logging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -15,6 +17,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public long? Id { get => transactionType.Id; set => transactionType.Id = value; }
         public string Name { get => transactionType.Name; set { transactionType.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
         public string Description { get => transactionType.Description; set { transactionType.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public long? OwnerId { get => transactionType.OwnerId; set => transactionType.OwnerId = value; }
 
         public TransactionTypeViewModel(TransactionType transactionType, Client client) : base(client)
 		{
@@ -28,7 +31,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             foreach (DBTransactionType dbTransactionType in dbTransactionTypes)
             {
-                TransactionType transactionType = new(dbTransactionType.Id, dbTransactionType.Name, dbTransactionType.Description);
+                TransactionType transactionType = new(dbTransactionType.Id, dbTransactionType.Name, dbTransactionType.Description, dbTransactionType.OwnerId);
                 result.Add(new TransactionTypeViewModel(transactionType, client));
             }
 
@@ -45,10 +48,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
             throw new NotImplementedException();
         }
 
-        public override void SaveRow(object obj)
+        public override async void SaveRow(object obj)
         {
             IsChanged = false;
-            throw new NotImplementedException();
+            if (Id == null)
+                Id = await DBTransactionType.CreateTransactionType(Name, Description, (long)OwnerId, client);
+            else
+                await DBTransactionType.UpdateTransactionType((long)Id, Name, Description, OwnerId, client);
         }
 
         public override string ToString()
@@ -58,7 +64,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && Description != null && IsChanged;
+            return Name != null && Name.Length > 0 && Description != null && IsChanged && OwnerId != null;
         }
 
         public override bool CanDeleteRow()
