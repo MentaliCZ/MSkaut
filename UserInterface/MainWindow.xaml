@@ -41,6 +41,8 @@
 
                 <Button Grid.Column="0"
                     Background="#FF24272C"
+                    BorderThickness="0"
+                        
                     Command="{Binding ShowEventsPage}">
                     <TextBlock Text="Events"
                            Foreground="White"
@@ -51,6 +53,7 @@
 
                 <Button Grid.Column="1"
                     Background="#FF24272C"
+                    BorderThickness="0"
                     Command="{Binding ShowPeoplePage}">
                     <TextBlock Text="People"
                            Foreground="White"
@@ -61,6 +64,7 @@
 
                 <Button Grid.Column="2"
                     Background="#FF24272C"
+                    BorderThickness="0"
                     Command="{Binding ShowTypesPage}">
                     <TextBlock Text="Transaction types"
                            Foreground="White"
@@ -71,6 +75,7 @@
 
                 <Button Grid.Column="3"
                     Background="#FF24272C"
+                    BorderThickness="0"
                     Command="{Binding ShowExportPage}">
                     <TextBlock Text="Export"
                            Foreground="White"

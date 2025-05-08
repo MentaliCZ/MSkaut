@@ -7,6 +7,7 @@ using DatabaseManager;
 using Supabase;
 using UserInterface.ViewModels.ModelRepresantations;
 using UserInterface.Commands;
+using System.Windows.Data;
 
 namespace UserInterface.ViewModels
 {
@@ -27,9 +28,11 @@ namespace UserInterface.ViewModels
             }
         }
 
-        public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
-        public ObservableCollection<TransactionViewModel> Transactions { get; set; }
+        public int moneyState { get; set; }
 
+        public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
+
+        public ObservableCollection<TransactionViewModel> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set; }
 
         private PersonViewModel selectedParticipant;

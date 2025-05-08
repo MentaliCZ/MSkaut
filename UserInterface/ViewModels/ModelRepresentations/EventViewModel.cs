@@ -16,11 +16,11 @@ namespace UserInterface.ViewModels.ModelRepresantations
     {
         private EventClass eventClass;
 
-        public long? Id { get => eventClass.Id; set => eventClass.Id = value; }
-        public string Name { get => eventClass.Name; set { eventClass.Name = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
-        public string Description { get => eventClass.Description; set { eventClass.Description = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
-        public DateTime StartDate { get => eventClass.StartDate; set { eventClass.StartDate = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
-        public DateTime EndDate { get => eventClass.EndDate; set { eventClass.EndDate = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public long? Id { get => eventClass.Id; set { eventClass.Id = value; OnPropertyChanged(); } }
+        public string Name { get => eventClass.Name; set { eventClass.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
+        public string Description { get => eventClass.Description; set { eventClass.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
+        public DateTime StartDate { get => eventClass.StartDate; set { eventClass.StartDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
+        public DateTime EndDate { get => eventClass.EndDate; set { eventClass.EndDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
 
         public ObservableCollection<TransactionViewModel> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set;}
@@ -92,6 +92,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void SaveRow(object obj)
         {
+            IsChanged = false;
             if (Id == null)
                 Id = await DBEvent.CreateEvent(Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
             else
@@ -112,12 +113,14 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate;
+            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate && IsChanged;
         }
 
         public override bool CanDeleteRow()
         {
             return true;
         }
+
+
     }
 }

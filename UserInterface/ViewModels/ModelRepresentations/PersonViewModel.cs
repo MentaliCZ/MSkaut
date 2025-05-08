@@ -22,25 +22,25 @@ namespace UserInterface.ViewModels.ModelRepresantations
 		{ 
 			get => person.FirstName;
 
-            set { person.FirstName = value; SaveRowCommand.RaiseCanExecuteChanged(); }
+            set { person.FirstName = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); }
 		}
 		public string LastName 
 		{ 
 			get => person.LastName;
 
-            set { person.LastName = value; SaveRowCommand.RaiseCanExecuteChanged(); }
+            set { person.LastName = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); }
 		}
 
         public DateTime BirthDate 
         { 
-            get => person.BirthDate; 
+            get => person.BirthDate;
 
-            set => person.BirthDate = value;
+            set { person.BirthDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); }
         }
         public Gender Gender 
         { get => person.Gender;
 
-          set { person.Gender = value; SaveRowCommand.RaiseCanExecuteChanged(); }
+          set { person.Gender = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged();  }
         }
 
         public long CreatorId 
@@ -99,6 +99,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void SaveRow(Object obj)
         {
+            IsChanged = false;
+
             if (Id == null)
                 Id = await DBPerson.CreatePerson(FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);
             else
@@ -117,7 +119,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return FirstName != null && FirstName.Length > 0 && LastName != null && LastName.Length > 0 && Gender != null;
+            return FirstName != null && FirstName.Length > 0 && LastName != null && LastName.Length > 0 && Gender != null && IsChanged; ;
         }
 
         public override bool CanDeleteRow()

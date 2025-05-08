@@ -55,7 +55,7 @@ namespace DatabaseManager
            .From<DBPerson>()
            .Select(x => new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId, x.CreatorId })
            .Where(x => x.CreatorId == creatorId)
-           .Order(x => x.LastName, Ordering.Ascending)
+           .Order(x => x.BirthDate, Ordering.Descending)
            .Get();
 
             return result.Models;

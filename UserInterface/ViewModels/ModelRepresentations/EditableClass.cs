@@ -1,11 +1,14 @@
 ﻿using System;
 using UserInterface.Commands;
 using Supabase;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace UserInterface.ViewModels.ModelRepresantations {
-	public abstract class EditableClass
-	{
-		public bool IsChanged { get; set; }
+	public abstract class EditableClass : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public bool IsChanged { get; set; }
 		protected Client client;
 
         public RelayCommand SaveRowCommand { get; set; }
@@ -28,5 +31,11 @@ namespace UserInterface.ViewModels.ModelRepresantations {
 		public abstract void SaveRow(Object obj);
 
 		public abstract void DeleteRow(Object obj);
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
     }
 }

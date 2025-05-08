@@ -13,8 +13,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public TransactionType TransactionType { get => transactionType; set => transactionType = value; }
 
         public long? Id { get => transactionType.Id; set => transactionType.Id = value; }
-        public string Name { get => transactionType.Name; set { transactionType.Name = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
-        public string Description { get => transactionType.Description; set { transactionType.Description = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public string Name { get => transactionType.Name; set { transactionType.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public string Description { get => transactionType.Description; set { transactionType.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
         public TransactionTypeViewModel(TransactionType transactionType, Client client) : base(client)
 		{
@@ -47,6 +47,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override void SaveRow(object obj)
         {
+            IsChanged = false;
             throw new NotImplementedException();
         }
 
@@ -57,7 +58,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && Description != null;
+            return Name != null && Name.Length > 0 && Description != null && IsChanged;
         }
 
         public override bool CanDeleteRow()

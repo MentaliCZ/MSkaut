@@ -13,11 +13,11 @@ namespace UserInterface.ViewModels.ModelRepresantations
 		private Transaction transaction;
 
         public long? Id { get => transaction.Id; set => transaction.Id = value; }
-		public string Name { get => transaction.Name; set { transaction.Name = value; SaveRowCommand.RaiseCanExecuteChanged(); } }
+		public string Name { get => transaction.Name; set { transaction.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
-        public TransactionTypeViewModel Type { get => new(transaction.Type, client); set => transaction.Type = value.getTransactionType(); }
-        public int Amount { get => transaction.Amount; set => transaction.Amount = value; }
-        public DateTime Date { get => transaction.Date; set => transaction.Date = value; }
+        public TransactionTypeViewModel Type { get => new(transaction.Type, client); set { transaction.Type = value.getTransactionType(); IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public int Amount { get => transaction.Amount; set { transaction.Amount = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public DateTime Date { get => transaction.Date; set { transaction.Date = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
         public long EventId { get => transaction.EventId; set => transaction.EventId = value; }
 
@@ -46,6 +46,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void SaveRow(object obj)
         {
+            IsChanged = false;
             if (Id == null)
                 Id = await DBTransaction.CreateTransaction(Name, (long)Type.Id, Amount, DateOnly.FromDateTime(Date), EventId, client);
             else
@@ -59,7 +60,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0;
+            return Name != null && Name.Length > 0 && IsChanged;
         }
 
         public override bool CanDeleteRow()
