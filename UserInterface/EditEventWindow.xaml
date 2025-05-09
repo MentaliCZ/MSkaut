@@ -7,6 +7,12 @@
         mc:Ignorable="d"
         Title="Edit event" Height="800" Width="900"
         Background="#FF31323A">
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "50"/>
@@ -186,6 +192,17 @@
                                     <DataTemplate>
                                         <Button Content="Save"
                                          Command="{Binding SaveRowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="20">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="*"
+                                                   Foreground="Red"
+                                                   FontSize="18"
+                                                   Visibility="{Binding IsChanged, Converter={StaticResource BoolToVis}}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

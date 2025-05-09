@@ -8,7 +8,9 @@ namespace UserInterface.ViewModels.ModelRepresantations {
 	public abstract class EditableClass : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool IsChanged { get; set; }
+
+        private bool isChanged;
+        public bool IsChanged { get => isChanged; set { isChanged = value; OnPropertyChanged(); } }
 		protected Client client;
 
         public RelayCommand SaveRowCommand { get; set; }

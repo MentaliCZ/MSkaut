@@ -85,8 +85,8 @@ namespace UserInterface.ViewModels
 
         public void AddTransaction(Object obj)
         {
-            Transaction transaction = new("...", 0, DateTime.Now, null, (long)eventClass.Id);
-            Transactions.Add(new (transaction, client));
+            Transaction transaction = new("...", 0, eventClass.StartDate, null, (long)eventClass.Id);
+            Transactions.Add(new TransactionViewModel(transaction, client));
         }
 
     }
