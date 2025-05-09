@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
 using UserInterface.ViewModels.ModelRepresantations;
+using System.Security;
 
 namespace UserInterface.ViewModels
 {
@@ -20,7 +21,7 @@ namespace UserInterface.ViewModels
         public string Login { get => _login; set { _login = value; TryLoginCommand.RaiseCanExecuteChanged(); CreateUserCommand.RaiseCanExecuteChanged(); } }
 
 		private string _password;
-		public string Password { get => _password; set { _password = value; TryLoginCommand.RaiseCanExecuteChanged(); CreateUserCommand.RaiseCanExecuteChanged(); } }
+        public string Password { get => _password; set { _password = value; TryLoginCommand.RaiseCanExecuteChanged(); CreateUserCommand.RaiseCanExecuteChanged(); } }
 
 		public RelayCommand TryLoginCommand { get; set; }
 		public RelayCommand CreateUserCommand { get; set; }
@@ -64,9 +65,9 @@ namespace UserInterface.ViewModels
             dbConnection = await ConnectionInstance.CreateInstance();
         }
 
-        public async void TryLogin(Object obj)
+		public async void TryLogin(Object obj)
 		{
-			User? user = await User.TryLogin(Login, Password, dbConnection.Client);
+			User? user = await User.TryLogin(Login, Password.ToString(), dbConnection.Client);
 
 			if (user == null)
 			{
