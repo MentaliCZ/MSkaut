@@ -33,7 +33,7 @@ namespace DatabaseManager
         {
             var result = await client
            .From<DBTransaction>()
-           .Select(x => new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.Date })
+           .Select(x => new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.EventId, x.Date })
            .Where(x => x.EventId == event_id)
            .Order(x => x.Date, Ordering.Ascending)
            .Get();

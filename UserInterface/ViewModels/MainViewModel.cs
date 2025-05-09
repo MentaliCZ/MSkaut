@@ -40,6 +40,10 @@ namespace UserInterface.ViewModels
         public RelayCommand AddTypeCommand { get; set; }
 
         public RelayCommand ShowExportPage { get; set; }
+        public RelayCommand ExportEventCommand { get; set; }
+
+        private EventViewModel _selectedExportEvent;
+        public EventViewModel SelectedExportEvent { get => _selectedExportEvent; set { _selectedExportEvent = value; ExportEventCommand.RaiseCanExecuteChanged(); } }
 
         private Visibility _eventsVisible;
         public Visibility EventsVisible 
@@ -110,6 +114,7 @@ namespace UserInterface.ViewModels
             AddTypeCommand = new(AddType, _ => true);
 
             ShowExportPage = new(ShowExport, _ => true);
+            ExportEventCommand = new(ExportEvent, x => CanExportEvent);
 
             ShowEvents(this);
         }
@@ -203,6 +208,13 @@ namespace UserInterface.ViewModels
         {
             HideAllWindows();
             ExportVisible = Visibility.Visible;
+        }
+
+        private bool CanExportEvent => SelectedExportEvent != null;
+
+        private async void ExportEvent(Object obj)
+        {
+            await EventExporter.Export(SelectedExportEvent);
         }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)

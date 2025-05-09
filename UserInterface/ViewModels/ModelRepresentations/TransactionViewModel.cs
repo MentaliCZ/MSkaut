@@ -47,6 +47,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(object obj)
         {
             IsChanged = false;
+            SaveRowCommand.RaiseCanExecuteChanged();
+
             if (Id == null)
                 Id = await DBTransaction.CreateTransaction(Name, (long)Type.Id, Amount, DateOnly.FromDateTime(Date), EventId, client);
             else
@@ -60,7 +62,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && IsChanged;
+            return Name != null && Name.Length > 0 && IsChanged && Amount >= 0;
         }
 
         public override bool CanDeleteRow()

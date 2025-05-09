@@ -100,6 +100,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(Object obj)
         {
             IsChanged = false;
+            SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
                 Id = await DBPerson.CreatePerson(FirstName, LastName, DateOnly.FromDateTime(BirthDate), Gender.Id, CreatorId, client);

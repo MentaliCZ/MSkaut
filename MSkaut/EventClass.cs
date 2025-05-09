@@ -42,5 +42,10 @@ namespace MSkaut
 			StartDate = startDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
 			EndDate = endDate.ToDateTime(TimeOnly.Parse("10:00 PM"));
         }
+
+        public override string ToString()
+        {
+			return Name;
+        }
     }
 }

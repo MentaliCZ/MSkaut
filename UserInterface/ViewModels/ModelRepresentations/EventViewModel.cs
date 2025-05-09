@@ -93,6 +93,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(object obj)
         {
             IsChanged = false;
+            SaveRowCommand.RaiseCanExecuteChanged();
+
             if (Id == null)
                 Id = await DBEvent.CreateEvent(Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
             else
@@ -119,6 +121,11 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override bool CanDeleteRow()
         {
             return true;
+        }
+
+        public override string ToString()
+        {
+            return eventClass.ToString();
         }
 
 

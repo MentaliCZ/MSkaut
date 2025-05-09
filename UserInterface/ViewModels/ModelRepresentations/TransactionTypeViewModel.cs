@@ -17,6 +17,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public long? Id { get => transactionType.Id; set => transactionType.Id = value; }
         public string Name { get => transactionType.Name; set { transactionType.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
         public string Description { get => transactionType.Description; set { transactionType.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        public bool IsExpense { get => transactionType.IsExpense; set { transactionType.IsExpense = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
         public long? OwnerId { get => transactionType.OwnerId; set => transactionType.OwnerId = value; }
 
         public TransactionTypeViewModel(TransactionType transactionType, Client client) : base(client)
@@ -31,7 +32,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             foreach (DBTransactionType dbTransactionType in dbTransactionTypes)
             {
-                TransactionType transactionType = new(dbTransactionType.Id, dbTransactionType.Name, dbTransactionType.Description, dbTransactionType.OwnerId);
+                TransactionType transactionType = new(dbTransactionType.Id, dbTransactionType.Name, dbTransactionType.Description, dbTransactionType.IsExpense, dbTransactionType.OwnerId);
                 result.Add(new TransactionTypeViewModel(transactionType, client));
             }
 
@@ -51,10 +52,12 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(object obj)
         {
             IsChanged = false;
+            SaveRowCommand.RaiseCanExecuteChanged();
+
             if (Id == null)
-                Id = await DBTransactionType.CreateTransactionType(Name, Description, (long)OwnerId, client);
+                Id = await DBTransactionType.CreateTransactionType(Name, Description, IsExpense, (long)OwnerId, client);
             else
-                await DBTransactionType.UpdateTransactionType((long)Id, Name, Description, OwnerId, client);
+                await DBTransactionType.UpdateTransactionType((long)Id, Name, Description, IsExpense, OwnerId, client);
         }
 
         public override string ToString()

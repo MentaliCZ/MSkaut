@@ -22,6 +22,9 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
+        [Column("is_expense")]
+        public bool IsExpense { get; set; }
+
         [Column("owner_id")]
         public long? OwnerId { get; set; }
 
@@ -30,7 +33,7 @@ namespace DatabaseManager
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
            .Where(x => x.Id == id)
            .Single();
         }
@@ -39,7 +42,7 @@ namespace DatabaseManager
         {
             return await client
            .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
            .Where(x => x.Name == name)
            .Single();
         }
@@ -48,7 +51,7 @@ namespace DatabaseManager
         {
             var result = await client
                 .From<DBTransactionType>()
-                .Select(x => new object[] { x.Id, x.Name, x.Description, x.OwnerId })
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense, x.OwnerId })
                 .Get();
 
 
@@ -57,13 +60,14 @@ namespace DatabaseManager
                 .ToList();
         }
 
-        public static async Task<long> CreateTransactionType(string name, string description, long userId, Client client)
+        public static async Task<long> CreateTransactionType(string name, string description, bool isExpense, long userId, Client client)
         {
             var dbTransactionType = new DBTransactionType
             {
                 Name = name,
                 Description = description,
-                OwnerId = userId
+                OwnerId = userId,
+                IsExpense = isExpense
             };
             var result = await client.From<DBTransactionType>()
                 .Insert(dbTransactionType, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
@@ -71,14 +75,15 @@ namespace DatabaseManager
             return result.Model.Id;
         }
 
-        public static async Task UpdateTransactionType(long id, string name, string description, long? userId, Client client)
+        public static async Task UpdateTransactionType(long id, string name, string description, bool isExpense, long? userId, Client client)
         {
             var dbTransactionType = new DBTransactionType
             {
                 Id = id,
                 Name = name,
                 Description = description,
-                OwnerId = userId
+                OwnerId = userId,
+                IsExpense = isExpense
             };
 
             await client.From<DBTransactionType>().Upsert(dbTransactionType);
