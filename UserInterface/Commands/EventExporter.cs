@@ -45,7 +45,9 @@ namespace UserInterface.Commands
             for (int idx = 1; idx <= 40; idx++)
             {
                 row++;
-                transactionSheet.Cells[row, "A"] = idx.ToString();
+                Excel.Range leftCell = (Excel.Range)transactionSheet.Cells[row, "A"];
+                leftCell.Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                leftCell.Value = idx.ToString();
 
                 string remainingMoneyFormula = "= +E" + row + "-F" + row;
                 if (idx != 1)
