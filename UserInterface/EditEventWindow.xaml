@@ -93,6 +93,16 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete"
+                                                Command="{Binding DataContext.DeleteParticipantCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                         </GridView>
                     </ListView.View>
                 </ListView>

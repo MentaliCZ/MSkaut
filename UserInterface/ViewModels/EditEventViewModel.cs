@@ -40,6 +40,7 @@ namespace UserInterface.ViewModels
         public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
 
         public RelayCommand AddParticipantCommand { get; set; }
+        public RelayCommand DeleteParticipantCommand { get; set; }
 
         public RelayCommand AddTransactionCommand { get; set; }
         public RelayCommand DeleteTransactionCommand { get; set; }
@@ -51,6 +52,7 @@ namespace UserInterface.ViewModels
             this.client = client;
 
             AddParticipantCommand = new(AddParticipant, x => CanAddParticipant());
+            DeleteParticipantCommand = new(DeleteParticipant, x => true);
 
             AddTransactionCommand = new(AddTransaction, x => true);
             DeleteTransactionCommand = new(DeleteTransaction, x => true);
@@ -91,6 +93,17 @@ namespace UserInterface.ViewModels
         {
             Transaction transaction = new("...", 0, eventClass.StartDate, null, (long)eventClass.Id);
             Transactions.Add(new TransactionViewModel(transaction, client));
+        }
+
+        private async void DeleteParticipant(Object obj)
+        {
+            PersonViewModel person = (PersonViewModel)obj;
+
+            if (person != null)
+            {
+                Participants.Remove(person);
+                DBEventPerson.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
+            }
         }
 
         private void DeleteTransaction(Object obj)
