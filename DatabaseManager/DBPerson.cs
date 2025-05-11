@@ -95,6 +95,13 @@ namespace DatabaseManager
             await client.From<DBPerson>().Upsert(dbPerson);
         }
 
+        public static async Task DeletePerson(long id, Client client)
+        {
+            await client
+                  .From<DBPerson>()
+                  .Where(x => x.Id == id)
+                  .Delete();
+        }
 
     }
 }

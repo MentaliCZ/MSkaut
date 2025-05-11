@@ -45,6 +45,11 @@ namespace UserInterface.ViewModels
         private EventViewModel _selectedExportEvent;
         public EventViewModel SelectedExportEvent { get => _selectedExportEvent; set { _selectedExportEvent = value; ExportEventCommand.RaiseCanExecuteChanged(); } }
 
+        public RelayCommand DeleteEventCommand { get; set; }
+        public RelayCommand DeletePersonCommand { get; set; }
+        public RelayCommand DeleteTransactionTypeCommand { get; set; }
+
+
         private Visibility _eventsVisible;
         public Visibility EventsVisible 
         { 
@@ -115,6 +120,10 @@ namespace UserInterface.ViewModels
 
             ShowExportPage = new(ShowExport, _ => true);
             ExportEventCommand = new(ExportEvent, x => CanExportEvent);
+
+            DeleteEventCommand = new(DeleteEvent, x => true);
+            DeletePersonCommand = new(DeletePerson, x => true);
+            DeleteTransactionTypeCommand = new(DeleteTransactionType, x => true);
 
             ShowEvents(this);
         }
@@ -220,6 +229,40 @@ namespace UserInterface.ViewModels
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void DeleteEvent(Object obj)
+        {
+            EventViewModel eventViewModel = (EventViewModel)obj;
+
+            if (eventViewModel != null && eventViewModel.CanDeleteRow())
+            {
+                eventViewModel.DeleteRow(null); 
+                Events.Remove(eventViewModel);  
+            }
+        }
+
+        private void DeletePerson(Object obj)
+        {
+            PersonViewModel personViewModel = (PersonViewModel)obj;
+
+            if (personViewModel != null && personViewModel.CanDeleteRow())
+            {
+                personViewModel.DeleteRow(null);
+                UsersPeople.Remove(personViewModel);
+            }
+        }
+
+
+        private void DeleteTransactionType(Object obj)
+        {
+            TransactionTypeViewModel transactionType = (TransactionTypeViewModel)obj;
+
+            if (transactionType != null && transactionType.CanDeleteRow())
+            {
+                transactionType.DeleteRow(null);
+                TransactionTypes.Remove(transactionType);
+            }
         }
 
     }

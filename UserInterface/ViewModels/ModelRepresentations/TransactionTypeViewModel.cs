@@ -6,6 +6,7 @@ using Supabase;
 using UserManager;
 using Microsoft.Extensions.Logging;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Threading.Tasks;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -44,9 +45,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             return transactionType;
         }
 
-        public override void DeleteRow(object obj)
+        public override async void DeleteRow(object obj)
         {
-            throw new NotImplementedException();
+            if (Id != null)
+                await DBTransactionType.DeleteTransactionType((long)Id, client);
         }
 
         public override async void SaveRow(object obj)
@@ -72,7 +74,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanDeleteRow()
         {
-            return false;
+            return OwnerId != null;
         }
     }
 }

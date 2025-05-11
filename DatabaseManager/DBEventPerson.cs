@@ -45,5 +45,13 @@ namespace DatabaseManager
 
             await client.From<DBEventPerson>().Upsert(dbEventPerson);
         }
+
+        public static async Task DeleteEventParticipant(long eventId, long personId, Client client)
+        {
+            await client
+                  .From<DBEventPerson>()
+                  .Where(x => x.EventId == eventId && x.PersonId == personId)
+                  .Delete();
+        }
     }
 }

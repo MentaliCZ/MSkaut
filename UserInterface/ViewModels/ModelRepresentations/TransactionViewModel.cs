@@ -5,6 +5,7 @@ using DatabaseManager;
 using UserManager;
 using System.Collections.ObjectModel;
 using Supabase;
+using System.Threading.Tasks;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -55,9 +56,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 await DBTransaction.UpdateTransaction((long)Id, Name, (long)Type.Id, Amount, DateOnly.FromDateTime(Date), EventId, client);
         }
 
-        public override void DeleteRow(object obj)
+        public override async void DeleteRow(object obj)
         {
-            throw new NotImplementedException();
+            if (Id != null)
+                await DBTransaction.DeleteTransaction((long)Id, client);
         }
 
         public override bool CanSaveRow()

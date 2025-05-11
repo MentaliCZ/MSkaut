@@ -103,7 +103,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            throw new NotImplementedException();
+            if (Id != null)
+                await DBEvent.DeleteEvent((long)Id, client);
         }
 
         public void OpenEditWindow(object obj)

@@ -75,5 +75,13 @@ namespace DatabaseManager
             await client.From<DBTransaction>().Upsert(dbTransaction);
 
         }
+
+        public static async Task DeleteTransaction(long id, Client client)
+        {
+            await client
+                  .From<DBTransaction>()
+                  .Where(x => x.Id == id)
+                  .Delete();
+        }
     }
 }

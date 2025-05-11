@@ -73,5 +73,13 @@ namespace DatabaseManager
 
             return true;
         }
+
+        public static async Task DeleteEvent(long id, Client client)
+        {
+            await client
+                  .From<DBEvent>()
+                  .Where(x => x.Id == id)
+                  .Delete();
+        }
     }
 }

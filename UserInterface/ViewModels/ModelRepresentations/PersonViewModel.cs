@@ -110,7 +110,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            throw new NotImplementedException();
+            if (Id != null)
+                await DBPerson.DeletePerson((long)Id, client);
         }
 
         public override string ToString()
