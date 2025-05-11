@@ -9,6 +9,8 @@ namespace UserInterface.Commands
         public static async Task Export(EventViewModel eventClass)
         {
             var excelApp = new Excel.Application();
+            excelApp.ScreenUpdating = false;
+
             excelApp.Workbooks.Add();
             Excel._Worksheet transactionSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
@@ -17,8 +19,13 @@ namespace UserInterface.Commands
 
             // Header
             transactionSheet.Cells[1, "B"] = "Pokladní kniha";
-            transactionSheet.Range["B1", "D1"].Merge();
+            transactionSheet.Range["B1:D1"].Merge();
             ((Excel.Range)transactionSheet.Cells[1, "B"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
+            transactionSheet.Cells[2, "B"] = "Akce: " + eventClass.Name;
+            transactionSheet.Range["B2:D2"].Merge();
+
+            transactionSheet.Range["B1:G2"].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
             ((Excel.Range)transactionSheet.Columns["A"]).ColumnWidth = 5;
 
@@ -128,7 +135,7 @@ namespace UserInterface.Commands
             ((Excel.Range)transactionSheet.Cells[45, "F"]).Font.Size = 8;
             ((Excel.Range)transactionSheet.Cells[45, "F"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-
+            transactionSheet.get_Range("B45:G45").Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
             //***********************************************************************************
             // Save logic
             //***********************************************************************************
@@ -142,6 +149,7 @@ namespace UserInterface.Commands
             // Show save file dialog box
             Nullable<bool> result = dlg.ShowDialog();
 
+
             // Process save file dialog box results
             if (result.Value)
             {
@@ -149,6 +157,7 @@ namespace UserInterface.Commands
                 string savePath = dlg.FileName;
                 transactionSheet.SaveAs(savePath);
             }
+
 
             excelApp.Quit();
 
