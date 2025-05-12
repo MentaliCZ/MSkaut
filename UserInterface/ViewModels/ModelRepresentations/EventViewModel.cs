@@ -38,6 +38,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             this.eventClass = eventClass;
             this.usersPeople = usersPeople;
             this.transactionTypes = transactionTypes;
+
+            this.Participants = new();
+            this.Transactions = new();
+
             OpenEditWindowCommand = new(OpenEditWindow, _ => true);
         }
 

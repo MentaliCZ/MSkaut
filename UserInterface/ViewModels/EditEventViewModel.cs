@@ -54,7 +54,7 @@ namespace UserInterface.ViewModels
             AddParticipantCommand = new(AddParticipant, x => CanAddParticipant());
             DeleteParticipantCommand = new(DeleteParticipant, x => true);
 
-            AddTransactionCommand = new(AddTransaction, x => true);
+            AddTransactionCommand = new(AddTransaction, x => CanAddTransaction());
             DeleteTransactionCommand = new(DeleteTransaction, x => true);
 
             TransactionTypes = transactionTypes;
@@ -70,7 +70,7 @@ namespace UserInterface.ViewModels
 
         public bool CanAddParticipant()
         {
-            if (SelectedParticipant == null || Participants == null)
+            if (eventClass.Id == null || SelectedParticipant == null || Participants == null)
                 return false;
 
             foreach (PersonViewModel person in Participants)
@@ -87,6 +87,11 @@ namespace UserInterface.ViewModels
             Participants.Add(SelectedParticipant);
             AddParticipantCommand.RaiseCanExecuteChanged();
             await DBEventPerson.AddEventParticipant((long)eventClass.Id, (long)SelectedParticipant.Id, client);
+        }
+
+        public bool CanAddTransaction()
+        {
+            return eventClass.Id != null;
         }
 
         public void AddTransaction(Object obj)
