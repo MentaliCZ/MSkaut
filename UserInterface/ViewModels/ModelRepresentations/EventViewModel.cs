@@ -16,7 +16,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
     {
         private EventClass eventClass;
 
-        public long? Id { get => eventClass.Id; set { eventClass.Id = value; OnPropertyChanged(); } }
+        public long? Id { get => eventClass.Id; set { eventClass.Id = value; OpenEditWindowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
         public string Name { get => eventClass.Name; set { eventClass.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
         public string Description { get => eventClass.Description; set { eventClass.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
         public DateTime StartDate { get => eventClass.StartDate; set { eventClass.StartDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
@@ -42,7 +42,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             this.Participants = new();
             this.Transactions = new();
 
-            OpenEditWindowCommand = new(OpenEditWindow, _ => true);
+            OpenEditWindowCommand = new(OpenEditWindow, x => CanOpenEditWindow);
         }
 
         public static async Task<EventViewModel> InitEventClass(DBEvent dbEvent, Dictionary<long, Gender> genderDict, 
@@ -105,10 +105,20 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 await DBEvent.UpdateEvent((long)Id, Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
         }
 
+        public override bool CanSaveRow()
+        {
+            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate && IsChanged;
+        }
+
         public override async void DeleteRow(object obj)
         {
             if (Id != null)
                 await DBEvent.DeleteEvent((long)Id, client);
+        }
+
+        public override bool CanDeleteRow()
+        {
+            return true;
         }
 
         public void OpenEditWindow(object obj)
@@ -118,15 +128,9 @@ namespace UserInterface.ViewModels.ModelRepresantations
             editWindow.Show();
         }
 
-        public override bool CanSaveRow()
-        {
-            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate && IsChanged;
-        }
+        public bool CanOpenEditWindow => Id != null;
 
-        public override bool CanDeleteRow()
-        {
-            return true;
-        }
+
 
         public override string ToString()
         {
