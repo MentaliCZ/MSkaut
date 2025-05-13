@@ -47,7 +47,9 @@
                 <TextBox Width="200"
                      Height="30"
                          FontSize="20"
-                         Foreground="Black"
+                         Foreground="White"
+                         Background="#FF53545D"
+                         BorderThickness="0"
                          Text="{Binding Login}"
                          Name="usernameInput"/>
             </StackPanel>
@@ -63,7 +65,9 @@
                         Width="200"
                         Height="30"
                          FontSize="20"
-                         Foreground="Black"
+                         Foreground="White"
+                         Background="#FF53545D"
+                             BorderThickness="0"
                          Name="passwordInput"/>
             </StackPanel>
 

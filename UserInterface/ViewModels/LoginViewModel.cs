@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Xml.Linq;
 using UserInterface.ViewModels.ModelRepresantations;
 using System.Security;
+using System.Text.RegularExpressions;
 
 namespace UserInterface.ViewModels
 {
@@ -67,7 +68,10 @@ namespace UserInterface.ViewModels
 
 		public async void TryLogin(Object obj)
 		{
-			User? user = await User.TryLogin(Login, Password.ToString(), dbConnection.Client);
+            if (!AreInputsValid())
+                return;
+
+            User? user = await User.TryLogin(Login, Password.ToString(), dbConnection.Client);
 
 			if (user == null)
 			{
@@ -85,7 +89,11 @@ namespace UserInterface.ViewModels
 
 		public async void CreateUser(Object obj)
 		{
-			if (!await User.CreateUser(Login, Password, dbConnection.Client))
+			if (!AreInputsValid())
+				return;
+
+
+            if (!await User.CreateUser(Login, Password, dbConnection.Client))
 			{
 				Message = "Account with this username already exists";
 				return;
@@ -93,6 +101,24 @@ namespace UserInterface.ViewModels
 
 			Message = "Account was succesfuly created, you can log in now";
 		}
+
+		private bool AreInputsValid()
+		{
+			if (!Regex.IsMatch(Login, @"[a-zA-Z0-9_]+$"))
+			{
+				Message = "Login must consist of only letters, numbers or undescore";
+				return false;
+			}
+
+			if (Login.Length > 30 || Password.ToString().Length > 30)
+			{
+				Message = "Max length of login or password is 30";
+				return false;
+			}
+
+			return true;
+
+        }
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {
