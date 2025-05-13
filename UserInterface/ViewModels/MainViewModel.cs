@@ -23,7 +23,7 @@ namespace UserInterface.ViewModels
         public ObservableCollection<EventViewModel> Events { get; set; }
 
         public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
-        private Dictionary<long, TransactionType> transactionTypesDict;
+        private Dictionary<long, TransactionTypeViewModel> transactionTypesDict;
 
         public ObservableCollection<Gender> Genders { get; set; }
         private Dictionary<long, Gender> genderDict;
@@ -143,7 +143,7 @@ namespace UserInterface.ViewModels
             transactionTypesDict = new();
             foreach (TransactionTypeViewModel transactionType in TransactionTypes)
             {
-                transactionTypesDict[(long)transactionType.Id] = transactionType.getTransactionType();
+                transactionTypesDict[(long)transactionType.Id] = transactionType;
             }
 
             Genders = await Gender.GetAllGendersEN(dbConnection.Client);

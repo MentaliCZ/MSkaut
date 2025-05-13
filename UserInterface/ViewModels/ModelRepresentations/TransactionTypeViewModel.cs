@@ -69,12 +69,20 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && Description != null && IsChanged && OwnerId != null;
+            return Name != null && Name.Length > 0 && Description != null && IsChanged && OwnerId != null && Name.Length <= 30;
         }
 
         public override bool CanDeleteRow()
         {
             return OwnerId != null;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj.GetType() != this.GetType())
+                return false;
+
+            return ((TransactionTypeViewModel)obj).Id == this.Id;
         }
     }
 }

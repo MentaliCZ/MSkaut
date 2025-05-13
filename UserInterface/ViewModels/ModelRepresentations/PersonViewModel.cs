@@ -121,7 +121,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return FirstName != null && FirstName.Length > 0 && LastName != null && LastName.Length > 0 && Gender != null && IsChanged; ;
+            return FirstName != null && FirstName.Length > 0 && LastName != null && LastName.Length > 0 && Gender != null && IsChanged && FirstName.Length <= 100 && LastName.Length <= 100;
         }
 
         public override bool CanDeleteRow()

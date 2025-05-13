@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
         Title="Edit event" Height="800" Width="900"
-        Background="#FF31323A">
+        Background="#FF31323A"
+        ResizeMode = "Noresize">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -25,13 +26,45 @@
         </Grid.ColumnDefinitions>
 
         <Grid Background= "#FF24272C" Grid.ColumnSpan="2">
-            <TextBlock Grid.Column="1"
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Grid.Column="1"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Foreground="White"
                        FontSize="25" 
                        Text="{Binding Name}"
-                       FontWeight="Bold" Margin="10"/>
+                       FontWeight="Bold" Margin="15"/>
+
+                <StackPanel Margin="5" Orientation="Horizontal" >
+                    <TextBlock Text="Start date: " 
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                           FontSize="15"
+                           Margin="40,5,5,5"
+                           />
+                    <TextBlock Text="{Binding StartDate}"
+                           HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                           Foreground="White"
+                           FontSize="13"
+                           Margin="5"/>
+
+                    <TextBlock Text="End date: " 
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                           FontSize="15"
+                           Margin="5"
+                           />
+                    <TextBlock Text="{Binding EndDate}"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                           FontSize="13"
+                           Margin="5"/>
+                </StackPanel>
+            </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -129,31 +162,7 @@
             </StackPanel>
 
             <Border Grid.Column="1" Background="#FF53545D" Margin="10,20,10,20">
-                <StackPanel Margin="15"  >
-                    <TextBlock Text="Start date: " 
-                           Foreground="White"
-                           HorizontalAlignment="Center"
-                           FontSize="18"
-                           Margin="5"
-                           />
-                    <TextBlock Text="{Binding StartDate}"
-                           HorizontalAlignment="Center"
-                           Foreground="White"
-                           FontSize="13"
-                           Margin="5"/>
 
-                    <TextBlock Text="End date: " 
-                           Foreground="White"
-                           HorizontalAlignment="Center"
-                           FontSize="18"
-                           Margin="5,15,5,5"
-                           />
-                    <TextBlock Text="{Binding EndDate}"
-                           Foreground="White"
-                           HorizontalAlignment="Center"
-                           FontSize="13"
-                           Margin="5"/>
-                </StackPanel>
             </Border>
         </Grid>
 

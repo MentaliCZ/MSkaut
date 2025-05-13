@@ -25,6 +25,9 @@ namespace DatabaseManager
         [Column("end_date")]
         public DateOnly EndDate { get; set; }
 
+        [Column("document_prefix")]
+        public string DocumentPrefix { get; set; }
+
         [Column("owner_id")]
         public long OwnerId { get; set; }
 
@@ -32,7 +35,7 @@ namespace DatabaseManager
         {
             var result = await client
            .From<DBEvent>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.StartDate, x.EndDate, x.OwnerId })
+           .Select(x => new object[] { x.Id, x.Name, x.Description, x.StartDate, x.EndDate, x.DocumentPrefix, x.OwnerId })
            .Where(x => x.OwnerId == id)
            .Order(x => x.StartDate, Ordering.Ascending)
            .Get();

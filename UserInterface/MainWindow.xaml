@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="Main page" Height="500" Width="1000"
         Background="#FF31323A"
-        Name ="RootWindow">
+        Name ="RootWindow"
+        ResizeMode = "Noresize">
     <Window.Resources>
         <Style TargetType="{x:Type GridViewColumnHeader}">
             <Setter Property="HorizontalContentAlignment" Value="Center" />

@@ -16,7 +16,9 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public long? Id { get => transaction.Id; set => transaction.Id = value; }
 		public string Name { get => transaction.Name; set { transaction.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
-        public TransactionTypeViewModel Type { get => new(transaction.Type, client); set { transaction.Type = value.getTransactionType(); IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+        private TransactionTypeViewModel type;
+        public TransactionTypeViewModel Type { get => type; set { type = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
+
         public int Amount { get => transaction.Amount; set { transaction.Amount = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
         public DateTime Date { get => transaction.Date; set { transaction.Date = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
 
@@ -25,10 +27,21 @@ namespace UserInterface.ViewModels.ModelRepresantations
 		public TransactionViewModel(Transaction transaction, Client client) : base(client)
 		{
             this.transaction = transaction;
+
+            this.Type = new(transaction.Type, client);
+            IsChanged = false;
 		}
 
+        public TransactionViewModel(Transaction transaction, Client client, Dictionary<long, TransactionTypeViewModel> transactionTypes) : base(client)
+        {
+            this.transaction = transaction;
+
+            this.Type = transactionTypes[(long)transaction.Type.Id];
+            IsChanged = false;
+        }
+
         public static async Task<ObservableCollection<TransactionViewModel>> GetEventTransactions(long eventId,
-        Dictionary<long, TransactionType> transactionTypes, Client client)
+        Dictionary<long, TransactionTypeViewModel> transactionTypes, Client client)
         {
             List<DBTransaction> dbTransactions = await DBTransaction.GetEventTransactions(eventId, client);
             ObservableCollection<TransactionViewModel> result = new();
@@ -36,10 +49,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             foreach (DBTransaction dbTransaction in dbTransactions)
             {
                 Transaction transaction = new Transaction(dbTransaction.Id, dbTransaction.Name,
-                    dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")), transactionTypes[dbTransaction.TypeId],
+                    dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")), transactionTypes[dbTransaction.TypeId].getTransactionType(),
                     dbTransaction.EventId);
 
-                result.Add(new TransactionViewModel(transaction, client));
+                result.Add(new TransactionViewModel(transaction, client, transactionTypes));
             }
 
             return result;
@@ -64,7 +77,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && IsChanged && Amount >= 0 && Type != null;
+            return Name != null && Name.Length > 0 && IsChanged && Amount >= 0 && Type != null && Name.Length <= 30;
         }
 
         public override bool CanDeleteRow()

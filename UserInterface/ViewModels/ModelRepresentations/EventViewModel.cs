@@ -46,7 +46,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         }
 
         public static async Task<EventViewModel> InitEventClass(DBEvent dbEvent, Dictionary<long, Gender> genderDict, 
-            Dictionary<long, TransactionType> transactionTypesDict, User user,
+            Dictionary<long, TransactionTypeViewModel> transactionTypesDict, User user,
             ObservableCollection<PersonViewModel> usersPeople, ObservableCollection<TransactionTypeViewModel> transactionTypes,
             Client client)
         {
@@ -65,7 +65,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         }
 
 
-        public static async Task<ObservableCollection<EventViewModel>> GetUserEvents(User user, Dictionary<long, TransactionType> transactionTypesDict,
+        public static async Task<ObservableCollection<EventViewModel>> GetUserEvents(User user, Dictionary<long, TransactionTypeViewModel> transactionTypesDict,
             Dictionary<long, Gender> genderDict, ObservableCollection<PersonViewModel> usersPeople, ObservableCollection<TransactionTypeViewModel> transactionTypes,
             Client client)
         {
@@ -88,7 +88,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         }
 
         private async Task LoadTransactions(EventViewModel eventViewModel, DBEvent dbEvent,
-            Dictionary<long, TransactionType> transactionTypes, Client client)
+            Dictionary<long, TransactionTypeViewModel> transactionTypes, Client client)
         {
             eventViewModel.Transactions = await TransactionViewModel.GetEventTransactions(dbEvent.Id, transactionTypes, client);
         }
@@ -107,7 +107,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate && IsChanged;
+            return Name != null && Name.Length > 0 && Description != null && StartDate <= EndDate && IsChanged && Name.Length <= 30;
         }
 
         public override async void DeleteRow(object obj)

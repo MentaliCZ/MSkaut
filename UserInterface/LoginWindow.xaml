@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
         Title="Login" Height="500" Width="800"
-        Background="#FF31323A">
+        Background="#FF31323A"
+         ResizeMode = "Noresize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "50"/>
