@@ -20,15 +20,17 @@ namespace UserInterface.ViewModels
         public string Name
         {
             get => eventClass.Name;
-
-            set
-            {
-                eventClass.Name = value;
-                OnPropertyChanged();
-            }
         }
 
-        public int moneyState { get; set; }
+        public String StartDate
+        {
+            get => DateOnly.FromDateTime(eventClass.StartDate).ToShortDateString();
+        }
+
+        public String EndDate
+        {
+            get => DateOnly.FromDateTime(eventClass.EndDate).ToShortDateString();
+        }
 
         public ObservableCollection<TransactionTypeViewModel> TransactionTypes { get; set; }
 
