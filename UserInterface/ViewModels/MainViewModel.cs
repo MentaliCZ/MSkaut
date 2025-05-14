@@ -1,15 +1,14 @@
 ﻿using System;
-using DatabaseManager;
-using System.Data.Common;
-
-using MSkaut;
-using UserManager;
-using UserInterface.Commands;
-using System.Windows;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Data.Common;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using DatabaseManager;
+using MSkaut;
+using UserInterface.Commands;
 using UserInterface.ViewModels.ModelRepresantations;
+using UserManager;
 
 namespace UserInterface.ViewModels
 {
@@ -43,18 +42,24 @@ namespace UserInterface.ViewModels
         public RelayCommand ExportEventCommand { get; set; }
 
         private EventViewModel _selectedExportEvent;
-        public EventViewModel SelectedExportEvent { get => _selectedExportEvent; set { _selectedExportEvent = value; ExportEventCommand.RaiseCanExecuteChanged(); } }
+        public EventViewModel SelectedExportEvent
+        {
+            get => _selectedExportEvent;
+            set
+            {
+                _selectedExportEvent = value;
+                ExportEventCommand.RaiseCanExecuteChanged();
+            }
+        }
 
         public RelayCommand DeleteEventCommand { get; set; }
         public RelayCommand DeletePersonCommand { get; set; }
         public RelayCommand DeleteTransactionTypeCommand { get; set; }
 
-
         private Visibility _eventsVisible;
-        public Visibility EventsVisible 
-        { 
-            get => _eventsVisible; 
-
+        public Visibility EventsVisible
+        {
+            get => _eventsVisible;
             set
             {
                 _eventsVisible = value;
@@ -66,7 +71,6 @@ namespace UserInterface.ViewModels
         public Visibility PeopleVisible
         {
             get => _peopleVisible;
-
             set
             {
                 _peopleVisible = value;
@@ -78,7 +82,6 @@ namespace UserInterface.ViewModels
         public Visibility TransactionTypesVisible
         {
             get => _transactionTypesVisible;
-
             set
             {
                 _transactionTypesVisible = value;
@@ -90,7 +93,6 @@ namespace UserInterface.ViewModels
         public Visibility ExportVisible
         {
             get => _exportVisible;
-
             set
             {
                 _exportVisible = value;
@@ -128,8 +130,11 @@ namespace UserInterface.ViewModels
             ShowEvents(this);
         }
 
-        public static async Task<MainViewModel> CreateMainViewModel(Window thisWindow,
-            User user, ConnectionInstance dbConnection)
+        public static async Task<MainViewModel> CreateMainViewModel(
+            Window thisWindow,
+            User user,
+            ConnectionInstance dbConnection
+        )
         {
             MainViewModel mainViewModel = new(thisWindow, user, dbConnection);
             await mainViewModel.InitStructures();
@@ -138,7 +143,10 @@ namespace UserInterface.ViewModels
 
         public async Task InitStructures()
         {
-            TransactionTypes = await TransactionTypeViewModel.GetUsersTransactionTypes(User, dbConnection.Client);
+            TransactionTypes = await TransactionTypeViewModel.GetUsersTransactionTypes(
+                User,
+                dbConnection.Client
+            );
 
             transactionTypesDict = new();
             foreach (TransactionTypeViewModel transactionType in TransactionTypes)
@@ -154,9 +162,19 @@ namespace UserInterface.ViewModels
                 genderDict[gender.Id] = gender;
             }
 
-            UsersPeople = await PersonViewModel.GetUsersPeople(User, genderDict, dbConnection.Client);
-            Events = await EventViewModel.GetUserEvents(User, transactionTypesDict, genderDict, UsersPeople,
-                TransactionTypes, dbConnection.Client);
+            UsersPeople = await PersonViewModel.GetUsersPeople(
+                User,
+                genderDict,
+                dbConnection.Client
+            );
+            Events = await EventViewModel.GetUserEvents(
+                User,
+                transactionTypesDict,
+                genderDict,
+                UsersPeople,
+                TransactionTypes,
+                dbConnection.Client
+            );
         }
 
         private void LogOut(Object obj)
@@ -184,7 +202,9 @@ namespace UserInterface.ViewModels
         {
             EventClass eventClass = new("Insert event name", "...", User.Id);
 
-            Events.Add(new EventViewModel(eventClass, UsersPeople, TransactionTypes, dbConnection.Client));
+            Events.Add(
+                new EventViewModel(eventClass, UsersPeople, TransactionTypes, dbConnection.Client)
+            );
         }
 
         private void ShowPeople(Object obj)
@@ -195,8 +215,14 @@ namespace UserInterface.ViewModels
 
         private void AddPerson(Object obj)
         {
-            Person person = new("Insert first name", "Insert last name", DateTime.Now, null, User.Id);
-            
+            Person person = new(
+                "Insert first name",
+                "Insert last name",
+                DateTime.Now,
+                null,
+                User.Id
+            );
+
             UsersPeople.Add(new PersonViewModel(person, dbConnection.Client));
         }
 
@@ -237,8 +263,8 @@ namespace UserInterface.ViewModels
 
             if (eventViewModel != null && eventViewModel.CanDeleteRow())
             {
-                eventViewModel.DeleteRow(null); 
-                Events.Remove(eventViewModel);  
+                eventViewModel.DeleteRow(null);
+                Events.Remove(eventViewModel);
             }
         }
 
@@ -253,7 +279,6 @@ namespace UserInterface.ViewModels
             }
         }
 
-
         private void DeleteTransactionType(Object obj)
         {
             TransactionTypeViewModel transactionType = (TransactionTypeViewModel)obj;
@@ -264,6 +289,5 @@ namespace UserInterface.ViewModels
                 TransactionTypes.Remove(transactionType);
             }
         }
-
     }
 }

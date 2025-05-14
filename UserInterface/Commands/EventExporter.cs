@@ -136,6 +136,7 @@ namespace UserInterface.Commands
             ((Excel.Range)transactionSheet.Cells[45, "F"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
             transactionSheet.get_Range("B45:G45").Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+
             //***********************************************************************************
             // Save logic
             //***********************************************************************************

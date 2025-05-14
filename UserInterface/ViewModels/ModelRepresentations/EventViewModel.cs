@@ -21,6 +21,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public string Description { get => eventClass.Description; set { eventClass.Description = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
         public DateTime StartDate { get => eventClass.StartDate; set { eventClass.StartDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
         public DateTime EndDate { get => eventClass.EndDate; set { eventClass.EndDate = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); OnPropertyChanged(); } }
+        public String DocumentPrefix { get => eventClass.DocumentPrefix; set { eventClass.DocumentPrefix = value; IsChanged = true; OnPropertyChanged(); } }
 
         public ObservableCollection<TransactionViewModel> Transactions { get; set; }
         public ObservableCollection<PersonViewModel> Participants { get; set;}
@@ -102,7 +103,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 Id = await DBEvent.CreateEvent(Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
             else
-                await DBEvent.UpdateEvent((long)Id, Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), CreatorId, client);
+                await DBEvent.UpdateEvent((long)Id, Name, Description, DateOnly.FromDateTime(StartDate), DateOnly.FromDateTime(EndDate), DocumentPrefix,  CreatorId, client);
         }
 
         public override bool CanSaveRow()

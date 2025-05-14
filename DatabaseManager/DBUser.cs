@@ -9,7 +9,7 @@ namespace DatabaseManager
 {
     [Table("User")]
     public class DBUser : BaseModel
-	{
+    {
         [PrimaryKey("user_id")]
         public long Id { get; set; }
 
@@ -23,13 +23,13 @@ namespace DatabaseManager
         public int RoleId { get; set; }
 
 
-        public static async Task<DBUser?> GetUser(string login, string hashedPassword ,Client client)
+        public static async Task<DBUser?> GetUser(string login, string hashedPassword, Client client)
         {
-             return await client
-            .From<DBUser>()
-            .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
-            .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
-            .Single();
+            return await client
+           .From<DBUser>()
+           .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
+           .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
+           .Single();
         }
 
         public static async Task<DBUser?> GetUserByLogin(string login, Client client)
@@ -43,7 +43,7 @@ namespace DatabaseManager
 
         public static async Task<bool> CreateUser(string login, string hashedPassword, Client client)
         {
-            if (await GetUserByLogin(login ,client) != null)
+            if (await GetUserByLogin(login, client) != null)
                 return false;
 
             var dbUser = new DBUser

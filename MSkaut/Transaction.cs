@@ -1,6 +1,6 @@
-﻿using Supabase;
+﻿using System.Collections.ObjectModel;
 using DatabaseManager;
-using System.Collections.ObjectModel;
+using Supabase;
 
 namespace MSkaut
 {
@@ -13,7 +13,13 @@ namespace MSkaut
         public DateTime Date { get; set; }
         public long EventId { get; set; }
 
-        public Transaction(string name, int amount, DateTime date, TransactionType type, long eventId)
+        public Transaction(
+            string name,
+            int amount,
+            DateTime date,
+            TransactionType type,
+            long eventId
+        )
         {
             Id = null;
             this.Name = name;
@@ -23,7 +29,15 @@ namespace MSkaut
             this.EventId = eventId;
         }
 
-        public Transaction(long id, string name, int amount, DateTime date, TransactionType type, long eventId) : this(name, amount, date, type, eventId)
+        public Transaction(
+            long id,
+            string name,
+            int amount,
+            DateTime date,
+            TransactionType type,
+            long eventId
+        )
+            : this(name, amount, date, type, eventId)
         {
             this.Id = id;
         }

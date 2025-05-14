@@ -1,7 +1,7 @@
-﻿using Supabase.Postgrest.Attributes;
-using Supabase.Postgrest.Models;
+﻿using System;
 using Supabase;
-using System;
+using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
 
 namespace DatabaseManager
 {
@@ -20,26 +20,30 @@ namespace DatabaseManager
         [Column("power_int")]
         public int Hierarchy { get; set; }
 
-
         public static async Task<DBUserRole?> GetUserRole(int id, Client client)
         {
             return await client
-           .From<DBUserRole>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
-           .Where(x => x.Id == id)
-           .Single();
+                .From<DBUserRole>()
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
+                .Where(x => x.Id == id)
+                .Single();
         }
 
         public static async Task<DBUserRole?> GetUserRole(string name, Client client)
         {
             return await client
-           .From<DBUserRole>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
-           .Where(x => x.Name == name)
-           .Single();
+                .From<DBUserRole>()
+                .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
+                .Where(x => x.Name == name)
+                .Single();
         }
 
-        public static async Task<Boolean> CreateUserRole(string name, string description, int power_int, Client client)
+        public static async Task<Boolean> CreateUserRole(
+            string name,
+            string description,
+            int power_int,
+            Client client
+        )
         {
             if (await GetUserRole(name, client) != null)
                 return false;
@@ -48,7 +52,7 @@ namespace DatabaseManager
             {
                 Name = name,
                 Description = description,
-                Hierarchy = power_int
+                Hierarchy = power_int,
             };
 
             await client.From<DBUserRole>().Insert(dbUserRole);

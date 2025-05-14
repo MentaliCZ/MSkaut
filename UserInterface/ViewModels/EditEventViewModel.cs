@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using MSkaut;
-using System.Collections.ObjectModel;
-using DatabaseManager;
-using Supabase;
-using UserInterface.ViewModels.ModelRepresantations;
-using UserInterface.Commands;
 using System.Windows.Data;
+using DatabaseManager;
+using MSkaut;
+using Supabase;
+using UserInterface.Commands;
+using UserInterface.ViewModels.ModelRepresantations;
 
 namespace UserInterface.ViewModels
 {
@@ -38,7 +38,15 @@ namespace UserInterface.ViewModels
         public ObservableCollection<PersonViewModel> Participants { get; set; }
 
         private PersonViewModel selectedParticipant;
-        public PersonViewModel SelectedParticipant { get => selectedParticipant; set { selectedParticipant = value; AddParticipantCommand.RaiseCanExecuteChanged(); } }
+        public PersonViewModel SelectedParticipant
+        {
+            get => selectedParticipant;
+            set
+            {
+                selectedParticipant = value;
+                AddParticipantCommand.RaiseCanExecuteChanged();
+            }
+        }
         public ObservableCollection<PersonViewModel> UsersPeople { get; set; }
 
         public RelayCommand AddParticipantCommand { get; set; }
@@ -47,8 +55,12 @@ namespace UserInterface.ViewModels
         public RelayCommand AddTransactionCommand { get; set; }
         public RelayCommand DeleteTransactionCommand { get; set; }
 
-        public EditEventViewModel(Client client, EventViewModel eventClass, ObservableCollection<PersonViewModel> usersPeople, 
-            ObservableCollection<TransactionTypeViewModel> transactionTypes)
+        public EditEventViewModel(
+            Client client,
+            EventViewModel eventClass,
+            ObservableCollection<PersonViewModel> usersPeople,
+            ObservableCollection<TransactionTypeViewModel> transactionTypes
+        )
         {
             this.eventClass = eventClass;
             this.client = client;
@@ -88,7 +100,11 @@ namespace UserInterface.ViewModels
         {
             Participants.Add(SelectedParticipant);
             AddParticipantCommand.RaiseCanExecuteChanged();
-            await DBEventPerson.AddEventParticipant((long)eventClass.Id, (long)SelectedParticipant.Id, client);
+            await DBEventPerson.AddEventParticipant(
+                (long)eventClass.Id,
+                (long)SelectedParticipant.Id,
+                client
+            );
         }
 
         public bool CanAddTransaction()
@@ -98,7 +114,13 @@ namespace UserInterface.ViewModels
 
         public void AddTransaction(Object obj)
         {
-            Transaction transaction = new("...", 0, eventClass.StartDate, null, (long)eventClass.Id);
+            Transaction transaction = new(
+                "...",
+                0,
+                eventClass.StartDate,
+                null,
+                (long)eventClass.Id
+            );
             Transactions.Add(new TransactionViewModel(transaction, client));
         }
 
@@ -123,6 +145,5 @@ namespace UserInterface.ViewModels
                 Transactions.Remove(transaction);
             }
         }
-
     }
 }

@@ -60,7 +60,7 @@ namespace DatabaseManager
             return result.Model.Id;
         }
 
-        public static async Task<bool> UpdateEvent(long id, string name, string description, DateOnly startDate, DateOnly endDate, long ownerId, Client client)
+        public static async Task<bool> UpdateEvent(long id, string name, string description, DateOnly startDate, DateOnly endDate, string documentPrefix, long ownerId, Client client)
         {
             var dbEvent = new DBEvent
             {
@@ -69,6 +69,7 @@ namespace DatabaseManager
                 Description = description,
                 StartDate = startDate,
                 EndDate = endDate,
+                DocumentPrefix = documentPrefix,
                 OwnerId = ownerId
             };
 

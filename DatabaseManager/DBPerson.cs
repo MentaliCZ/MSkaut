@@ -10,7 +10,7 @@ namespace DatabaseManager
 {
     [Table("Person")]
     public class DBPerson : BaseModel
-	{
+    {
         [PrimaryKey("person_id")]
         public long Id { get; set; }
 
@@ -43,7 +43,7 @@ namespace DatabaseManager
             var result = await client
            .From<DBPerson>()
            .Where(x => x.FirstName == firstName && x.LastName == lastName && x.BirthDate == birthDate)
-           .Select(x => new object[] { x.Id})
+           .Select(x => new object[] { x.Id })
            .Single();
 
             return result.Id;
