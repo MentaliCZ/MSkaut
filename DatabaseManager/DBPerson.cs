@@ -97,6 +97,8 @@ namespace DatabaseManager
 
         public static async Task DeletePerson(long id, Client client)
         {
+            await DBEventPerson.DeleteAllPersonReferences(id, client);
+
             await client
                   .From<DBPerson>()
                   .Where(x => x.Id == id)

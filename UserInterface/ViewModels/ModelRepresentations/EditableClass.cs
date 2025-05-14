@@ -32,7 +32,7 @@ namespace UserInterface.ViewModels.ModelRepresantations {
 
 		public abstract void SaveRow(Object obj);
 
-		public abstract void DeleteRow(Object obj);
+        public abstract void DeleteRow(Object obj);
 
         protected void OnPropertyChanged([CallerMemberName] string name = null)
         {

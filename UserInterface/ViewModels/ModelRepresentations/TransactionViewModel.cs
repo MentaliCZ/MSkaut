@@ -48,11 +48,26 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             foreach (DBTransaction dbTransaction in dbTransactions)
             {
-                Transaction transaction = new Transaction(dbTransaction.Id, dbTransaction.Name,
-                    dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")), transactionTypes[dbTransaction.TypeId].getTransactionType(),
-                    dbTransaction.EventId);
+                Transaction transaction;
+                if (dbTransaction.TypeId == null)
+                {
+                    transaction = new Transaction(dbTransaction.Id, dbTransaction.Name,
+                        dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")),
+                        null,
+                        dbTransaction.EventId);
 
-                result.Add(new TransactionViewModel(transaction, client, transactionTypes));
+                    result.Add(new TransactionViewModel(transaction, client));
+                }
+                else
+                {
+                    transaction = new Transaction(dbTransaction.Id, dbTransaction.Name,
+                        dbTransaction.Amount, dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")),
+                        transactionTypes[(long)dbTransaction.TypeId].getTransactionType(),
+                        dbTransaction.EventId);
+
+                    result.Add(new TransactionViewModel(transaction, client, transactionTypes));
+                }
+
             }
 
             return result;
@@ -71,13 +86,15 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            if (Id != null)
-                await DBTransaction.DeleteTransaction((long)Id, client);
+            if (Id == null)
+                return;
+
+            await DBTransaction.DeleteTransaction((long)Id, client);
         }
 
         public override bool CanSaveRow()
         {
-            return Name != null && Name.Length > 0 && IsChanged && Amount >= 0 && Type != null && Name.Length <= 30;
+            return Name != null && Name.Length > 0 && IsChanged && Amount >= 0 && type.getTransactionType() != null && Name.Length <= 30 ;
         }
 
         public override bool CanDeleteRow()

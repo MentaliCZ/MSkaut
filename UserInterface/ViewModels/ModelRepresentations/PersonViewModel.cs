@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using MSkaut;
 using UserManager;
 using Supabase;
+using System.Windows;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -110,7 +111,17 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            if (Id != null)
+            if (Id == null)
+                return;
+
+
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this person?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
                 await DBPerson.DeletePerson((long)Id, client);
         }
 

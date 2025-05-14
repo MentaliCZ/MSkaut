@@ -18,7 +18,7 @@ namespace DatabaseManager
         public string Name { get; set; }
 
         [Column("transaction_type_id")]
-        public long TypeId { get; set; }
+        public long? TypeId { get; set; }
 
         [Column("amount")]
         public int Amount { get; set; }
@@ -76,6 +76,16 @@ namespace DatabaseManager
 
         }
 
+        public static async Task RemoveTransactionTypeReferences(long typeId, Client client)
+        {
+
+            await client.From<DBTransaction>()
+                .Where(x => x.TypeId == typeId)
+                .Set(x => x.TypeId, null)
+                .Update();
+
+        }
+
         public static async Task DeleteTransaction(long id, Client client)
         {
             await client
@@ -83,5 +93,7 @@ namespace DatabaseManager
                   .Where(x => x.Id == id)
                   .Delete();
         }
+
+
     }
 }

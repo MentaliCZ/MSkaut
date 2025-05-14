@@ -7,13 +7,13 @@ using UserManager;
 using Microsoft.Extensions.Logging;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
 	public class TransactionTypeViewModel : EditableClass
 	{
         private TransactionType transactionType;
-        public TransactionType TransactionType { get => transactionType; set => transactionType = value; }
 
         public long? Id { get => transactionType.Id; set => transactionType.Id = value; }
         public string Name { get => transactionType.Name; set { transactionType.Name = value; IsChanged = true; SaveRowCommand.RaiseCanExecuteChanged(); } }
@@ -47,7 +47,16 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            if (Id != null)
+            if (Id == null)
+                return;
+
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this type?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
                 await DBTransactionType.DeleteTransactionType((long)Id, client);
         }
 
@@ -77,12 +86,5 @@ namespace UserInterface.ViewModels.ModelRepresantations
             return OwnerId != null;
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj.GetType() != this.GetType())
-                return false;
-
-            return ((TransactionTypeViewModel)obj).Id == this.Id;
-        }
     }
 }

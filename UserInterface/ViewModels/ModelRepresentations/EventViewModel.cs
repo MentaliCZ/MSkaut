@@ -112,7 +112,17 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         public override async void DeleteRow(object obj)
         {
-            if (Id != null)
+            if (Id == null)
+                return;
+
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this event?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+
+            if (result == MessageBoxResult.Yes)
                 await DBEvent.DeleteEvent((long)Id, client);
         }
 

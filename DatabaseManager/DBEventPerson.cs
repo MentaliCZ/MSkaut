@@ -53,5 +53,13 @@ namespace DatabaseManager
                   .Where(x => x.EventId == eventId && x.PersonId == personId)
                   .Delete();
         }
+
+        public static async Task DeleteAllPersonReferences(long personId, Client client)
+        {
+            await client
+                  .From<DBEventPerson>()
+                  .Where(x => x.PersonId == personId)
+                  .Delete();
+        }
     }
 }

@@ -91,6 +91,8 @@ namespace DatabaseManager
 
         public static async Task DeleteTransactionType(long id, Client client)
         {
+            await DBTransaction.RemoveTransactionTypeReferences(id, client);
+
             await client
                   .From<DBTransactionType>()
                   .Where(x => x.Id == id)
