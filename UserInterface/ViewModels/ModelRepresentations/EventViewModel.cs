@@ -201,6 +201,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         {
             bool success;
             SaveRowCommand.RaiseCanExecuteChanged();
+            IsProcessing = true;
 
             if (Id == null)
             {
@@ -226,6 +227,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             }
+
+            IsProcessing = false;
 
             if (success)
                 IsChanged = false;
@@ -253,8 +256,12 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 MessageBoxImage.Warning
             );
 
+            IsProcessing = true;
+
             if (result == MessageBoxResult.Yes)
                 await DBEvent.DeleteEvent((long)Id, client);
+
+            IsProcessing = false;
         }
 
         public override bool CanDeleteRow()

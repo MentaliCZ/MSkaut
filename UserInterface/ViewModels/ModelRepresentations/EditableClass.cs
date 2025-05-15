@@ -20,6 +20,18 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 OnPropertyChanged();
             }
         }
+
+        private bool isProcessing;
+        public bool IsProcessing
+        {
+            get => isProcessing;
+            set
+            {
+                isProcessing = value;
+                OnPropertyChanged();
+            }
+        }
+
         protected Client client;
 
         public RelayCommand SaveRowCommand { get; set; }
@@ -28,6 +40,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         protected EditableClass(Client client)
         {
             IsChanged = false;
+            IsProcessing = false;
             this.client = client;
 
             SaveRowCommand = new(SaveRow, x => CanSaveRow());

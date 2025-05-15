@@ -211,17 +211,16 @@
                             </GridViewColumn>
 
                             <GridViewColumn Width="20">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
                                         <TextBlock Text="*"
                                                    Foreground="Red"
                                                    FontSize="18"
                                                    Visibility="{Binding IsChanged, Converter={StaticResource BoolToVis}}"/>
                                     </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
-                        
                         </GridView>
                     </ListView.View>
             </ListView>

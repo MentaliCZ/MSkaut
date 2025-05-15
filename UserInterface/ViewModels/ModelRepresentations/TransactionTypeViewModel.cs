@@ -102,13 +102,18 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 MessageBoxImage.Warning
             );
 
+            IsProcessing = true;
+
             if (result == MessageBoxResult.Yes)
                 await DBTransactionType.DeleteTransactionType((long)Id, client);
+
+            IsProcessing = false;
         }
 
         public override async void SaveRow(object obj)
         {
             IsChanged = false;
+            IsProcessing = true;
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
@@ -128,6 +133,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     OwnerId,
                     client
                 );
+
+            IsProcessing = false;
         }
 
         public override string ToString()

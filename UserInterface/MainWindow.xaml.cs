@@ -12,6 +12,7 @@ using System.Windows.Shapes;
 using UserManager;
 using DatabaseManager;
 using UserInterface.ViewModels;
+using WpfAnimatedGif;
 
 namespace UserInterface
 {

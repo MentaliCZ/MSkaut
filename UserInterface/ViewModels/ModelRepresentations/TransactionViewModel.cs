@@ -153,6 +153,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(object obj)
         {
             IsChanged = false;
+            IsProcessing = true;
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
@@ -176,14 +177,20 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     EventId,
                     client
                 );
+
+            IsProcessing = false;
         }
 
         public override async void DeleteRow(object obj)
         {
+            IsProcessing = true;
+
             if (Id == null)
                 return;
 
             await DBTransaction.DeleteTransaction((long)Id, client);
+
+            IsProcessing = false;
         }
 
         public override bool CanSaveRow()
