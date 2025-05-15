@@ -18,6 +18,18 @@ namespace UserInterface.ViewModels.ModelRepresantations
             get => transaction.Id;
             set => transaction.Id = value;
         }
+
+        public string DocumentName
+        {
+            get => transaction.DocumentName;
+            set
+            {
+                transaction.DocumentName = value;
+                IsChanged = true;
+                SaveRowCommand.RaiseCanExecuteChanged();
+            }
+        }
+
         public string Name
         {
             get => transaction.Name;
@@ -109,6 +121,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 {
                     transaction = new Transaction(
                         dbTransaction.Id,
+                        dbTransaction.DocumentName,
                         dbTransaction.Name,
                         dbTransaction.Amount,
                         dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")),
@@ -122,6 +135,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 {
                     transaction = new Transaction(
                         dbTransaction.Id,
+                        dbTransaction.DocumentName,
                         dbTransaction.Name,
                         dbTransaction.Amount,
                         dbTransaction.Date.ToDateTime(TimeOnly.Parse("10:00 PM")),
@@ -143,6 +157,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             if (Id == null)
                 Id = await DBTransaction.CreateTransaction(
+                    DocumentName,
                     Name,
                     (long)Type.Id,
                     Amount,
@@ -153,6 +168,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             else
                 await DBTransaction.UpdateTransaction(
                     (long)Id,
+                    DocumentName,
                     Name,
                     (long)Type.Id,
                     Amount,

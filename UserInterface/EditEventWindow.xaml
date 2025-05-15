@@ -161,7 +161,7 @@
 
             </StackPanel>
 
-            <Border Grid.Column="1" Background="#FF53545D" Margin="10,20,10,20">
+            <Border Grid.Column="1" Margin="10,20,10,20">
 
             </Border>
         </Grid>
@@ -186,8 +186,21 @@
                     
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Name"
+                            <GridViewColumn Header="Document name"
                                             Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding DocumentName, UpdateSourceTrigger=PropertyChanged}"
+                                                    BorderThickness="0"
+                                                    Background="#FF53545D"
+                                                    Foreground="White"
+                                                    HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Transaction purpose"
+                                            Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
@@ -200,13 +213,13 @@
                             </GridViewColumn>
 
                             <GridViewColumn Header="Type"
-                                        Width="100">
+                                        Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.TransactionTypes, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
                                                SelectedItem="{Binding Type, Mode=TwoWay}"
                                                  HorizontalAlignment="Stretch"
-                                              Width="80"
+                                              Width="130"
                                               Height="20"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

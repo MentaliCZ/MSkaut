@@ -116,6 +116,7 @@ namespace UserInterface.ViewModels
         {
             Transaction transaction = new(
                 "...",
+                "...",
                 0,
                 eventClass.StartDate,
                 null,

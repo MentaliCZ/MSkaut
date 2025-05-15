@@ -100,25 +100,23 @@ namespace UserInterface.Commands
 
                 TransactionViewModel transaction = eventClass.Transactions[idx - 1];
 
+                (transactionSheet.Range["B" + row, "F" + row]).Font.Size = 8;
+
                 transactionSheet.Cells[row, "B"] = transaction.Date.Day + ". " + transaction.Date.Month + ".";
-                ((Excel.Range)transactionSheet.Cells[row, "B"]).Font.Size = 8;
                 ((Excel.Range)transactionSheet.Cells[row, "B"]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
 
-
+                transactionSheet.Cells[row, "C"] = transaction.DocumentName;
 
                 transactionSheet.Cells[row, "D"] = transaction.Name;
-                ((Excel.Range)transactionSheet.Cells[row, "D"]).Font.Size = 8;
 
 
                 if (transaction.Type.IsExpense)
                 {
                     transactionSheet.Cells[row, "F"] = transaction.Amount.ToString();
-                    ((Excel.Range)transactionSheet.Cells[row, "F"]).Font.Size = 8;
                 }
                 else
                 {
                     transactionSheet.Cells[row, "E"] = transaction.Amount.ToString();
-                    ((Excel.Range)transactionSheet.Cells[row, "E"]).Font.Size = 8;
                 }
 
             }

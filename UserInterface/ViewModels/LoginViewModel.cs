@@ -97,9 +97,6 @@ namespace UserInterface.ViewModels
             string login = Login;
             string password = Password.ToString();
 
-            Login = "";
-            Password = "";
-
             User? user = await User.TryLogin(login, password, dbConnection.Client);
 
             if (user == null)

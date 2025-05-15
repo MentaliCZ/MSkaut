@@ -7,6 +7,7 @@ namespace MSkaut
     public class Transaction
     {
         public long? Id { get; set; }
+        public string DocumentName { get; set; }
         public string Name { get; set; }
         public TransactionType Type { get; set; }
         public int Amount { get; set; }
@@ -14,6 +15,7 @@ namespace MSkaut
         public long EventId { get; set; }
 
         public Transaction(
+            string documentName,
             string name,
             int amount,
             DateTime date,
@@ -22,6 +24,7 @@ namespace MSkaut
         )
         {
             Id = null;
+            this.DocumentName = documentName;
             this.Name = name;
             this.Amount = amount;
             this.Date = date;
@@ -31,13 +34,14 @@ namespace MSkaut
 
         public Transaction(
             long id,
+            string documentName,
             string name,
             int amount,
             DateTime date,
             TransactionType type,
             long eventId
         )
-            : this(name, amount, date, type, eventId)
+            : this(documentName, name, amount, date, type, eventId)
         {
             this.Id = id;
         }

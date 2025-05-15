@@ -16,6 +16,9 @@ namespace DatabaseManager
         [Column("name")]
         public string Name { get; set; }
 
+        [Column("doc_name")]
+        public string DocumentName { get; set; }
+
         [Column("transaction_type_id")]
         public long? TypeId { get; set; }
 
@@ -38,7 +41,7 @@ namespace DatabaseManager
                 var result = await client
                     .From<DBTransaction>()
                     .Select(x =>
-                        new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.EventId, x.Date }
+                        new object[] { x.Id, x.DocumentName, x.Name, x.TypeId, x.Amount, x.EventId, x.Date }
                     )
                     .Where(x => x.EventId == event_id)
                     .Order(x => x.Date, Ordering.Ascending)
@@ -53,6 +56,7 @@ namespace DatabaseManager
         }
 
         public static async Task<long> CreateTransaction(
+            string documentName,
             string name,
             long typeId,
             int amount,
@@ -65,6 +69,7 @@ namespace DatabaseManager
             {
                 var dbTransaction = new DBTransaction
                 {
+                    DocumentName = documentName,
                     Name = name,
                     TypeId = typeId,
                     Amount = amount,
@@ -92,6 +97,7 @@ namespace DatabaseManager
 
         public static async Task<bool> UpdateTransaction(
             long id,
+            string documentName,
             string name,
             long typeId,
             int amount,
@@ -105,6 +111,7 @@ namespace DatabaseManager
                 var dbTransaction = new DBTransaction
                 {
                     Id = id,
+                    DocumentName = documentName,
                     Name = name,
                     TypeId = typeId,
                     Amount = amount,
