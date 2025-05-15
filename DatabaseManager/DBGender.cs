@@ -22,21 +22,34 @@ namespace DatabaseManager
 
         public static async Task<DBGender?> GetGender(int id, Client client)
         {
-            return await client
-           .From<DBGender>()
-           .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-           .Where(x => x.Id == id)
-           .Single();
+            try
+            {
+                return await client
+               .From<DBGender>()
+               .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
+               .Where(x => x.Id == id)
+               .Single();
+            } catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static async Task<List<DBGender>> GetAllGenders(Client client)
         {
-            var result = await client
-            .From<DBGender>()
-            .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-            .Get();
+            try
+            {
+                var result = await client
+                .From<DBGender>()
+                .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
+                .Get();
 
-            return result.Models;
+                return result.Models;
+            }
+            catch (Exception)
+            {
+                return new List<DBGender>();
+            }
         }
 
     }

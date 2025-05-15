@@ -31,69 +31,89 @@ namespace DatabaseManager
 
         public static async Task<List<DBTransaction>> GetEventTransactions(long event_id, Client client)
         {
-            var result = await client
-           .From<DBTransaction>()
-           .Select(x => new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.EventId, x.Date })
-           .Where(x => x.EventId == event_id)
-           .Order(x => x.Date, Ordering.Ascending)
-           .Get();
+            try
+            {
+                var result = await client
+               .From<DBTransaction>()
+               .Select(x => new object[] { x.Id, x.Name, x.TypeId, x.Amount, x.EventId, x.Date })
+               .Where(x => x.EventId == event_id)
+               .Order(x => x.Date, Ordering.Ascending)
+               .Get();
 
-            return result.Models;
+                return result.Models;
+            }
+            catch (Exception)
+            {
+                return new List<DBTransaction>();
+            }
         }
 
         public static async Task<long> CreateTransaction(string name, long typeId, int amount,
             DateOnly date, long eventId, Client client)
         {
-            var dbTransaction = new DBTransaction
+            try
             {
-                Name = name,
-                TypeId = typeId,
-                Amount = amount,
-                Date = date,
-                EventId = eventId
-            };
+                var dbTransaction = new DBTransaction
+                {
+                    Name = name,
+                    TypeId = typeId,
+                    Amount = amount,
+                    Date = date,
+                    EventId = eventId
+                };
 
-            var result = await client.From<DBTransaction>()
-                .Insert(dbTransaction, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
+                var result = await client.From<DBTransaction>()
+                    .Insert(dbTransaction, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return result.Model.Id;
+                return result.Model.Id;
+
+            } catch (Exception)
+            {
+                return -1;
+            }
         }
 
-        public static async Task UpdateTransaction(long id, string name, long typeId, int amount,
+        public static async Task<bool> UpdateTransaction(long id, string name, long typeId, int amount,
             DateOnly date, long eventId, Client client)
         {
-            var dbTransaction = new DBTransaction
+            try
             {
-                Id = id,
-                Name = name,
-                TypeId = typeId,
-                Amount = amount,
-                Date = date,
-                EventId = eventId
-            };
+                var dbTransaction = new DBTransaction
+                {
+                    Id = id,
+                    Name = name,
+                    TypeId = typeId,
+                    Amount = amount,
+                    Date = date,
+                    EventId = eventId
+                };
 
-            await client.From<DBTransaction>().Upsert(dbTransaction);
+                await client.From<DBTransaction>().Upsert(dbTransaction);
+
+                return true;
+
+            } catch (Exception)
+            {
+                return false;
+            }
 
         }
 
-        public static async Task RemoveTransactionTypeReferences(long typeId, Client client)
+
+        public static async Task<bool> DeleteTransaction(long id, Client client)
         {
+            try
+            {
+                await client
+                      .From<DBTransaction>()
+                      .Where(x => x.Id == id)
+                      .Delete();
 
-            await client.From<DBTransaction>()
-                .Where(x => x.TypeId == typeId)
-                .Set(x => x.TypeId, null)
-                .Update();
-
+                return true;
+            } catch (Exception)
+            {
+                return false;
+            }
         }
-
-        public static async Task DeleteTransaction(long id, Client client)
-        {
-            await client
-                  .From<DBTransaction>()
-                  .Where(x => x.Id == id)
-                  .Delete();
-        }
-
-
     }
 }

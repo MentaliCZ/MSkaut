@@ -72,7 +72,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             this.person = person;
         }
 
-        public static async Task DBPersonToPerson(
+        public static void DBPersonToPerson(
             ObservableCollection<PersonViewModel> peopleList,
             Dictionary<long, Gender> genderDict,
             DBPerson dbPerson,
@@ -100,14 +100,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             List<DBPerson> dbPeople = await DBPerson.GetUsersPeople(user.Id, client);
             ObservableCollection<PersonViewModel> people = new();
 
-            List<Task> tasks = new();
-
             foreach (DBPerson dbPerson in dbPeople)
             {
-                tasks.Add(DBPersonToPerson(people, genderDict, dbPerson, client));
+                DBPersonToPerson(people, genderDict, dbPerson, client);
             }
-
-            await Task.WhenAll();
 
             return people;
         }
@@ -120,14 +116,11 @@ namespace UserInterface.ViewModels.ModelRepresantations
         {
             List<DBPerson> dbPeople = await DBEventPerson.GetEventParticipants(eventId, client);
             ObservableCollection<PersonViewModel> participants = new();
-            List<Task> tasks = new();
 
             foreach (DBPerson dbPerson in dbPeople)
             {
-                tasks.Add(DBPersonToPerson(participants, genderDict, dbPerson, client));
+                DBPersonToPerson(participants, genderDict, dbPerson, client);
             }
-
-            await Task.WhenAll(tasks);
 
             return participants;
         }

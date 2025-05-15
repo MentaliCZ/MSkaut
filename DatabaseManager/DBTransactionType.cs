@@ -28,75 +28,94 @@ namespace DatabaseManager
         [Column("owner_id")]
         public long? OwnerId { get; set; }
 
-
-        public static async Task<DBTransactionType?> GetTransactionType(long id, Client client)
-        {
-            return await client
-           .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
-           .Where(x => x.Id == id)
-           .Single();
-        }
-
-        public static async Task<DBTransactionType?> GetTransactionType(string name, Client client)
-        {
-            return await client
-           .From<DBTransactionType>()
-           .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense })
-           .Where(x => x.Name == name)
-           .Single();
-        }
-
         public static async Task<List<DBTransactionType>> GetUsersTransactionTypes(long userId, Client client)
         {
-            var result = await client
-                .From<DBTransactionType>()
-                .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense, x.OwnerId })
-                .Get();
+            try
+            {
+                var result = await client
+                    .From<DBTransactionType>()
+                    .Select(x => new object[] { x.Id, x.Name, x.Description, x.IsExpense, x.OwnerId })
+                    .Get();
 
 
-            return result.Models
-                .Where(x => x.OwnerId == null || x.OwnerId == userId)
-                .ToList();
+                return result.Models
+                    .Where(x => x.OwnerId == null || x.OwnerId == userId)
+                    .ToList();
+            } catch (Exception)
+            {
+                return new List<DBTransactionType>();
+            }
         }
 
         public static async Task<long> CreateTransactionType(string name, string description, bool isExpense, long userId, Client client)
         {
-            var dbTransactionType = new DBTransactionType
+            try
             {
-                Name = name,
-                Description = description,
-                OwnerId = userId,
-                IsExpense = isExpense
-            };
-            var result = await client.From<DBTransactionType>()
-                .Insert(dbTransactionType, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
+                var dbTransactionType = new DBTransactionType
+                {
+                    Name = name,
+                    Description = description,
+                    OwnerId = userId,
+                    IsExpense = isExpense
+                };
+                var result = await client.From<DBTransactionType>()
+                    .Insert(dbTransactionType, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return result.Model.Id;
+                return result.Model.Id;
+            } catch (Exception)
+            {
+                return -1;
+            }
         }
 
-        public static async Task UpdateTransactionType(long id, string name, string description, bool isExpense, long? userId, Client client)
+        public static async Task<bool> UpdateTransactionType(long id, string name, string description, bool isExpense, long? userId, Client client)
         {
-            var dbTransactionType = new DBTransactionType
+            try
             {
-                Id = id,
-                Name = name,
-                Description = description,
-                OwnerId = userId,
-                IsExpense = isExpense
-            };
+                var dbTransactionType = new DBTransactionType
+                {
+                    Id = id,
+                    Name = name,
+                    Description = description,
+                    OwnerId = userId,
+                    IsExpense = isExpense
+                };
 
-            await client.From<DBTransactionType>().Upsert(dbTransactionType);
+                await client.From<DBTransactionType>().Upsert(dbTransactionType);
+
+                return true;
+
+            } catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public static async Task DeleteTransactionType(long id, Client client)
+        public static async Task RemoveTransactionTypeReferences(long typeId, Client client)
         {
-            await DBTransaction.RemoveTransactionTypeReferences(id, client);
+            await client.From<DBTransaction>()
+                .Where(x => x.TypeId == typeId)
+                .Set(x => x.TypeId, null)
+                .Update();
+        }
 
-            await client
-                  .From<DBTransactionType>()
-                  .Where(x => x.Id == id)
-                  .Delete();
+        public static async Task<bool> DeleteTransactionType(long id, Client client)
+        {
+            try
+            {
+                await DBTransactionType.RemoveTransactionTypeReferences(id, client);
+
+                await client
+                      .From<DBTransactionType>()
+                      .Where(x => x.Id == id)
+                      .Delete();
+
+                return true;
+
+            } catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }

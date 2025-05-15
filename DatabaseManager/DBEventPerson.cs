@@ -19,47 +19,75 @@ namespace DatabaseManager
 
         public static async Task<List<DBPerson>> GetEventParticipants(long eventId, Client client)
         {
-            var participantsId = (await client
-           .From<DBEventPerson>()
-           .Select(x => new object[] { x.PersonId })
-           .Where(x => x.EventId == eventId)
-           .Get()).Models;
-
-            var result = new List<DBPerson?>();
-
-            foreach (DBEventPerson dbEventPerson in participantsId)
+            try
             {
-                result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
+                var participantsId = (
+                    await client
+                        .From<DBEventPerson>()
+                        .Select(x => new object[] { x.PersonId })
+                        .Where(x => x.EventId == eventId)
+                        .Get()
+                ).Models;
+
+                var result = new List<DBPerson?>();
+
+                foreach (DBEventPerson dbEventPerson in participantsId)
+                {
+                    result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
+                }
+
+                return result;
             }
-
-            return result;
-        }
-
-        public static async Task AddEventParticipant(long eventId, long personId, Client client)
-        {
-            var dbEventPerson = new DBEventPerson
+            catch (Exception)
             {
-                EventId = eventId,
-                PersonId = personId
-            };
-
-            await client.From<DBEventPerson>().Upsert(dbEventPerson);
+                return new List<DBPerson>();
+            }
         }
 
-        public static async Task DeleteEventParticipant(long eventId, long personId, Client client)
+        public static async Task<bool> AddEventParticipant(
+            long eventId,
+            long personId,
+            Client client
+        )
         {
-            await client
-                  .From<DBEventPerson>()
-                  .Where(x => x.EventId == eventId && x.PersonId == personId)
-                  .Delete();
+            try
+            {
+                var dbEventPerson = new DBEventPerson { EventId = eventId, PersonId = personId };
+
+                await client.From<DBEventPerson>().Upsert(dbEventPerson);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> DeleteEventParticipant(
+            long eventId,
+            long personId,
+            Client client
+        )
+        {
+            try
+            {
+                await client
+                    .From<DBEventPerson>()
+                    .Where(x => x.EventId == eventId && x.PersonId == personId)
+                    .Delete();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public static async Task DeleteAllPersonReferences(long personId, Client client)
         {
-            await client
-                  .From<DBEventPerson>()
-                  .Where(x => x.PersonId == personId)
-                  .Delete();
+            await client.From<DBEventPerson>().Where(x => x.PersonId == personId).Delete();
         }
     }
 }

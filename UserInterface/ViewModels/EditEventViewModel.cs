@@ -130,8 +130,8 @@ namespace UserInterface.ViewModels
 
             if (person != null)
             {
+                await DBEventPerson.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
                 Participants.Remove(person);
-                DBEventPerson.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
             }
         }
 

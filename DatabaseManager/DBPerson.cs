@@ -38,71 +38,91 @@ namespace DatabaseManager
            .Single();
         }
 
-        public static async Task<long> GetPerson(string firstName, string lastName, DateOnly birthDate, Client client)
-        {
-            var result = await client
-           .From<DBPerson>()
-           .Where(x => x.FirstName == firstName && x.LastName == lastName && x.BirthDate == birthDate)
-           .Select(x => new object[] { x.Id })
-           .Single();
-
-            return result.Id;
-        }
-
         public static async Task<List<DBPerson>> GetUsersPeople(long creatorId, Client client)
         {
-            var result = await client
-           .From<DBPerson>()
-           .Select(x => new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId, x.CreatorId })
-           .Where(x => x.CreatorId == creatorId)
-           .Order(x => x.BirthDate, Ordering.Descending)
-           .Get();
+            try
+            {
+                var result = await client
+               .From<DBPerson>()
+               .Select(x => new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId, x.CreatorId })
+               .Where(x => x.CreatorId == creatorId)
+               .Order(x => x.BirthDate, Ordering.Descending)
+               .Get();
 
-            return result.Models;
+                return result.Models;
+            }
+            catch (Exception)
+            {
+                return new List<DBPerson>();
+            }
         }
 
         public static async Task<long> CreatePerson(string firstName, string lastName, DateOnly birthDate,
                                                     int genderId, long creatorId, Client client)
         {
-            var dbPerson = new DBPerson
+            try
             {
-                FirstName = firstName,
-                LastName = lastName,
-                BirthDate = birthDate,
-                GenderId = genderId,
-                CreatorId = creatorId
-            };
+                var dbPerson = new DBPerson
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    BirthDate = birthDate,
+                    GenderId = genderId,
+                    CreatorId = creatorId
+                };
 
-            var result = await client.From<DBPerson>()
-                .Insert(dbPerson, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
+                var result = await client.From<DBPerson>()
+                    .Insert(dbPerson, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
 
-            return result.Model.Id;
+                return result.Model.Id;
+            } catch (Exception)
+            {
+                return -1;
+            }
         }
 
-        public static async Task UpdatePerson(long id, string firstName, string lastName, DateOnly birthDate,
+        public static async Task<bool> UpdatePerson(long id, string firstName, string lastName, DateOnly birthDate,
                                                     int genderId, long creatorId, Client client)
         {
-            var dbPerson = new DBPerson
+            try
             {
-                Id = id,
-                FirstName = firstName,
-                LastName = lastName,
-                BirthDate = birthDate,
-                GenderId = genderId,
-                CreatorId = creatorId
-            };
+                var dbPerson = new DBPerson
+                {
+                    Id = id,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    BirthDate = birthDate,
+                    GenderId = genderId,
+                    CreatorId = creatorId
+                };
 
-            await client.From<DBPerson>().Upsert(dbPerson);
+                await client.From<DBPerson>().Upsert(dbPerson);
+
+                return true;
+
+            } catch (Exception)
+            {
+                return false;
+            }
         }
 
-        public static async Task DeletePerson(long id, Client client)
+        public static async Task<bool> DeletePerson(long id, Client client)
         {
-            await DBEventPerson.DeleteAllPersonReferences(id, client);
+            try
+            {
+                await DBEventPerson.DeleteAllPersonReferences(id, client);
 
-            await client
-                  .From<DBPerson>()
-                  .Where(x => x.Id == id)
-                  .Delete();
+                await client
+                      .From<DBPerson>()
+                      .Where(x => x.Id == id)
+                      .Delete();
+
+                return true;
+
+            } catch (Exception)
+            {
+                return false;
+            }
         }
 
     }

@@ -22,7 +22,6 @@ namespace MSkaut
         public string Description { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public string DocumentPrefix { get; set; }
 
         public long CreatorId { get; set; }
 
