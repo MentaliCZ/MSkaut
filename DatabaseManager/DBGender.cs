@@ -25,11 +25,12 @@ namespace DatabaseManager
             try
             {
                 return await client
-               .From<DBGender>()
-               .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-               .Where(x => x.Id == id)
-               .Single();
-            } catch (Exception)
+                    .From<DBGender>()
+                    .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
+                    .Where(x => x.Id == id)
+                    .Single();
+            }
+            catch (Exception)
             {
                 return null;
             }
@@ -40,9 +41,9 @@ namespace DatabaseManager
             try
             {
                 var result = await client
-                .From<DBGender>()
-                .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-                .Get();
+                    .From<DBGender>()
+                    .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
+                    .Get();
 
                 return result.Models;
             }
@@ -51,7 +52,5 @@ namespace DatabaseManager
                 return new List<DBGender>();
             }
         }
-
     }
 }
-

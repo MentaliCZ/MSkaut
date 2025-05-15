@@ -10,7 +10,7 @@ namespace DatabaseManager
 {
     [Table("Event")]
     public class DBEvent : BaseModel
-	{
+    {
         [PrimaryKey("event_id")]
         public long Id { get; set; }
 
@@ -26,7 +26,6 @@ namespace DatabaseManager
         [Column("end_date")]
         public DateOnly EndDate { get; set; }
 
-
         [Column("owner_id")]
         public long OwnerId { get; set; }
 
@@ -35,11 +34,21 @@ namespace DatabaseManager
             try
             {
                 var result = await client
-               .From<DBEvent>()
-               .Select(x => new object[] { x.Id, x.Name, x.Description, x.StartDate, x.EndDate, x.OwnerId })
-               .Where(x => x.OwnerId == id)
-               .Order(x => x.StartDate, Ordering.Ascending)
-               .Get();
+                    .From<DBEvent>()
+                    .Select(x =>
+                        new object[]
+                        {
+                            x.Id,
+                            x.Name,
+                            x.Description,
+                            x.StartDate,
+                            x.EndDate,
+                            x.OwnerId,
+                        }
+                    )
+                    .Where(x => x.OwnerId == id)
+                    .Order(x => x.StartDate, Ordering.Ascending)
+                    .Get();
 
                 return result.Models;
             }
@@ -49,7 +58,14 @@ namespace DatabaseManager
             }
         }
 
-        public static async Task<long> CreateEvent(string name, string description, DateOnly startDate, DateOnly endDate, long ownerId, Client client)
+        public static async Task<long> CreateEvent(
+            string name,
+            string description,
+            DateOnly startDate,
+            DateOnly endDate,
+            long ownerId,
+            Client client
+        )
         {
             try
             {
@@ -59,21 +75,36 @@ namespace DatabaseManager
                     Description = description,
                     StartDate = startDate,
                     EndDate = endDate,
-                    OwnerId = ownerId
+                    OwnerId = ownerId,
                 };
 
-                var result = await client.From<DBEvent>()
-                    .Insert(dbEvent, new Supabase.Postgrest.QueryOptions { Returning = ReturnType.Representation });
+                var result = await client
+                    .From<DBEvent>()
+                    .Insert(
+                        dbEvent,
+                        new Supabase.Postgrest.QueryOptions
+                        {
+                            Returning = ReturnType.Representation,
+                        }
+                    );
 
                 return result.Model.Id;
-
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return -1;
             }
         }
 
-        public static async Task<bool> UpdateEvent(long id, string name, string description, DateOnly startDate, DateOnly endDate, long ownerId, Client client)
+        public static async Task<bool> UpdateEvent(
+            long id,
+            string name,
+            string description,
+            DateOnly startDate,
+            DateOnly endDate,
+            long ownerId,
+            Client client
+        )
         {
             try
             {
@@ -84,13 +115,14 @@ namespace DatabaseManager
                     Description = description,
                     StartDate = startDate,
                     EndDate = endDate,
-                    OwnerId = ownerId
+                    OwnerId = ownerId,
                 };
 
                 await client.From<DBEvent>().Upsert(dbEvent);
 
                 return true;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return false;
             }
@@ -100,13 +132,11 @@ namespace DatabaseManager
         {
             try
             {
-                await client
-                      .From<DBEvent>()
-                      .Where(x => x.Id == id)
-                      .Delete();
+                await client.From<DBEvent>().Where(x => x.Id == id).Delete();
 
                 return true;
-            } catch (Exception)
+            }
+            catch (Exception)
             {
                 return false;
             }
