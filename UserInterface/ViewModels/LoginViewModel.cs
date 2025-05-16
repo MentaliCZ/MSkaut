@@ -46,6 +46,7 @@ namespace UserInterface.ViewModels
 
         public RelayCommand TryLoginCommand { get; set; }
         public RelayCommand CreateUserCommand { get; set; }
+
         private MainWindow mainWindow;
         private Window window;
 

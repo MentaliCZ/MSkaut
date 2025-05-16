@@ -10,24 +10,24 @@ namespace UserInterface.ViewModels.ModelRepresantations
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private bool isChanged;
+        private bool _isChanged;
         public bool IsChanged
         {
-            get => isChanged;
+            get => _isChanged;
             set
             {
-                isChanged = value;
+                _isChanged = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool isProcessing;
+        private bool _isProcessing;
         public bool IsProcessing
         {
-            get => isProcessing;
+            get => _isProcessing;
             set
             {
-                isProcessing = value;
+                _isProcessing = value;
                 OnPropertyChanged();
             }
         }
