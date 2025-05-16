@@ -202,6 +202,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             bool success;
             SaveRowCommand.RaiseCanExecuteChanged();
             IsProcessing = true;
+            IsChanged = false;
 
             if (Id == null)
             {
