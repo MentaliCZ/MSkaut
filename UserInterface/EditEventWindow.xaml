@@ -19,7 +19,6 @@
             <RowDefinition Height = "50"/>
             <RowDefinition Height="50*"/>
             <RowDefinition Height="70*"/>
-            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="93*"/>
@@ -176,7 +175,7 @@
                            Margin="10"/>
                 <ListView Name="TransactionList" ItemsSource="{Binding Transactions}" 
                           Background="#FF31323A"
-                          Height="230">
+                          Height="300">
 
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
