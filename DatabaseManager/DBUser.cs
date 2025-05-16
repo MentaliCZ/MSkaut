@@ -32,6 +32,7 @@ namespace DatabaseManager
                 .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
                 .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
                 .Single();
+
         }
 
         public static async Task<DBUser?> GetUserByLogin(string login, Client client)
@@ -49,6 +50,7 @@ namespace DatabaseManager
             Client client
         )
         {
+
             if (await GetUserByLogin(login, client) != null)
                 return false;
 

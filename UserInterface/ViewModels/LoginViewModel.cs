@@ -96,21 +96,26 @@ namespace UserInterface.ViewModels
 
             string login = Login;
             string password = Password.ToString();
-
-            User? user = await User.TryLogin(login, password, dbConnection.Client);
-
-            if (user == null)
+            try
             {
-                Message = "The username or password is incorrect";
+                User? user = await User.TryLogin(login, password, dbConnection.Client);
+
+                if (user == null)
+                {
+                    Message = "The username or password is incorrect";
+                    return;
+                }
+
+                mainWindow = await MainWindow.CreateMainWindow(user, dbConnection);
+                mainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                mainWindow.Show();
+
+                window.Close();
                 return;
+            } catch (Exception)
+            {
+                Message = "Could not connect to the server";
             }
-
-            mainWindow = await MainWindow.CreateMainWindow(user, dbConnection);
-            mainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            mainWindow.Show();
-
-            window.Close();
-            return;
         }
 
         public async void CreateUser(Object obj)
@@ -118,13 +123,20 @@ namespace UserInterface.ViewModels
             if (!AreInputsValid())
                 return;
 
-            if (!await User.CreateUser(Login, Password, dbConnection.Client))
+            try
             {
-                Message = "Account with this username already exists";
-                return;
-            }
 
-            Message = "Account was succesfuly created, you can log in now";
+                if (!await User.CreateUser(Login, Password, dbConnection.Client))
+                {
+                    Message = "Account with this username already exists";
+                    return;
+                }
+
+                Message = "Account was succesfuly created, you can log in now";
+            } catch (Exception)
+            {
+                Message = "Could not connect to the server";
+            }
         }
 
         private bool AreInputsValid()
