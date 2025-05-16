@@ -20,21 +20,6 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
-        public static async Task<DBGender?> GetGender(int id, Client client)
-        {
-            try
-            {
-                return await client
-                    .From<DBGender>()
-                    .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-                    .Where(x => x.Id == id)
-                    .Single();
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
 
         public static async Task<List<DBGender>> GetAllGenders(Client client)
         {

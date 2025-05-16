@@ -14,13 +14,6 @@ public class Gender
         this.Name = name;
     }
 
-    public static async Task<Gender> GetGender(int id, Client client)
-    {
-        DBGender dbGender = await DBGender.GetGender(id, client);
-
-        return new Gender(dbGender.Id, dbGender.NameCs);
-    }
-
     public static async Task<ObservableCollection<Gender>> GetAllGendersEN(Client client)
     {
         List<DBGender> dbGenders = await DBGender.GetAllGenders(client);
