@@ -200,9 +200,9 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public override async void SaveRow(object obj)
         {
             bool success;
+            IsChanged = false;
             SaveRowCommand.RaiseCanExecuteChanged();
             IsProcessing = true;
-            IsChanged = false;
 
             if (Id == null)
             {
