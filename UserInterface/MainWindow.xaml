@@ -118,7 +118,7 @@
         </Grid>
 
 
-        <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
+        <Grid Visibility="{Binding EventsVisible, Converter={StaticResource BoolToVis}}" Grid.Row="2">
             <StackPanel Margin="10">
                 <ListView Name="EventsList" ItemsSource="{Binding Events}" 
                       Background="#FF31323A"
@@ -236,7 +236,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
+        <Grid Visibility="{Binding PeopleVisible, Converter={StaticResource BoolToVis}}" Grid.Row="2">
             <StackPanel Margin="10">
                 <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
                       Background="#FF31323A"
@@ -342,7 +342,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
+        <Grid Visibility="{Binding TransactionTypesVisible, Converter={StaticResource BoolToVis}}" Grid.Row="2">
             <StackPanel Margin="10">
                 <ListView Name="TransactionTypesList" ItemsSource="{Binding TransactionTypes}" 
                       Background="#FF31323A"
@@ -436,7 +436,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Visibility="{Binding ExportVisible}" Grid.Row="2">
+        <Grid Visibility="{Binding ExportVisible, Converter={StaticResource BoolToVis}}" Grid.Row="2">
             <StackPanel Margin="30"
                         Orientation="Horizontal"
                         VerticalAlignment="Top">

@@ -56,8 +56,8 @@ namespace UserInterface.ViewModels
         public RelayCommand DeletePersonCommand { get; set; }
         public RelayCommand DeleteTransactionTypeCommand { get; set; }
 
-        private Visibility _eventsVisible;
-        public Visibility EventsVisible
+        private bool _eventsVisible;
+        public bool EventsVisible
         {
             get => _eventsVisible;
             set
@@ -67,8 +67,8 @@ namespace UserInterface.ViewModels
             }
         }
 
-        private Visibility _peopleVisible;
-        public Visibility PeopleVisible
+        private bool _peopleVisible;
+        public bool PeopleVisible
         {
             get => _peopleVisible;
             set
@@ -78,8 +78,8 @@ namespace UserInterface.ViewModels
             }
         }
 
-        private Visibility _transactionTypesVisible;
-        public Visibility TransactionTypesVisible
+        private bool _transactionTypesVisible;
+        public bool TransactionTypesVisible
         {
             get => _transactionTypesVisible;
             set
@@ -89,8 +89,8 @@ namespace UserInterface.ViewModels
             }
         }
 
-        private Visibility _exportVisible;
-        public Visibility ExportVisible
+        private bool _exportVisible;
+        public bool ExportVisible
         {
             get => _exportVisible;
             set
@@ -186,16 +186,16 @@ namespace UserInterface.ViewModels
 
         private void HideAllWindows()
         {
-            EventsVisible = Visibility.Hidden;
-            PeopleVisible = Visibility.Hidden;
-            TransactionTypesVisible = Visibility.Hidden;
-            ExportVisible = Visibility.Hidden;
+            EventsVisible = false;
+            PeopleVisible = false;
+            TransactionTypesVisible = false;
+            ExportVisible = false;
         }
 
         private void ShowEvents(Object obj)
         {
             HideAllWindows();
-            EventsVisible = Visibility.Visible;
+            EventsVisible = true;
         }
 
         private void AddEvent(Object obj)
@@ -210,7 +210,7 @@ namespace UserInterface.ViewModels
         private void ShowPeople(Object obj)
         {
             HideAllWindows();
-            PeopleVisible = Visibility.Visible;
+            PeopleVisible = true;
         }
 
         private void AddPerson(Object obj)
@@ -229,7 +229,7 @@ namespace UserInterface.ViewModels
         private void ShowTypes(Object obj)
         {
             HideAllWindows();
-            TransactionTypesVisible = Visibility.Visible;
+            TransactionTypesVisible = true;
         }
 
         private void AddType(Object obj)
@@ -242,7 +242,7 @@ namespace UserInterface.ViewModels
         private void ShowExport(Object obj)
         {
             HideAllWindows();
-            ExportVisible = Visibility.Visible;
+            ExportVisible = true;
         }
 
         private bool CanExportEvent => SelectedExportEvent != null;
