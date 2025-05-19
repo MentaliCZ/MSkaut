@@ -41,6 +41,9 @@ namespace UserInterface.ViewModels
         public RelayCommand ShowExportPage { get; set; }
         public RelayCommand ExportEventCommand { get; set; }
 
+        public RelayCommand ShowUsersPage { get; set; }
+        public RelayCommand DeleteUser { get; set; }
+
         private EventViewModel _selectedExportEvent;
         public EventViewModel SelectedExportEvent
         {
@@ -100,6 +103,17 @@ namespace UserInterface.ViewModels
             }
         }
 
+        private bool _usersVisible;
+        public bool UsersVisible
+        {
+            get => _usersVisible;
+            set
+            {
+                _usersVisible = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand LogOutCommand { get; set; }
         private Window thisWindow;
 
@@ -126,6 +140,8 @@ namespace UserInterface.ViewModels
             DeleteEventCommand = new(DeleteEvent, x => true);
             DeletePersonCommand = new(DeletePerson, x => true);
             DeleteTransactionTypeCommand = new(DeleteTransactionType, x => true);
+
+            ShowUsersPage = new(ShowUsers, _ => true);
 
             ShowEvents(this);
         }
@@ -190,6 +206,7 @@ namespace UserInterface.ViewModels
             PeopleVisible = false;
             TransactionTypesVisible = false;
             ExportVisible = false;
+            UsersVisible = false;
         }
 
         private void ShowEvents(Object obj)
@@ -245,6 +262,12 @@ namespace UserInterface.ViewModels
             ExportVisible = true;
         }
 
+        private void ShowUsers(Object obj)
+        {
+            HideAllWindows();
+            UsersVisible = true;
+        }
+
         private bool CanExportEvent => SelectedExportEvent != null;
 
         private async void ExportEvent(Object obj)
@@ -261,10 +284,20 @@ namespace UserInterface.ViewModels
         {
             EventViewModel eventViewModel = (EventViewModel)obj;
 
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this type?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+
+            if (result == MessageBoxResult.No)
+                return;
+
             if (eventViewModel != null && eventViewModel.CanDeleteRow())
             {
-                eventViewModel.DeleteRow(null);
                 Events.Remove(eventViewModel);
+                eventViewModel.DeleteRow(null);
             }
         }
 
@@ -272,10 +305,20 @@ namespace UserInterface.ViewModels
         {
             PersonViewModel personViewModel = (PersonViewModel)obj;
 
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this type?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+
+            if (result == MessageBoxResult.No)
+                return;
+
             if (personViewModel != null && personViewModel.CanDeleteRow())
             {
-                personViewModel.DeleteRow(null);
                 UsersPeople.Remove(personViewModel);
+                personViewModel.DeleteRow(null);
             }
         }
 
@@ -283,10 +326,20 @@ namespace UserInterface.ViewModels
         {
             TransactionTypeViewModel transactionType = (TransactionTypeViewModel)obj;
 
+            var result = MessageBox.Show(
+                "Are you sure you want to delete this type?",
+                "Confirm Delete",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning
+            );
+
+            if (result == MessageBoxResult.No)
+                return;
+
             if (transactionType != null && transactionType.CanDeleteRow())
             {
-                transactionType.DeleteRow(null);
                 TransactionTypes.Remove(transactionType);
+                transactionType.DeleteRow(null);
             }
         }
     }

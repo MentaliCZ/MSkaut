@@ -17,6 +17,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
             set
             {
                 _isChanged = value;
+                SaveRowCommand.RaiseCanExecuteChanged();
+                DeleteRowCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
@@ -28,6 +30,8 @@ namespace UserInterface.ViewModels.ModelRepresantations
             set
             {
                 _isProcessing = value;
+                SaveRowCommand.RaiseCanExecuteChanged();
+                DeleteRowCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged();
             }
         }
@@ -39,12 +43,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         protected EditableClass(Client client)
         {
-            IsChanged = false;
-            IsProcessing = false;
             this.client = client;
 
             SaveRowCommand = new(SaveRow, x => CanSaveRow());
             DeleteRowCommand = new(DeleteRow, x => CanDeleteRow());
+
+            IsChanged = false;
+            IsProcessing = false;
         }
 
         public abstract bool CanSaveRow();

@@ -200,12 +200,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 && IsChanged
                 && Amount >= 0
                 && type.getTransactionType() != null
-                && Name.Length <= 30;
+                && Name.Length <= 30
+                && !IsProcessing;
         }
 
         public override bool CanDeleteRow()
         {
-            return true;
+            return !IsProcessing;
         }
     }
 }

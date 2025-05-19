@@ -242,32 +242,25 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 && Description != null
                 && StartDate <= EndDate
                 && IsChanged
-                && Name.Length <= 30;
+                && Name.Length <= 30
+                && !IsProcessing;
         }
 
         public override async void DeleteRow(object obj)
         {
+            IsProcessing = true;
+
             if (Id == null)
                 return;
 
-            var result = MessageBox.Show(
-                "Are you sure you want to delete this event?",
-                "Confirm Delete",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
-            );
-
-            IsProcessing = true;
-
-            if (result == MessageBoxResult.Yes)
-                await DBEvent.DeleteEvent((long)Id, client);
+            await DBEvent.DeleteEvent((long)Id, client);
 
             IsProcessing = false;
         }
 
         public override bool CanDeleteRow()
         {
-            return true;
+            return !IsProcessing;
         }
 
         public void OpenEditWindow(object obj)

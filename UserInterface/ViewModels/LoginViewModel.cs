@@ -61,12 +61,26 @@ namespace UserInterface.ViewModels
             }
         }
 
+        private bool _isProcessing;
+        public bool IsProcessing
+        {
+            get => _isProcessing;
+            set
+            {
+                _isProcessing = value;
+                TryLoginCommand.RaiseCanExecuteChanged();
+                CreateUserCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged();
+            }
+        }
+
         private ConnectionInstance dbConnection;
 
         private LoginViewModel()
         {
             TryLoginCommand = new(TryLogin, CanTryLogin);
             CreateUserCommand = new(CreateUser, CanTryLogin);
+            IsProcessing = false;
         }
 
         public LoginViewModel(Window window)
@@ -99,6 +113,7 @@ namespace UserInterface.ViewModels
             string password = Password.ToString();
             try
             {
+                IsProcessing = true;
                 User? user = await User.TryLogin(login, password, dbConnection.Client);
 
                 if (user == null)
@@ -117,6 +132,10 @@ namespace UserInterface.ViewModels
             {
                 Message = "Could not connect to the server";
             }
+            finally
+            {
+                IsProcessing = false;
+            }
         }
 
         public async void CreateUser(Object obj)
@@ -126,7 +145,7 @@ namespace UserInterface.ViewModels
 
             try
             {
-
+                IsProcessing = true;
                 if (!await User.CreateUser(Login, Password, dbConnection.Client))
                 {
                     Message = "Account with this username already exists";
@@ -137,6 +156,10 @@ namespace UserInterface.ViewModels
             } catch (Exception)
             {
                 Message = "Could not connect to the server";
+            }
+            finally
+            {
+                IsProcessing = false;
             }
         }
 
@@ -162,6 +185,6 @@ namespace UserInterface.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private bool CanTryLogin(object? obj) => Login is not null && Password is not null;
+        private bool CanTryLogin(object? obj) => Login is not null && Password is not null && !IsProcessing;
     }
 }

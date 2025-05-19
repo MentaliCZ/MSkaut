@@ -95,17 +95,9 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 return;
 
-            var result = MessageBox.Show(
-                "Are you sure you want to delete this type?",
-                "Confirm Delete",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
-            );
-
             IsProcessing = true;
 
-            if (result == MessageBoxResult.Yes)
-                await DBTransactionType.DeleteTransactionType((long)Id, client);
+            await DBTransactionType.DeleteTransactionType((long)Id, client);
 
             IsProcessing = false;
         }
@@ -149,12 +141,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 && Description != null
                 && IsChanged
                 && OwnerId != null
-                && Name.Length <= 30;
+                && Name.Length <= 30
+                && !IsProcessing;
         }
 
         public override bool CanDeleteRow()
         {
-            return OwnerId != null;
+            return OwnerId != null && !IsProcessing;
         }
     }
 }

@@ -158,16 +158,12 @@ namespace UserInterface.ViewModels.ModelRepresantations
         {
             if (Id == null)
                 return;
+            
+            IsProcessing = true;
 
-            var result = MessageBox.Show(
-                "Are you sure you want to delete this person?",
-                "Confirm Delete",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning
-            );
+            await DBPerson.DeletePerson((long)Id, client);
 
-            if (result == MessageBoxResult.Yes)
-                await DBPerson.DeletePerson((long)Id, client);
+            IsProcessing = false;
         }
 
         public override string ToString()
@@ -184,12 +180,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
                 && Gender != null
                 && IsChanged
                 && FirstName.Length <= 100
-                && LastName.Length <= 100;
+                && LastName.Length <= 100
+                && !IsProcessing;
         }
 
         public override bool CanDeleteRow()
         {
-            return true;
+            return !IsProcessing;
         }
     }
 }
