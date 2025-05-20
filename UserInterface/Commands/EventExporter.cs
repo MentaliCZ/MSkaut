@@ -16,93 +16,93 @@ namespace UserInterface.Commands
             Excel._Worksheet transactionSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
             int height = eventClass.Transactions.Count + 5 > 45 ? eventClass.Transactions.Count + 5 : 45;
+            Excel.Range rowCells;
 
             char column;
             int row;
 
-            // Header
-            transactionSheet.Cells[1, "B"] = "Pokladní kniha";
-            transactionSheet.Range["B1:D1"].Merge();
-            ((Excel.Range)transactionSheet.Cells[1, "B"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            //Column widths
+            ((Excel.Range)transactionSheet.Columns["A"]).ColumnWidth = 5;
+            ((Excel.Range)transactionSheet.Columns["B"]).ColumnWidth = 7;
+            ((Excel.Range)transactionSheet.Columns["C"]).ColumnWidth = 10;
+            ((Excel.Range)transactionSheet.Columns["D"]).ColumnWidth = 20;
+            ((Excel.Range)transactionSheet.Columns["E"]).ColumnWidth = 12;
 
-            transactionSheet.Cells[2, "B"] = "Akce: " + eventClass.Name;
-            transactionSheet.Range["B2:D2"].Merge();
+            // Header
+            rowCells = transactionSheet.Range["B" + 1, "H" + 1];
+
+            rowCells[1, 1] = "Pokladní kniha";
+            rowCells.Range["A1:C1"].Merge();
+            ((Excel.Range)rowCells[1, 1]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
             transactionSheet.Range["B1:H2"].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            ((Excel.Range)transactionSheet.Columns["A"]).ColumnWidth = 5;
+            //header row 2
+            transactionSheet.Cells[2, "B"] = "Akce: " + eventClass.Name;
+            transactionSheet.Range["B2:D2"].Merge();
 
-            transactionSheet.Cells[3, "B"] = "Dne";
-            ((Excel.Range)transactionSheet.Cells[3, "B"]).Font.Size = 10;
-            ((Excel.Range)transactionSheet.Columns["B"]).ColumnWidth = 7;
-            ((Excel.Range)transactionSheet.Cells[3, "B"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            //header row 3
+            rowCells = transactionSheet.Range["A" + 3, "H" + 3];
+            rowCells.Range["B1:C1"].Font.Size = 10;
+            rowCells.Range["D1:H1"].Font.Size = 8;
 
+            rowCells[1, 2] = "Dne";
+            ((Excel.Range)rowCells[1, 2]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            transactionSheet.Cells[3, "C"] = "Dokl.";
-            ((Excel.Range)transactionSheet.Cells[3, "C"]).Font.Size = 10;
-            ((Excel.Range)transactionSheet.Columns["C"]).ColumnWidth = 10;
-            ((Excel.Range)transactionSheet.Cells[3, "C"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            rowCells[1, 3] = "Dokl.";
+            ((Excel.Range)rowCells[1, 3]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
+            rowCells[1, 4] = "Účel platby";
+            ((Excel.Range)rowCells[1, 4]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            transactionSheet.Cells[3, "D"] = "Účel platby";
-            ((Excel.Range)transactionSheet.Cells[3, "D"]).Font.Size = 8;
-            ((Excel.Range)transactionSheet.Columns["D"]).ColumnWidth = 20;
-            ((Excel.Range)transactionSheet.Cells[3, "D"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            rowCells[1, 5] = "Kategorie";
+            ((Excel.Range)rowCells[1, 5]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            transactionSheet.Cells[3, "E"] = "Kategorie";
-            ((Excel.Range)transactionSheet.Cells[3, "E"]).Font.Size = 8;
-            ((Excel.Range)transactionSheet.Columns["E"]).ColumnWidth = 12;
-            ((Excel.Range)transactionSheet.Cells[3, "E"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            rowCells[1, 6] = "Příjem";
+            ((Excel.Range)rowCells[1, 6]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            transactionSheet.Cells[3, "F"] = "Příjem";
-            ((Excel.Range)transactionSheet.Cells[3, "F"]).Font.Size = 8;
-            ((Excel.Range)transactionSheet.Cells[3, "F"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+            rowCells[1, 7] = "Výdej";
+            ((Excel.Range)rowCells[1, 7]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
+            rowCells[1, 8] = "Zůstatek";
+            ((Excel.Range)rowCells[1, 8]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            transactionSheet.Cells[3, "G"] = "Výdej";
-            ((Excel.Range)transactionSheet.Cells[3, "G"]).Font.Size = 8;
-            ((Excel.Range)transactionSheet.Cells[3, "G"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-            transactionSheet.Cells[3, "H"] = "Zůstatek";
-            ((Excel.Range)transactionSheet.Cells[3, "H"]).Font.Size = 8;
-            ((Excel.Range)transactionSheet.Cells[3, "H"]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-
-
-            column = 'B';
+            rowCells = transactionSheet.Range["B4:H4"];
             for (int idx = 1; idx <= 7; idx++)
             {
-                transactionSheet.Cells[4, column.ToString()] = idx.ToString();
-                ((Excel.Range)transactionSheet.Cells[4, column.ToString()]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[4, column.ToString()]).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-                column++;
+                rowCells[1, idx] = idx.ToString();
+                ((Excel.Range)rowCells[1, idx]).Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, idx]).HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             }
 
             row = 4;
             for (int idx = 1; idx <= height - 5; idx++)
             {
                 row++;
-                Excel.Range leftCell = (Excel.Range)transactionSheet.Cells[row, "A"];
+
+                rowCells = transactionSheet.Range["A" + row, "H" + row];
+
+                Excel.Range leftCell = (Excel.Range)rowCells[1, 1];
                 leftCell.Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
                 leftCell.Value = idx.ToString();
                 leftCell.Font.Size = 10;
 
-                (transactionSheet.Range["B" + row, "H" + row]).Font.Size = 8;
-
+                rowCells.Font.Size = 8;
                 string remainingMoneyFormula = "= +F" + row + "-G" + row;
 
                 if (idx != 1)
                     remainingMoneyFormula += "+ H" + (row - 1);
 
-                transactionSheet.Cells[row, "H"] = remainingMoneyFormula;
+                rowCells[1, 8] = remainingMoneyFormula;
 
                 // Borders
-                ((Excel.Range)transactionSheet.Cells[row, "B"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "C"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "D"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "E"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "F"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "G"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-                ((Excel.Range)transactionSheet.Cells[row, "H"]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 2]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 3]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 4]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 5]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 6]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 7]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
+                ((Excel.Range)rowCells[1, 8]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
 
 
 
@@ -111,21 +111,19 @@ namespace UserInterface.Commands
 
                 TransactionViewModel transaction = eventClass.Transactions[idx - 1];
 
-                transactionSheet.Cells[row, "B"] = transaction.Date.Day + ". " + transaction.Date.Month + ".";
-                ((Excel.Range)transactionSheet.Cells[row, "B"]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
+                rowCells[1, 2] = transaction.Date.Day + ". " + transaction.Date.Month + ".";
+                ((Excel.Range)rowCells[1, 2]).HorizontalAlignment = Excel.XlHAlign.xlHAlignRight;
 
-                transactionSheet.Cells[row, "C"] = transaction.DocumentName;
-
-                transactionSheet.Cells[row, "D"] = transaction.Name;
+                rowCells[1, 3] = transaction.DocumentName;
+                rowCells[1, 4] = transaction.Name;
 
                 if (transaction.Type != null)
-                    transactionSheet.Cells[row, "E"] = transaction.Type.ToString();
-
+                    rowCells[1, 5] = transaction.Type.ToString();
 
                 if (transaction.Type.IsExpense)
-                    transactionSheet.Cells[row, "G"] = transaction.Amount.ToString();
+                    rowCells[1, 6] = transaction.Amount.ToString();
                 else
-                    transactionSheet.Cells[row, "F"] = transaction.Amount.ToString();
+                    rowCells[1, 7] = transaction.Amount.ToString();
 
             }
 
