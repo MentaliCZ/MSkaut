@@ -35,7 +35,7 @@ namespace UserManager
 
         public static async Task<User?> TryLogin(string login, string password, Client client)
         {
-            DBUser? dbUser = await DBUser.GetUser(login, HashPassword(password), client);
+            UserEntity? dbUser = await UserEntity.GetUser(login, HashPassword(password), client);
 
             if (dbUser == null)
                 return null;
@@ -45,7 +45,7 @@ namespace UserManager
 
         public static async Task<bool> CreateUser(string login, string password, Client client)
         {
-            return await DBUser.CreateUser(login, HashPassword(password), client);
+            return await UserEntity.CreateUser(login, HashPassword(password), client);
         }
     }
 }

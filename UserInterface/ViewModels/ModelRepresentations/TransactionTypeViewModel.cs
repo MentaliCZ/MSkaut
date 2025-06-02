@@ -66,11 +66,11 @@ namespace UserInterface.ViewModels.ModelRepresantations
             ObservableCollection<TransactionTypeViewModel>
         > GetUsersTransactionTypes(User user, Client client)
         {
-            List<DBTransactionType> dbTransactionTypes =
-                await DBTransactionType.GetUsersTransactionTypes(user.Id, client);
+            List<TransactionTypeEntity> dbTransactionTypes =
+                await TransactionTypeEntity.GetUsersTransactionTypes(user.Id, client);
             ObservableCollection<TransactionTypeViewModel> result = new();
 
-            foreach (DBTransactionType dbTransactionType in dbTransactionTypes)
+            foreach (TransactionTypeEntity dbTransactionType in dbTransactionTypes)
             {
                 TransactionType transactionType = new(
                     dbTransactionType.Id,
@@ -97,7 +97,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             IsProcessing = true;
 
-            await DBTransactionType.DeleteTransactionType((long)Id, client);
+            await TransactionTypeEntity.DeleteTransactionType((long)Id, client);
 
             IsProcessing = false;
         }
@@ -109,7 +109,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await DBTransactionType.CreateTransactionType(
+                Id = await TransactionTypeEntity.CreateTransactionType(
                     Name,
                     Description,
                     IsExpense,
@@ -117,7 +117,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await DBTransactionType.UpdateTransactionType(
+                await TransactionTypeEntity.UpdateTransactionType(
                     (long)Id,
                     Name,
                     Description,

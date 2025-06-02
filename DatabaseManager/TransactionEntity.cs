@@ -8,7 +8,7 @@ using static Supabase.Postgrest.QueryOptions;
 namespace DatabaseManager
 {
     [Table("Transaction")]
-    public class DBTransaction : BaseModel
+    public class TransactionEntity : BaseModel
     {
         [PrimaryKey("transaction_id")]
         public long Id { get; set; }
@@ -31,7 +31,7 @@ namespace DatabaseManager
         [Column("event_id")]
         public long EventId { get; set; }
 
-        public static async Task<List<DBTransaction>> GetEventTransactions(
+        public static async Task<List<TransactionEntity>> GetEventTransactions(
             long event_id,
             Client client
         )
@@ -39,7 +39,7 @@ namespace DatabaseManager
             try
             {
                 var result = await client
-                    .From<DBTransaction>()
+                    .From<TransactionEntity>()
                     .Select(x =>
                         new object[] { x.Id, x.DocumentName, x.Name, x.TypeId, x.Amount, x.EventId, x.Date }
                     )
@@ -51,7 +51,7 @@ namespace DatabaseManager
             }
             catch (Exception)
             {
-                return new List<DBTransaction>();
+                return new List<TransactionEntity>();
             }
         }
 
@@ -67,7 +67,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbTransaction = new DBTransaction
+                var dbTransaction = new TransactionEntity
                 {
                     DocumentName = documentName,
                     Name = name,
@@ -78,7 +78,7 @@ namespace DatabaseManager
                 };
 
                 var result = await client
-                    .From<DBTransaction>()
+                    .From<TransactionEntity>()
                     .Insert(
                         dbTransaction,
                         new Supabase.Postgrest.QueryOptions
@@ -108,7 +108,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbTransaction = new DBTransaction
+                var dbTransaction = new TransactionEntity
                 {
                     Id = id,
                     DocumentName = documentName,
@@ -119,7 +119,7 @@ namespace DatabaseManager
                     EventId = eventId,
                 };
 
-                await client.From<DBTransaction>().Upsert(dbTransaction);
+                await client.From<TransactionEntity>().Upsert(dbTransaction);
 
                 return true;
             }
@@ -133,7 +133,7 @@ namespace DatabaseManager
         {
             try
             {
-                await client.From<DBTransaction>().Where(x => x.Id == id).Delete();
+                await client.From<TransactionEntity>().Where(x => x.Id == id).Delete();
 
                 return true;
             }

@@ -6,7 +6,7 @@ using Supabase.Postgrest.Models;
 namespace DatabaseManager
 {
     [Table("Gender")]
-    public class DBGender : BaseModel
+    public class GenderEntity : BaseModel
     {
         [PrimaryKey("gender_id")]
         public int Id { get; set; }
@@ -21,12 +21,12 @@ namespace DatabaseManager
         public string Description { get; set; }
 
 
-        public static async Task<List<DBGender>> GetAllGenders(Client client)
+        public static async Task<List<GenderEntity>> GetAllGenders(Client client)
         {
             try
             {
                 var result = await client
-                    .From<DBGender>()
+                    .From<GenderEntity>()
                     .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
                     .Get();
 
@@ -34,7 +34,7 @@ namespace DatabaseManager
             }
             catch (Exception)
             {
-                return new List<DBGender>();
+                return new List<GenderEntity>();
             }
         }
     }

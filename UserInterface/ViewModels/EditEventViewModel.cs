@@ -100,7 +100,7 @@ namespace UserInterface.ViewModels
         {
             Participants.Add(SelectedParticipant);
             AddParticipantCommand.RaiseCanExecuteChanged();
-            await DBEventPerson.AddEventParticipant(
+            await EventPersonEntity.AddEventParticipant(
                 (long)eventClass.Id,
                 (long)SelectedParticipant.Id,
                 client
@@ -131,7 +131,7 @@ namespace UserInterface.ViewModels
 
             if (person != null)
             {
-                await DBEventPerson.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
+                await EventPersonEntity.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
                 Participants.Remove(person);
             }
         }

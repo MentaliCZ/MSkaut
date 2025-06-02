@@ -6,7 +6,7 @@ using Supabase.Postgrest.Models;
 namespace DatabaseManager
 {
     [Table("User_role")]
-    public class DBUserRole : BaseModel
+    public class UserRoleEntity : BaseModel
     {
         [PrimaryKey("user_role_id")]
         public int Id { get; set; }
@@ -20,19 +20,19 @@ namespace DatabaseManager
         [Column("power_int")]
         public int Hierarchy { get; set; }
 
-        public static async Task<DBUserRole?> GetUserRole(int id, Client client)
+        public static async Task<UserRoleEntity?> GetUserRole(int id, Client client)
         {
             return await client
-                .From<DBUserRole>()
+                .From<UserRoleEntity>()
                 .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
                 .Where(x => x.Id == id)
                 .Single();
         }
 
-        public static async Task<DBUserRole?> GetUserRole(string name, Client client)
+        public static async Task<UserRoleEntity?> GetUserRole(string name, Client client)
         {
             return await client
-                .From<DBUserRole>()
+                .From<UserRoleEntity>()
                 .Select(x => new object[] { x.Id, x.Name, x.Description, x.Hierarchy })
                 .Where(x => x.Name == name)
                 .Single();
@@ -48,14 +48,14 @@ namespace DatabaseManager
             if (await GetUserRole(name, client) != null)
                 return false;
 
-            var dbUserRole = new DBUserRole
+            var dbUserRole = new UserRoleEntity
             {
                 Name = name,
                 Description = description,
                 Hierarchy = power_int,
             };
 
-            await client.From<DBUserRole>().Insert(dbUserRole);
+            await client.From<UserRoleEntity>().Insert(dbUserRole);
 
             return true;
         }

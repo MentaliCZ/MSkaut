@@ -108,13 +108,13 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<DBTransaction> dbTransactions = await DBTransaction.GetEventTransactions(
+            List<TransactionEntity> dbTransactions = await TransactionEntity.GetEventTransactions(
                 eventId,
                 client
             );
             ObservableCollection<TransactionViewModel> result = new();
 
-            foreach (DBTransaction dbTransaction in dbTransactions)
+            foreach (TransactionEntity dbTransaction in dbTransactions)
             {
                 Transaction transaction;
                 if (dbTransaction.TypeId == null)
@@ -157,7 +157,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await DBTransaction.CreateTransaction(
+                Id = await TransactionEntity.CreateTransaction(
                     DocumentName,
                     Name,
                     (long)Type.Id,
@@ -167,7 +167,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await DBTransaction.UpdateTransaction(
+                await TransactionEntity.UpdateTransaction(
                     (long)Id,
                     DocumentName,
                     Name,
@@ -188,7 +188,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 return;
 
-            await DBTransaction.DeleteTransaction((long)Id, client);
+            await TransactionEntity.DeleteTransaction((long)Id, client);
 
             IsProcessing = false;
         }

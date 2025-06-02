@@ -7,6 +7,9 @@ namespace UserInterface.Commands
 {
 	public static class EventExporter
 	{
+        private static int HEADER_SIZE = 5;
+        private static int DEFAULT_SIZE = 45;
+
         public static async Task Export(EventViewModel eventClass)
         {
             var excelApp = new Excel.Application();
@@ -15,10 +18,9 @@ namespace UserInterface.Commands
             excelApp.Workbooks.Add();
             Excel._Worksheet transactionSheet = (Excel.Worksheet)excelApp.ActiveSheet;
 
-            int height = eventClass.Transactions.Count + 5 > 45 ? eventClass.Transactions.Count + 5 : 45;
+            int height = eventClass.Transactions.Count + HEADER_SIZE > 45 ? eventClass.Transactions.Count + HEADER_SIZE : DEFAULT_SIZE;
             Excel.Range rowCells;
 
-            char column;
             int row;
 
             //Column widths
@@ -37,11 +39,11 @@ namespace UserInterface.Commands
 
             transactionSheet.Range["B1:H2"].Borders.LineStyle = Excel.XlLineStyle.xlContinuous;
 
-            //header row 2
+            // header row 2
             transactionSheet.Cells[2, "B"] = "Akce: " + eventClass.Name;
             transactionSheet.Range["B2:D2"].Merge();
 
-            //header row 3
+            // header row 3
             rowCells = transactionSheet.Range["A" + 3, "H" + 3];
             rowCells.Range["B1:C1"].Font.Size = 10;
             rowCells.Range["D1:H1"].Font.Size = 8;
@@ -103,7 +105,6 @@ namespace UserInterface.Commands
                 ((Excel.Range)rowCells[1, 6]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
                 ((Excel.Range)rowCells[1, 7]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
                 ((Excel.Range)rowCells[1, 8]).Borders[Excel.XlBordersIndex.xlEdgeRight].LineStyle = Excel.XlLineStyle.xlContinuous;
-
 
 
                 if (eventClass.Transactions.Count <= (idx - 1))

@@ -75,7 +75,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         public static void DBPersonToPerson(
             ObservableCollection<PersonViewModel> peopleList,
             Dictionary<long, Gender> genderDict,
-            DBPerson dbPerson,
+            PersonEntity dbPerson,
             Client client
         )
         {
@@ -97,10 +97,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<DBPerson> dbPeople = await DBPerson.GetUsersPeople(user.Id, client);
+            List<PersonEntity> dbPeople = await PersonEntity.GetUsersPeople(user.Id, client);
             ObservableCollection<PersonViewModel> people = new();
 
-            foreach (DBPerson dbPerson in dbPeople)
+            foreach (PersonEntity dbPerson in dbPeople)
             {
                 DBPersonToPerson(people, genderDict, dbPerson, client);
             }
@@ -114,10 +114,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<DBPerson> dbPeople = await DBEventPerson.GetEventParticipants(eventId, client);
+            List<PersonEntity> dbPeople = await EventPersonEntity.GetEventParticipants(eventId, client);
             ObservableCollection<PersonViewModel> participants = new();
 
-            foreach (DBPerson dbPerson in dbPeople)
+            foreach (PersonEntity dbPerson in dbPeople)
             {
                 DBPersonToPerson(participants, genderDict, dbPerson, client);
             }
@@ -132,7 +132,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await DBPerson.CreatePerson(
+                Id = await PersonEntity.CreatePerson(
                     FirstName,
                     LastName,
                     DateOnly.FromDateTime(BirthDate),
@@ -141,7 +141,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await DBPerson.UpdatePerson(
+                await PersonEntity.UpdatePerson(
                     (long)Id,
                     FirstName,
                     LastName,
@@ -161,7 +161,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             
             IsProcessing = true;
 
-            await DBPerson.DeletePerson((long)Id, client);
+            await PersonEntity.DeletePerson((long)Id, client);
 
             IsProcessing = false;
         }

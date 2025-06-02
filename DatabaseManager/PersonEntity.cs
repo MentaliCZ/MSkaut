@@ -9,7 +9,7 @@ using static Supabase.Postgrest.QueryOptions;
 namespace DatabaseManager
 {
     [Table("Person")]
-    public class DBPerson : BaseModel
+    public class PersonEntity : BaseModel
     {
         [PrimaryKey("person_id")]
         public long Id { get; set; }
@@ -29,10 +29,10 @@ namespace DatabaseManager
         [Column("creator_id")]
         public long CreatorId { get; set; }
 
-        public static async Task<DBPerson?> GetPerson(long id, Client client)
+        public static async Task<PersonEntity?> GetPerson(long id, Client client)
         {
             return await client
-                .From<DBPerson>()
+                .From<PersonEntity>()
                 .Select(x =>
                     new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId }
                 )
@@ -40,12 +40,12 @@ namespace DatabaseManager
                 .Single();
         }
 
-        public static async Task<List<DBPerson>> GetUsersPeople(long creatorId, Client client)
+        public static async Task<List<PersonEntity>> GetUsersPeople(long creatorId, Client client)
         {
             try
             {
                 var result = await client
-                    .From<DBPerson>()
+                    .From<PersonEntity>()
                     .Select(x =>
                         new object[]
                         {
@@ -65,7 +65,7 @@ namespace DatabaseManager
             }
             catch (Exception)
             {
-                return new List<DBPerson>();
+                return new List<PersonEntity>();
             }
         }
 
@@ -80,7 +80,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbPerson = new DBPerson
+                var dbPerson = new PersonEntity
                 {
                     FirstName = firstName,
                     LastName = lastName,
@@ -90,7 +90,7 @@ namespace DatabaseManager
                 };
 
                 var result = await client
-                    .From<DBPerson>()
+                    .From<PersonEntity>()
                     .Insert(
                         dbPerson,
                         new Supabase.Postgrest.QueryOptions
@@ -119,7 +119,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbPerson = new DBPerson
+                var dbPerson = new PersonEntity
                 {
                     Id = id,
                     FirstName = firstName,
@@ -129,7 +129,7 @@ namespace DatabaseManager
                     CreatorId = creatorId,
                 };
 
-                await client.From<DBPerson>().Upsert(dbPerson);
+                await client.From<PersonEntity>().Upsert(dbPerson);
 
                 return true;
             }
@@ -143,9 +143,9 @@ namespace DatabaseManager
         {
             try
             {
-                await DBEventPerson.DeleteAllPersonReferences(id, client);
+                await EventPersonEntity.DeleteAllPersonReferences(id, client);
 
-                await client.From<DBPerson>().Where(x => x.Id == id).Delete();
+                await client.From<PersonEntity>().Where(x => x.Id == id).Delete();
 
                 return true;
             }

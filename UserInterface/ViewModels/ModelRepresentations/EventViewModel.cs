@@ -103,7 +103,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         }
 
         public static async Task<EventViewModel> InitEventClass(
-            DBEvent dbEvent,
+            EventEntity dbEvent,
             Dictionary<long, Gender> genderDict,
             Dictionary<long, TransactionTypeViewModel> transactionTypesDict,
             User user,
@@ -148,10 +148,10 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<DBEvent> dbEvents = await DBEvent.GetUserEvents(user.Id, client);
+            List<EventEntity> dbEvents = await EventEntity.GetUserEvents(user.Id, client);
             ObservableCollection<EventViewModel> events = new();
 
-            foreach (DBEvent dbEvent in dbEvents)
+            foreach (EventEntity dbEvent in dbEvents)
             {
                 events.Add(
                     await EventViewModel.InitEventClass(
@@ -172,7 +172,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         private async Task LoadParticipants(
             EventViewModel eventViewModel,
             Dictionary<long, Gender> genderDict,
-            DBEvent dbEvent,
+            EventEntity dbEvent,
             Client client
         )
         {
@@ -185,7 +185,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
         private async Task LoadTransactions(
             EventViewModel eventViewModel,
-            DBEvent dbEvent,
+            EventEntity dbEvent,
             Dictionary<long, TransactionTypeViewModel> transactionTypes,
             Client client
         )
@@ -206,7 +206,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             if (Id == null)
             {
-                Id = await DBEvent.CreateEvent(
+                Id = await EventEntity.CreateEvent(
                     Name,
                     Description,
                     DateOnly.FromDateTime(StartDate),
@@ -218,7 +218,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             }
             else
             {
-                success = await DBEvent.UpdateEvent(
+                success = await EventEntity.UpdateEvent(
                     (long)Id,
                     Name,
                     Description,
@@ -253,7 +253,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 return;
 
-            await DBEvent.DeleteEvent((long)Id, client);
+            await EventEntity.DeleteEvent((long)Id, client);
 
             IsProcessing = false;
         }

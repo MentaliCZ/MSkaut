@@ -285,7 +285,7 @@ namespace UserInterface.ViewModels
             EventViewModel eventViewModel = (EventViewModel)obj;
 
             var result = MessageBox.Show(
-                "Are you sure you want to delete this type?",
+                "Are you sure you want to delete this event?",
                 "Confirm Delete",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning
@@ -306,7 +306,7 @@ namespace UserInterface.ViewModels
             PersonViewModel personViewModel = (PersonViewModel)obj;
 
             var result = MessageBox.Show(
-                "Are you sure you want to delete this type?",
+                "Are you sure you want to delete this person?",
                 "Confirm Delete",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Warning

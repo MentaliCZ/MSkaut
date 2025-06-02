@@ -6,7 +6,7 @@ using Supabase.Postgrest.Models;
 namespace DatabaseManager
 {
     [Table("Event_person")]
-    public class DBEventPerson : BaseModel
+    public class EventPersonEntity : BaseModel
     {
         [PrimaryKey("event_id")]
         public long EventId { get; set; }
@@ -17,30 +17,30 @@ namespace DatabaseManager
         [Column("description")]
         public string Description { get; set; }
 
-        public static async Task<List<DBPerson>> GetEventParticipants(long eventId, Client client)
+        public static async Task<List<PersonEntity>> GetEventParticipants(long eventId, Client client)
         {
             try
             {
                 var participantsId = (
                     await client
-                        .From<DBEventPerson>()
+                        .From<EventPersonEntity>()
                         .Select(x => new object[] { x.PersonId })
                         .Where(x => x.EventId == eventId)
                         .Get()
                 ).Models;
 
-                var result = new List<DBPerson?>();
+                var result = new List<PersonEntity?>();
 
-                foreach (DBEventPerson dbEventPerson in participantsId)
+                foreach (EventPersonEntity dbEventPerson in participantsId)
                 {
-                    result.Add(await DBPerson.GetPerson(dbEventPerson.PersonId, client));
+                    result.Add(await PersonEntity.GetPerson(dbEventPerson.PersonId, client));
                 }
 
                 return result;
             }
             catch (Exception)
             {
-                return new List<DBPerson>();
+                return new List<PersonEntity>();
             }
         }
 
@@ -52,9 +52,9 @@ namespace DatabaseManager
         {
             try
             {
-                var dbEventPerson = new DBEventPerson { EventId = eventId, PersonId = personId };
+                var dbEventPerson = new EventPersonEntity { EventId = eventId, PersonId = personId };
 
-                await client.From<DBEventPerson>().Upsert(dbEventPerson);
+                await client.From<EventPersonEntity>().Upsert(dbEventPerson);
 
                 return true;
             }
@@ -73,7 +73,7 @@ namespace DatabaseManager
             try
             {
                 await client
-                    .From<DBEventPerson>()
+                    .From<EventPersonEntity>()
                     .Where(x => x.EventId == eventId && x.PersonId == personId)
                     .Delete();
 
@@ -87,7 +87,7 @@ namespace DatabaseManager
 
         public static async Task DeleteAllPersonReferences(long personId, Client client)
         {
-            await client.From<DBEventPerson>().Where(x => x.PersonId == personId).Delete();
+            await client.From<EventPersonEntity>().Where(x => x.PersonId == personId).Delete();
         }
     }
 }

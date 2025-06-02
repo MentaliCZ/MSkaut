@@ -7,7 +7,7 @@ using Supabase.Postgrest.Models;
 namespace DatabaseManager
 {
     [Table("User")]
-    public class DBUser : BaseModel
+    public class UserEntity : BaseModel
     {
         [PrimaryKey("user_id")]
         public long Id { get; set; }
@@ -21,24 +21,24 @@ namespace DatabaseManager
         [Column("role_id")]
         public int RoleId { get; set; }
 
-        public static async Task<DBUser?> GetUser(
+        public static async Task<UserEntity?> GetUser(
             string login,
             string hashedPassword,
             Client client
         )
         {
             return await client
-                .From<DBUser>()
+                .From<UserEntity>()
                 .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
                 .Where(x => x.Login == login && x.PasswordHashed == hashedPassword)
                 .Single();
 
         }
 
-        public static async Task<DBUser?> GetUserByLogin(string login, Client client)
+        public static async Task<UserEntity?> GetUserByLogin(string login, Client client)
         {
             return await client
-                .From<DBUser>()
+                .From<UserEntity>()
                 .Select(x => new object[] { x.Id, x.Login, x.PasswordHashed })
                 .Where(x => x.Login == login)
                 .Single();
@@ -54,14 +54,14 @@ namespace DatabaseManager
             if (await GetUserByLogin(login, client) != null)
                 return false;
 
-            var dbUser = new DBUser
+            var dbUser = new UserEntity
             {
                 Login = login,
                 PasswordHashed = hashedPassword,
                 RoleId = 3,
             };
 
-            await client.From<DBUser>().Insert(dbUser);
+            await client.From<UserEntity>().Insert(dbUser);
 
             return true;
         }

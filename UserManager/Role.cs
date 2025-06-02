@@ -30,7 +30,7 @@ namespace UserManager
 
 		public static async Task<Role?> GetRole(int id, Client client)
 		{
-			DBUserRole? dbUserRole = await DBUserRole.GetUserRole(id, client);
+			UserRoleEntity? dbUserRole = await UserRoleEntity.GetUserRole(id, client);
 
 			if (dbUserRole == null)
 				return null;
@@ -40,7 +40,7 @@ namespace UserManager
 
 		public static async Task<bool> CreateRole(string name, string description, int hierarchy, Client client)
 		{
-			return await DBUserRole.CreateUserRole(name, description, hierarchy, client);
+			return await UserRoleEntity.CreateUserRole(name, description, hierarchy, client);
 		}
     }
 }

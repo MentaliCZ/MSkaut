@@ -9,7 +9,7 @@ using static Supabase.Postgrest.QueryOptions;
 namespace DatabaseManager
 {
     [Table("Event")]
-    public class DBEvent : BaseModel
+    public class EventEntity : BaseModel
     {
         [PrimaryKey("event_id")]
         public long Id { get; set; }
@@ -29,12 +29,12 @@ namespace DatabaseManager
         [Column("owner_id")]
         public long OwnerId { get; set; }
 
-        public static async Task<List<DBEvent>> GetUserEvents(long id, Client client)
+        public static async Task<List<EventEntity>> GetUserEvents(long id, Client client)
         {
             try
             {
                 var result = await client
-                    .From<DBEvent>()
+                    .From<EventEntity>()
                     .Select(x =>
                         new object[]
                         {
@@ -54,7 +54,7 @@ namespace DatabaseManager
             }
             catch (Exception)
             {
-                return new List<DBEvent>();
+                return new List<EventEntity>();
             }
         }
 
@@ -69,7 +69,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbEvent = new DBEvent
+                var dbEvent = new EventEntity
                 {
                     Name = name,
                     Description = description,
@@ -79,7 +79,7 @@ namespace DatabaseManager
                 };
 
                 var result = await client
-                    .From<DBEvent>()
+                    .From<EventEntity>()
                     .Insert(
                         dbEvent,
                         new Supabase.Postgrest.QueryOptions
@@ -108,7 +108,7 @@ namespace DatabaseManager
         {
             try
             {
-                var dbEvent = new DBEvent
+                var dbEvent = new EventEntity
                 {
                     Id = id,
                     Name = name,
@@ -118,7 +118,7 @@ namespace DatabaseManager
                     OwnerId = ownerId,
                 };
 
-                await client.From<DBEvent>().Upsert(dbEvent);
+                await client.From<EventEntity>().Upsert(dbEvent);
 
                 return true;
             }
@@ -132,7 +132,7 @@ namespace DatabaseManager
         {
             try
             {
-                await client.From<DBEvent>().Where(x => x.Id == id).Delete();
+                await client.From<EventEntity>().Where(x => x.Id == id).Delete();
 
                 return true;
             }

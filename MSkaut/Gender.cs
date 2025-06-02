@@ -16,10 +16,10 @@ public class Gender
 
     public static async Task<ObservableCollection<Gender>> GetAllGendersEN(Client client)
     {
-        List<DBGender> dbGenders = await DBGender.GetAllGenders(client);
+        List<GenderEntity> dbGenders = await GenderEntity.GetAllGenders(client);
         ObservableCollection<Gender> genders = new();
 
-        foreach (DBGender dbGender in dbGenders)
+        foreach (GenderEntity dbGender in dbGenders)
         {
             genders.Add(new Gender(dbGender.Id, dbGender.NameEn));
         }
