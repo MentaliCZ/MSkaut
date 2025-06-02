@@ -1,9 +1,7 @@
-﻿using System;
-using Supabase;
-using Supabase.Postgrest.Attributes;
+﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace DatabaseManager
+namespace DatabaseManager.Gender
 {
     [Table("Gender")]
     public class GenderEntity : BaseModel
@@ -19,23 +17,5 @@ namespace DatabaseManager
 
         [Column("description")]
         public string Description { get; set; }
-
-
-        public static async Task<List<GenderEntity>> GetAllGenders(Client client)
-        {
-            try
-            {
-                var result = await client
-                    .From<GenderEntity>()
-                    .Select(x => new object[] { x.Id, x.NameCs, x.NameEn, x.Description })
-                    .Get();
-
-                return result.Models;
-            }
-            catch (Exception)
-            {
-                return new List<GenderEntity>();
-            }
-        }
     }
 }

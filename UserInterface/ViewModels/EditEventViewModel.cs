@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
-using DatabaseManager;
+using DatabaseManager.EventPerson;
 using MSkaut;
 using Supabase;
 using UserInterface.Commands;
@@ -100,7 +98,7 @@ namespace UserInterface.ViewModels
         {
             Participants.Add(SelectedParticipant);
             AddParticipantCommand.RaiseCanExecuteChanged();
-            await EventPersonEntity.AddEventParticipant(
+            await EventPersonFunc.AddEventParticipant(
                 (long)eventClass.Id,
                 (long)SelectedParticipant.Id,
                 client
@@ -131,7 +129,7 @@ namespace UserInterface.ViewModels
 
             if (person != null)
             {
-                await EventPersonEntity.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
+                await EventPersonFunc.DeleteEventParticipant((long)eventClass.Id, (long)person.Id, client);
                 Participants.Remove(person);
             }
         }

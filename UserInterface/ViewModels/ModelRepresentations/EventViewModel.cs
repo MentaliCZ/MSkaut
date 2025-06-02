@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Data.Common;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
-using System.Xml.Linq;
-using DatabaseManager;
+using DatabaseManager.Event;
 using MSkaut;
 using Supabase;
 using UserInterface.Commands;
@@ -148,7 +145,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<EventEntity> dbEvents = await EventEntity.GetUserEvents(user.Id, client);
+            List<EventEntity> dbEvents = await EventFunc.GetUserEvents(user.Id, client);
             ObservableCollection<EventViewModel> events = new();
 
             foreach (EventEntity dbEvent in dbEvents)
@@ -206,7 +203,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             if (Id == null)
             {
-                Id = await EventEntity.CreateEvent(
+                Id = await EventFunc.CreateEvent(
                     Name,
                     Description,
                     DateOnly.FromDateTime(StartDate),
@@ -218,7 +215,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             }
             else
             {
-                success = await EventEntity.UpdateEvent(
+                success = await EventFunc.UpdateEvent(
                     (long)Id,
                     Name,
                     Description,
@@ -253,7 +250,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 return;
 
-            await EventEntity.DeleteEvent((long)Id, client);
+            await EventFunc.DeleteEvent((long)Id, client);
 
             IsProcessing = false;
         }

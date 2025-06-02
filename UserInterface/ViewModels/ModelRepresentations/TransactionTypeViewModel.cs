@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows;
-using DatabaseManager;
-using Microsoft.Extensions.Logging;
+﻿using System.Collections.ObjectModel;
+using DatabaseManager.TransactionType;
 using MSkaut;
 using Supabase;
 using UserManager;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -67,7 +62,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
         > GetUsersTransactionTypes(User user, Client client)
         {
             List<TransactionTypeEntity> dbTransactionTypes =
-                await TransactionTypeEntity.GetUsersTransactionTypes(user.Id, client);
+                await TransactionTypeFunc.GetUsersTransactionTypes(user.Id, client);
             ObservableCollection<TransactionTypeViewModel> result = new();
 
             foreach (TransactionTypeEntity dbTransactionType in dbTransactionTypes)
@@ -97,7 +92,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
 
             IsProcessing = true;
 
-            await TransactionTypeEntity.DeleteTransactionType((long)Id, client);
+            await TransactionTypeFunc.DeleteTransactionType((long)Id, client);
 
             IsProcessing = false;
         }
@@ -109,7 +104,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await TransactionTypeEntity.CreateTransactionType(
+                Id = await TransactionTypeFunc.CreateTransactionType(
                     Name,
                     Description,
                     IsExpense,
@@ -117,7 +112,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await TransactionTypeEntity.UpdateTransactionType(
+                await TransactionTypeFunc.UpdateTransactionType(
                     (long)Id,
                     Name,
                     Description,

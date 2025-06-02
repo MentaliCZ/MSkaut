@@ -1,5 +1,4 @@
-﻿using System;
-using DatabaseManager;
+﻿using DatabaseManager.UserRole;
 using Supabase;
 
 namespace UserManager
@@ -30,7 +29,7 @@ namespace UserManager
 
 		public static async Task<Role?> GetRole(int id, Client client)
 		{
-			UserRoleEntity? dbUserRole = await UserRoleEntity.GetUserRole(id, client);
+			UserRoleEntity? dbUserRole = await UserRoleFunc.GetUserRole(id, client);
 
 			if (dbUserRole == null)
 				return null;
@@ -40,7 +39,7 @@ namespace UserManager
 
 		public static async Task<bool> CreateRole(string name, string description, int hierarchy, Client client)
 		{
-			return await UserRoleEntity.CreateUserRole(name, description, hierarchy, client);
+			return await UserRoleFunc.CreateUserRole(name, description, hierarchy, client);
 		}
     }
 }

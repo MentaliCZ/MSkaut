@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using DatabaseManager;
+﻿using System.Collections.ObjectModel;
+using DatabaseManager.Transaction;
 using MSkaut;
 using Supabase;
-using UserInterface.Commands;
-using UserManager;
 
 namespace UserInterface.ViewModels.ModelRepresantations
 {
@@ -108,7 +104,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<TransactionEntity> dbTransactions = await TransactionEntity.GetEventTransactions(
+            List<TransactionEntity> dbTransactions = await TransactionFunc.GetEventTransactions(
                 eventId,
                 client
             );
@@ -157,7 +153,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await TransactionEntity.CreateTransaction(
+                Id = await TransactionFunc.CreateTransaction(
                     DocumentName,
                     Name,
                     (long)Type.Id,
@@ -167,7 +163,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await TransactionEntity.UpdateTransaction(
+                await TransactionFunc.UpdateTransaction(
                     (long)Id,
                     DocumentName,
                     Name,
@@ -188,7 +184,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             if (Id == null)
                 return;
 
-            await TransactionEntity.DeleteTransaction((long)Id, client);
+            await TransactionFunc.DeleteTransaction((long)Id, client);
 
             IsProcessing = false;
         }

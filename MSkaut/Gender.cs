@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using DatabaseManager;
+﻿using System.Collections.ObjectModel;
+using DatabaseManager.Gender;
 using Supabase;
 
 public class Gender
@@ -16,7 +15,7 @@ public class Gender
 
     public static async Task<ObservableCollection<Gender>> GetAllGendersEN(Client client)
     {
-        List<GenderEntity> dbGenders = await GenderEntity.GetAllGenders(client);
+        List<GenderEntity> dbGenders = await GenderFunc.GetAllGenders(client);
         ObservableCollection<Gender> genders = new();
 
         foreach (GenderEntity dbGender in dbGenders)

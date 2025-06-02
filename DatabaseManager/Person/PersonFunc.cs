@@ -1,0 +1,137 @@
+﻿using System;
+using Supabase;
+using static Supabase.Postgrest.Constants;
+using static Supabase.Postgrest.QueryOptions;
+using DatabaseManager.EventPerson;
+
+namespace DatabaseManager.Person
+{
+    public static class PersonFunc
+    {
+        public static async Task<PersonEntity?> GetPerson(long id, Client client)
+        {
+            return await client
+                .From<PersonEntity>()
+                .Select(x =>
+                    new object[] { x.Id, x.FirstName, x.LastName, x.BirthDate, x.GenderId }
+                )
+                .Where(x => x.Id == id)
+                .Single();
+        }
+
+        public static async Task<List<PersonEntity>> GetUsersPeople(long creatorId, Client client)
+        {
+            try
+            {
+                var result = await client
+                    .From<PersonEntity>()
+                    .Select(x =>
+                        new object[]
+                        {
+                            x.Id,
+                            x.FirstName,
+                            x.LastName,
+                            x.BirthDate,
+                            x.GenderId,
+                            x.CreatorId,
+                        }
+                    )
+                    .Where(x => x.CreatorId == creatorId)
+                    .Order(x => x.BirthDate, Ordering.Descending)
+                    .Get();
+
+                return result.Models;
+            }
+            catch (Exception)
+            {
+                return new List<PersonEntity>();
+            }
+        }
+
+        public static async Task<long> CreatePerson(
+            string firstName,
+            string lastName,
+            DateOnly birthDate,
+            int genderId,
+            long creatorId,
+            Client client
+        )
+        {
+            try
+            {
+                var dbPerson = new PersonEntity
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    BirthDate = birthDate,
+                    GenderId = genderId,
+                    CreatorId = creatorId,
+                };
+
+                var result = await client
+                    .From<PersonEntity>()
+                    .Insert(
+                        dbPerson,
+                        new Supabase.Postgrest.QueryOptions
+                        {
+                            Returning = ReturnType.Representation,
+                        }
+                    );
+
+                return result.Model.Id;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
+        public static async Task<bool> UpdatePerson(
+            long id,
+            string firstName,
+            string lastName,
+            DateOnly birthDate,
+            int genderId,
+            long creatorId,
+            Client client
+        )
+        {
+            try
+            {
+                var dbPerson = new PersonEntity
+                {
+                    Id = id,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    BirthDate = birthDate,
+                    GenderId = genderId,
+                    CreatorId = creatorId,
+                };
+
+                await client.From<PersonEntity>().Upsert(dbPerson);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static async Task<bool> DeletePerson(long id, Client client)
+        {
+            try
+            {
+                await EventPersonFunc.DeleteAllPersonReferences(id, client);
+
+                await client.From<PersonEntity>().Where(x => x.Id == id).Delete();
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+    }
+}

@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using DatabaseManager;
+﻿using System.Collections.ObjectModel;
+using DatabaseManager.Person;
+using DatabaseManager.EventPerson;
 using MSkaut;
 using Supabase;
 using UserManager;
@@ -97,7 +96,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<PersonEntity> dbPeople = await PersonEntity.GetUsersPeople(user.Id, client);
+            List<PersonEntity> dbPeople = await PersonFunc.GetUsersPeople(user.Id, client);
             ObservableCollection<PersonViewModel> people = new();
 
             foreach (PersonEntity dbPerson in dbPeople)
@@ -114,7 +113,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             Client client
         )
         {
-            List<PersonEntity> dbPeople = await EventPersonEntity.GetEventParticipants(eventId, client);
+            List<PersonEntity> dbPeople = await EventPersonFunc.GetEventParticipants(eventId, client);
             ObservableCollection<PersonViewModel> participants = new();
 
             foreach (PersonEntity dbPerson in dbPeople)
@@ -132,7 +131,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             SaveRowCommand.RaiseCanExecuteChanged();
 
             if (Id == null)
-                Id = await PersonEntity.CreatePerson(
+                Id = await PersonFunc.CreatePerson(
                     FirstName,
                     LastName,
                     DateOnly.FromDateTime(BirthDate),
@@ -141,7 +140,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
                     client
                 );
             else
-                await PersonEntity.UpdatePerson(
+                await PersonFunc.UpdatePerson(
                     (long)Id,
                     FirstName,
                     LastName,
@@ -161,7 +160,7 @@ namespace UserInterface.ViewModels.ModelRepresantations
             
             IsProcessing = true;
 
-            await PersonEntity.DeletePerson((long)Id, client);
+            await PersonFunc.DeletePerson((long)Id, client);
 
             IsProcessing = false;
         }
