@@ -9,15 +9,36 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace UserInterface;
+using UserManager;
+using DatabaseManager;
+using UserInterface.ViewModels;
+using WpfAnimatedGif;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
-public partial class MainWindow : Window
+namespace UserInterface
 {
-    public MainWindow()
+
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
     {
-        InitializeComponent();
+        private MainWindow()
+        {   
+            InitializeComponent();
+        }
+
+        private async Task Init(User user, ConnectionInstance dbConnection)
+        {
+            MainViewModel mainViewModel = await MainViewModel.CreateMainViewModel(this, user, dbConnection);
+            DataContext = mainViewModel;
+        }
+
+        public static async Task<MainWindow> CreateMainWindow(User user, ConnectionInstance dbConnection)
+        {
+            MainWindow mainWindow = new MainWindow();
+            await mainWindow.Init(user, dbConnection);
+            return mainWindow;
+        }
+
     }
 }

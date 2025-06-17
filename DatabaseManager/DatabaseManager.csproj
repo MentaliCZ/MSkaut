@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DatabaseManager\DatabaseManager.csproj" />
-    <ProjectReference Include="..\UserManager\UserManager.csproj" />
+    <PackageReference Include="supabase" Version="1.1.1" />
   </ItemGroup>
 
 </Project>

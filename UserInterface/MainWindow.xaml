@@ -5,8 +5,455 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:UserInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Main page" Height="500" Width="1000"
+        Background="#FF31323A"
+        Name ="RootWindow"
+        ResizeMode = "Noresize">
+    <Window.Resources>
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+    
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height = "50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Background= "#FF24272C" Grid.ColumnSpan="2" 
+              HorizontalAlignment="Center"
+              Grid.Row="0"
+              Width="1000">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0"
+              Background="#FF24272C">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Button Grid.Column="0"
+                    Background="#FF24272C"
+                    BorderThickness="0"
+                        
+                    Command="{Binding ShowEventsPage}">
+                    <TextBlock Text="Events"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+                </Button>
+
+                <Button Grid.Column="1"
+                    Background="#FF24272C"
+                    BorderThickness="0"
+                    Command="{Binding ShowPeoplePage}">
+                    <TextBlock Text="People"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+                </Button>
+
+                <Button Grid.Column="2"
+                    Background="#FF24272C"
+                    BorderThickness="0"
+                    Command="{Binding ShowTypesPage}">
+                    <TextBlock Text="Transaction types"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+                </Button>
+
+                <Button Grid.Column="3"
+                    Background="#FF24272C"
+                    BorderThickness="0"
+                    Command="{Binding ShowExportPage}">
+                    <TextBlock Text="Export"
+                           Foreground="White"
+                           FontSize="18"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+                </Button>
+
+            </Grid>
+
+
+            <Grid Grid.Column="1"
+              Background="#FF24272C">
+                <StackPanel HorizontalAlignment="Right"
+                        Orientation="Vertical" Margin="0,0,10,0"
+                            >
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="User: "
+                               Foreground="White"/>
+                        <TextBlock Text="{Binding User.Login}"
+                               Foreground="White"/>
+                    </StackPanel>
+                    <Button Background="#A61C3C" 
+                        Height="15"
+                        Width="50"
+                        Margin="5"
+                        Command="{Binding LogOutCommand}">
+                        <TextBlock Text="Log Out"
+                               FontSize="8"
+                               Foreground="White"
+                               FontWeight="Bold"/>
+                    </Button>
+
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+
+
+        <Grid Visibility="{Binding EventsVisible}" Grid.Row="2">
+            <StackPanel Margin="10">
+                <ListView Name="EventsList" ItemsSource="{Binding Events}" 
+                      Background="#FF31323A"
+                      Height="300">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+
+                    <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name"
+                                        Width="200">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                        <Grid>
+                                            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
+                                             HorizontalAlignment="Stretch"/>
+                                        </Grid>
+                                    </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        
+                        <GridViewColumn Header="Description"
+                                        Width="240">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderThickness="0"
+                                         Background="#FF53545D"
+                                         Foreground="White"
+                                         HorizontalAlignment="Stretch"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Start Date"
+                                    Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DatePicker SelectedDate="{Binding StartDate}"
+                                                HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                            <GridViewColumn Header="End Date"
+                                    Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker SelectedDate="{Binding EndDate}"
+                                                    HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Edit"
+                                            Command="{Binding OpenEditWindowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Save"
+                                    Command="{Binding SaveRowCommand}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete"
+                                                Command="{Binding DataContext.DeleteEventCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="20">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="*"
+                                                   Foreground="Red"
+                                                   FontSize="18"
+                                                   Visibility="{Binding IsChanged, Converter={StaticResource BoolToVis}}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                        </GridView>
+                    </ListView.View>
+            </ListView>
+            <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Margin="10"
+                    Command="{Binding AddEventCommand}">
+                <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+            </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding PeopleVisible}" Grid.Row="2">
+            <StackPanel Margin="10">
+                <ListView Name="PeopleList" ItemsSource="{Binding UsersPeople}" 
+                      Background="#FF31323A"
+                      Height="300">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    
+                    <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="First Name"
+                                        Width="280">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
+                                             HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Last Name"
+                                        Width="280">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}"
+                                          BorderThickness="0"
+                                         Background="#FF53545D"
+                                         Foreground="White"
+                                         HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Birth Date"
+                                        Width="150">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <DatePicker SelectedDate="{Binding BirthDate}"
+                                                HorizontalAlignment="Stretch"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Gender"
+                                        Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding DataContext.Genders, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListView}}}"
+                                               SelectedItem="{Binding Gender, Mode=TwoWay}"
+                                              Width="80"
+                                              Height="20"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Save"
+                                        Command="{Binding SaveRowCommand}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete"
+                                                Command="{Binding DataContext.DeletePersonCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="20">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="*"
+                                                Foreground="Red"
+                                                FontSize="18"
+                                                Visibility="{Binding IsChanged, Converter={StaticResource BoolToVis}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        </GridView>
+                </ListView.View>
+            </ListView>
+            <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Margin="10"
+                    Command="{Binding AddPersonCommand}">
+                <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+            </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding TransactionTypesVisible}" Grid.Row="2">
+            <StackPanel Margin="10">
+                <ListView Name="TransactionTypesList" ItemsSource="{Binding TransactionTypes}" 
+                      Background="#FF31323A"
+                      Height="300">
+
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Name"
+                                        Width="200">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                             BorderThickness="0"
+                                             Background="#FF53545D"
+                                             Foreground="White"
+                                             HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Description"
+                                        Width="400">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                                            BorderThickness="0"
+                                            Background="#FF53545D"
+                                            Foreground="White"
+                                            HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Is Expense"
+                                        Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsExpense}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Save"
+                                        Command="{Binding SaveRowCommand}"
+                                                HorizontalAlignment="Stretch"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="Delete"
+                                                Command="{Binding DataContext.DeleteTransactionTypeCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Width="20">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="*"
+                                                   Foreground="Red"
+                                                   FontSize="18"
+                                                   Visibility="{Binding IsChanged, Converter={StaticResource BoolToVis}}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Width="100"
+                    Height="20"
+                    Background="#70877F"
+                    Margin="10"
+                    Command="{Binding AddTypeCommand}">
+                    <TextBlock Text="Add"
+                           Foreground="White"
+                           FontWeight="Bold"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding ExportVisible}" Grid.Row="2">
+            <StackPanel Margin="30"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Top">
+                <ComboBox 
+                      Width="800"
+                      Height="20"
+                      ItemsSource="{Binding Events}"
+                    SelectedValue="{Binding SelectedExportEvent}"
+                        Margin="10"
+                      />
+                <Button Height="20"
+                        Width="100"
+                        Command="{Binding ExportEventCommand}">
+                    <TextBlock Text="Export" />
+                </Button>
+            </StackPanel>
+        </Grid>
 
     </Grid>
 </Window>

@@ -7,8 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="supabase" Version="1.1.1" />
+    <PackageReference Include="XAct.Core.PCL" Version="0.0.5014" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DatabaseManager\DatabaseManager.csproj" />
-    <ProjectReference Include="..\UserManager\UserManager.csproj" />
   </ItemGroup>
 
 </Project>
